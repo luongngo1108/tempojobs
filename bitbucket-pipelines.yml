@@ -1,0 +1,11 @@
+pipelines:
+  default:
+    - step:
+        name: Sync GitHub Mirror
+        image: alpine/git:latest
+        clone:
+          enabled: true
+        script:
+          - git clone --bare git@bitbucket.org:temporaryjobs/tempojobs.git
+          - cd tempojobs.git
+          - git push --mirror git@github.com:luongngo1108/tempojobs.git
