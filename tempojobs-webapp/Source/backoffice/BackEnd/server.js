@@ -1,9 +1,20 @@
-const express = require('express')
-const app = express()
-const port = 3000
+import express, { json } from 'express';
+import 'dotenv/config'
 
-app.get('/', function (req, res) {
-  res.send('Hello World')
+const app = express();
+const port = process.env.PORT || 5000;
+import route from './src/routes/indexRoutes.js';
+import connect from './src/configs/dbConnection.js';
+
+//database connection
+connect();
+
+//middleware
+app.use(json());
+
+//base route
+route(app);
+
+app.listen(port, () => {
+  console.log(`App listening on port http://localhost:${port}`);
 })
-
-app.listen(port, () => console.log(`Backoffice backend is listening at http://localhost:${port}`))
