@@ -1,8 +1,9 @@
 import express, { json } from 'express';
-import 'dotenv/config'
+import 'dotenv/config';
+import cors from 'cors';
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 import route from './src/routes/indexRoutes.js';
 import connect from './src/configs/dbConnection.js';
 
@@ -11,6 +12,7 @@ connect();
 
 //middleware
 app.use(json());
+app.use(cors());
 
 //base route
 route(app);

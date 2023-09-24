@@ -1,0 +1,24 @@
+<form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title" *ngIf="frmLogin" [formGroup]="frmLogin">
+    <mat-form-field appearance="outline" style="margin-top:-8px">
+        <mat-label>Username</mat-label>
+        <input matInput id="userNameOrEmail" type="text" formControlName="userNameOrEmail" autocomplete="off"
+            trim="blur">
+        <mat-error
+            *ngIf="frmLogin.controls['userNameOrEmail'].errors && (frmLogin.controls['userNameOrEmail'].dirty || frmLogin.controls['userNameOrEmail'].touched)">
+            {{frmLogin.controls['userNameOrEmail'].getError}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput id="password" type="password" formControlName="password" autocomplete="off" trim="blur">
+        <mat-error
+            *ngIf="frmLogin.controls['password'].errors && (frmLogin.controls['password'].dirty || frmLogin.controls['password'].touched)">
+            {{frmLogin.controls['password'].getError}}
+        </mat-error>
+    </mat-form-field>
+
+    <mat-checkbox color="primary" name="rememberMe" formControlName="rememberMe" *ngIf="frmLogin.controls['rememberMe']">
+        Remember me</mat-checkbox>
+    <button mat-stroked-button style="width:100%" nbSpinnerStatus="primary" 
+        [class.spinner]="submitted" [disabled]="submitted" color="primary"> Sign In</button>
+</form>

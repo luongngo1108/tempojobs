@@ -36,7 +36,7 @@ class authController {
     // [GET] /login
     async login(req, res, next) {
         const {email, password} = req.body;
-        
+        console.log(email, password);
         if(!email || !password) {
             res.status(400).json("All fields are madatory");
             return;
