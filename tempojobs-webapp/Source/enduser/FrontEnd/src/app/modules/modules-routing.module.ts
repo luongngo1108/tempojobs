@@ -8,7 +8,11 @@ const routes: Routes = [
         loadChildren: () => import('./home/home.module')
             .then(m => m.HomeModule)
     },
-    { path: '**', redirectTo: '', pathMatch: 'full' },
+    { 
+        path: 'jobcreator',
+        loadChildren: () => import('./jobcreator/jobcreator.module')
+        .then(m => m.JobcreatorModule)
+     },
 ];
 
 @NgModule({
