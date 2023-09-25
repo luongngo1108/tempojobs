@@ -4,7 +4,7 @@ import { NbAuthService } from '@nebular/auth';
 import { NbToastrService } from '@nebular/theme'
 import { tap } from 'rxjs';
 
-export const AuthGuardService: CanActivateFn = (
+export const AdminAuthGuardService: CanActivateFn = (
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
 ) => {
@@ -17,13 +17,12 @@ export const AuthGuardService: CanActivateFn = (
                 console.log("Authentiacted: " + authenticated)
                 if (!authenticated) {
                     router.navigate([`/auth`], {
-                        queryParams: { returnUrl: state.url }
+                        // queryParams: { returnUrl: state.url }
                     }).then(() => {
                         // toast.warning("You need to login!", "Warning");
                     });
-                }
-                return false;
+                } 
+                return;
             })
         );
-    return false;
 }

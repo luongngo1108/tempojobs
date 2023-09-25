@@ -69,7 +69,7 @@ const routes: Routes = [{
     },
     {
       path: '',
-      redirectTo: 'dashboard',
+      redirectTo: 'tables/tree-grid',
       pathMatch: 'full',
     },
     {

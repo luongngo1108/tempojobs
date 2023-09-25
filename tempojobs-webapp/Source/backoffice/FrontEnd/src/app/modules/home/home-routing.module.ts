@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'auth',
+    path: '',
     loadChildren: () => import('./master-layout/master-layout.module')
       .then(m => m.MasterLayoutModule),
   },

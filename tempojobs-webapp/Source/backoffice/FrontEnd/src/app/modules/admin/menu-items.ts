@@ -4,13 +4,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'E-commerce',
     icon: 'shopping-cart-outline',
-    link: '/dashboard',
+    link: '/admin/dashboard',
     home: true,
   },
   {
     title: 'IoT Dashboard',
     icon: 'home-outline',
-    link: '/iot-dashboard',
+    link: '/admin/iot-dashboard',
   },
   {
     title: 'FEATURES',
@@ -22,24 +22,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Stepper',
-        link: '/layout/stepper',
+        link: '/admin/layout/stepper',
       },
       {
         title: 'List',
-        link: '/layout/list',
+        link: '/admin/layout/list',
       },
       {
         title: 'Infinite List',
-        link: '/layout/infinite-list',
+        link: '/admin/layout/infinite-list',
       },
       {
         title: 'Accordion',
-        link: '/layout/accordion',
+        link: '/admin/layout/accordion',
       },
       {
         title: 'Tabs',
         pathMatch: 'prefix',
-        link: '/layout/tabs',
+        link: '/admin/layout/tabs',
       },
     ],
   },
@@ -49,42 +49,42 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Form Inputs',
-        link: '/forms/inputs',
+        link: '/admin/forms/inputs',
       },
       {
         title: 'Form Layouts',
-        link: '/forms/layouts',
+        link: '/admin/forms/layouts',
       },
       {
         title: 'Buttons',
-        link: '/forms/buttons',
+        link: '/admin/forms/buttons',
       },
       {
         title: 'Datepicker',
-        link: '/forms/datepicker',
+        link: '/admin/forms/datepicker',
       },
     ],
   },
   {
     title: 'UI Features',
     icon: 'keypad-outline',
-    link: '/ui-features',
+    link: '/admin/ui-features',
     children: [
       {
         title: 'Grid',
-        link: '/ui-features/grid',
+        link: '/admin/ui-features/grid',
       },
       {
         title: 'Icons',
-        link: '/ui-features/icons',
+        link: '/admin/ui-features/icons',
       },
       {
         title: 'Typography',
-        link: '/ui-features/typography',
+        link: '/admin/ui-features/typography',
       },
       {
         title: 'Animated Searches',
-        link: '/ui-features/search-fields',
+        link: '/admin/ui-features/search-fields',
       },
     ],
   },
@@ -94,23 +94,23 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Dialog',
-        link: '/modal-overlays/dialog',
+        link: '/admin/modal-overlays/dialog',
       },
       {
         title: 'Window',
-        link: '/modal-overlays/window',
+        link: '/admin/modal-overlays/window',
       },
       {
         title: 'Popover',
-        link: '/modal-overlays/popover',
+        link: '/admin/modal-overlays/popover',
       },
       {
         title: 'Toastr',
-        link: '/modal-overlays/toastr',
+        link: '/admin/modal-overlays/toastr',
       },
       {
         title: 'Tooltip',
-        link: '/modal-overlays/tooltip',
+        link: '/admin/modal-overlays/tooltip',
       },
     ],
   },
@@ -120,27 +120,27 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Calendar',
-        link: '/extra-components/calendar',
+        link: '/admin/extra-components/calendar',
       },
       {
         title: 'Progress Bar',
-        link: '/extra-components/progress-bar',
+        link: '/admin/extra-components/progress-bar',
       },
       {
         title: 'Spinner',
-        link: '/extra-components/spinner',
+        link: '/admin/extra-components/spinner',
       },
       {
         title: 'Alert',
-        link: '/extra-components/alert',
+        link: '/admin/extra-components/alert',
       },
       {
         title: 'Calendar Kit',
-        link: '/extra-components/calendar-kit',
+        link: '/admin/extra-components/calendar-kit',
       },
       {
         title: 'Chat',
-        link: '/extra-components/chat',
+        link: '/admin/extra-components/chat',
       },
     ],
   },
@@ -150,19 +150,19 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Google Maps',
-        link: '/maps/gmaps',
+        link: '/admin/maps/gmaps',
       },
       {
         title: 'Leaflet Maps',
-        link: '/maps/leaflet',
+        link: '/admin/maps/leaflet',
       },
       {
         title: 'Bubble Maps',
-        link: '/maps/bubble',
+        link: '/admin/maps/bubble',
       },
       {
         title: 'Search Maps',
-        link: '/maps/searchmap',
+        link: '/admin/maps/searchmap',
       },
     ],
   },
@@ -172,15 +172,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Echarts',
-        link: '/charts/echarts',
+        link: '/admin/charts/echarts',
       },
       {
         title: 'Charts.js',
-        link: '/charts/chartjs',
+        link: '/admin/charts/chartjs',
       },
       {
         title: 'D3',
-        link: '/charts/d3',
+        link: '/admin/charts/d3',
       },
     ],
   },
@@ -190,11 +190,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'TinyMCE',
-        link: '/editors/tinymce',
+        link: '/admin/editors/tinymce',
       },
       {
         title: 'CKEditor',
-        link: '/editors/ckeditor',
+        link: '/admin/editors/ckeditor',
       },
     ],
   },
@@ -204,11 +204,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Smart Table',
-        link: '/tables/smart-table',
+        link: '/admin/tables/smart-table',
       },
       {
         title: 'Tree Grid',
-        link: '/tables/tree-grid',
+        link: '/admin/tables/tree-grid',
       },
     ],
   },
@@ -218,7 +218,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: '404',
-        link: '/miscellaneous/404',
+        link: '/admin/miscellaneous/404',
       },
     ],
   },
@@ -228,19 +228,19 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Login',
-        link: '/auth/login',
+        link: '/admin/auth/login',
       },
       {
         title: 'Register',
-        link: '/auth/register',
+        link: '/admin/auth/register',
       },
       {
         title: 'Request Password',
-        link: '/auth/request-password',
+        link: '/admin/auth/request-password',
       },
       {
         title: 'Reset Password',
-        link: '/auth/reset-password',
+        link: '/admin/auth/reset-password',
       },
     ],
   },
