@@ -7,6 +7,8 @@ import { NbAuthModule } from '@nebular/auth';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbCardModule, NbLayoutModule, NbMenuModule } from '@nebular/theme';
+import { NgxTableComponent } from './components/ngx-table/ngx-table.component';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 const materialModules = [
   MatFormFieldModule,
@@ -15,7 +17,9 @@ const materialModules = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    NgxTableComponent
+  ],
   imports: [
     CommonModule,
     NbAuthModule,
@@ -25,6 +29,7 @@ const materialModules = [
     FormsModule,
     ReactiveFormsModule,
     RxReactiveFormsModule,
+    NgxDatatableModule,
     [...materialModules]
   ],
   exports: [
@@ -36,6 +41,8 @@ const materialModules = [
     FormsModule,
     ReactiveFormsModule,
     RxReactiveFormsModule,
+    NgxDatatableModule,
+    NgxTableComponent,
     [...materialModules]
   ]
 })

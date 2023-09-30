@@ -7,7 +7,7 @@ import { NbAuthComponent, NbAuthService } from '@nebular/auth';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })
-export class AuthComponent  extends NbAuthComponent implements OnInit{
+export class AuthComponent extends NbAuthComponent implements OnInit{
   constructor(
     protected service: NbAuthService,
     protected location: Location,

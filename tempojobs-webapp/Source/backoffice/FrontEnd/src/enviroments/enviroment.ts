@@ -3,4 +3,5 @@ export const apiUrl = `${host}/api`;
 
 export const environment = {
     apiAuth: apiUrl + '/auth',
+    apiUser: apiUrl + '/user',
 }

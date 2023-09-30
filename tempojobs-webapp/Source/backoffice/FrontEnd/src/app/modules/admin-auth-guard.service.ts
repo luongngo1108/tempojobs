@@ -10,16 +10,15 @@ export const AdminAuthGuardService: CanActivateFn = (
 ) => {
     const authService = inject(NbAuthService);
     const router = inject(Router);
-    //const toast = inject(NbToastrService)
+    const toast = inject(NbToastrService)
     return authService.isAuthenticated()
         .pipe(
             tap(authenticated => {
-                console.log("Authentiacted: " + authenticated)
                 if (!authenticated) {
                     router.navigate([`/auth`], {
                         // queryParams: { returnUrl: state.url }
                     }).then(() => {
-                        // toast.warning("You need to login!", "Warning");
+                        toast.warning("You need to login!", "Warning");
                     });
                 } 
                 return;

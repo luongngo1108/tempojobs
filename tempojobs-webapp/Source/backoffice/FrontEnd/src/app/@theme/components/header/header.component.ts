@@ -4,7 +4,9 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { NbTokenService } from '@nebular/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-header',
@@ -16,7 +18,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   user: any;
-
+  menuServiceObservable: Subscription = null;
   themes = [
     {
       value: 'default',
@@ -38,18 +40,28 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [ { title: 'Profile' , id: 'profile'}, { title: 'Log out', id:'logout' } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
               private layoutService: LayoutService,
+              private tokenService: NbTokenService,
+              private router: Router,
               private breakpointService: NbMediaBreakpointsService) {
   }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
+    // catch menu event
+    this.menuServiceObservable = this.menuService.onItemClick().subscribe((event) => {
+      if(event.item['id'] === 'logout') {
+        this.tokenService.clear();
+        localStorage.clear();
+        this.router.navigateByUrl("/auth");
+      }
+    })
 
     // this.userService.getUsers()
     //   .pipe(takeUntil(this.destroy$))
@@ -72,6 +84,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.menuServiceObservable != null) {
+      this.menuServiceObservable.unsubscribe();
+    }
     this.destroy$.next();
     this.destroy$.complete();
   }

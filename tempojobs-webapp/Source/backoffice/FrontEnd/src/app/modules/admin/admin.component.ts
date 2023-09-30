@@ -16,7 +16,6 @@ export class AdminComponent {
     
       if (token.isValid()) {
         this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
-        console.log(this.user);
       }
       
     });
