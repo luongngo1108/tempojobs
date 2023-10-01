@@ -4,6 +4,7 @@ import { Admin, User } from './roles.js';
 const validateToken = async(req, res, next) => {
     let token;
     let authHeader = req.headers.Authorization || req.headers.authorization;
+    console.log(authHeader);
     if(authHeader && authHeader.startsWith("Bearer")) {
         token = authHeader.split(" ")[1];
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
@@ -23,6 +24,7 @@ const validateToken = async(req, res, next) => {
 };
 
 const checkAdminRole = async(req, res, next) => {
+    console.log("Heree2");
     // validateToken(req, res, next);
     const {role} = req.user;
     if(role !== Admin) {
@@ -33,6 +35,7 @@ const checkAdminRole = async(req, res, next) => {
 }
 
 const checkUserRole = async(req, res, next) => {
+    console.log("Heree3");
     // validateToken(req, res, next);
     const {role} = req.user;
     if(role !== User) {

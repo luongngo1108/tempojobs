@@ -4,7 +4,7 @@ class userController {
     // [GET] /get
     async get(req, res, next) {
         const data = await User.find({});
-        
+        console.log(req);
         //compare password with hashedpassword
         if(data) {
             res.status(200).json({data});

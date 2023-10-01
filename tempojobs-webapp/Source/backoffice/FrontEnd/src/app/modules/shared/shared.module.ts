@@ -6,14 +6,28 @@ import { MatInputModule } from '@angular/material/input';
 import { NbAuthModule } from '@nebular/auth';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbCardModule, NbLayoutModule, NbMenuModule } from '@nebular/theme';
+import { NbCardModule, NbIconModule, NbLayoutModule, NbMenuModule } from '@nebular/theme';
 import { NgxTableComponent } from './components/ngx-table/ngx-table.component';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 const materialModules = [
   MatFormFieldModule,
   MatCheckboxModule,
-  MatInputModule
+  MatInputModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatMenuModule,
+  MatButtonModule,
+  MatGridListModule,
+];
+
+const nebularModules = [
+  NbIconModule
 ];
 
 @NgModule({

@@ -6,10 +6,10 @@ import {validateToken, checkAdminRole, checkUserRole} from "../middlewares/valid
 import userController from "../controllers/userController.js";
 
 // ------------------- Validate token ----------------------
-// router.use(validateToken, checkUserRole);
+router.use(validateToken, checkUserRole);
 
 // ------------------- User APIs ---------------------------
-router.route('/').get(validateToken, authController.getCurrentUser);
+router.route('/').get( authController.getCurrentUser);
 router.route('/get').get( userController.get);
 
 export default router;
