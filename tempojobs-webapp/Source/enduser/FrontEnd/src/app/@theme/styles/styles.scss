@@ -9,8 +9,9 @@
 
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/grid';
+@import '../../../../node_modules/bootstrap/scss/bootstrap-grid.scss';
+@import '../../../../node_modules/bootstrap/scss/_grid.scss';
+// @import 'bootstrap/scss/grid';
 
 // loading progress bar theme
 @import './pace.theme';
