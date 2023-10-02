@@ -6,6 +6,7 @@ class authController {
     // [POST] /register
     async register(req, res, next) {
         const{username, email, password} = req.body;
+        console.log(username, email, password);
         if(!username || !email || !password) {
             res.status(400);
             throw new Error("All fields are madatory");
@@ -15,7 +16,7 @@ class authController {
         if(userAvailable) {
             res.status(400).json("User already registered");
             return;
-            //throw new Error("User already registered");
+            // throw new Error("User already registered");
         }
 
         //Hash password

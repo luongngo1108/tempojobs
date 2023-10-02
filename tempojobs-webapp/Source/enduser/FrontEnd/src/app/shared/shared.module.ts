@@ -7,6 +7,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { NbIconModule } from '@nebular/theme';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
+import { MatSelectModule } from '@angular/material/select';
+import { HttpClientModule } from '@angular/common/http';
 
 const materialModules = [
   MatToolbarModule,
@@ -14,10 +19,18 @@ const materialModules = [
   MatMenuModule,
   MatButtonModule,
   MatGridListModule,
+  MatSelectModule,
 ];
 
 const nebularModules = [
   NbIconModule
+];
+
+const angularModules = [
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  RxReactiveFormsModule,
+  HttpClientModule,
 ];
 
 @NgModule({
@@ -28,6 +41,7 @@ const nebularModules = [
   exports: [
     CommonModule,
     FontAwesomeModule,
+    ...angularModules,
     ...materialModules,
     ...nebularModules,
   ]

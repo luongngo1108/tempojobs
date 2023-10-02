@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { faCoffee, faEarthAsia, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faEarthAsia, faCircleUser, faBell, faMessage } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-header',
@@ -11,9 +11,11 @@ export class HeaderComponent {
   faCoffee = faCoffee;
   faEarthAsia = faEarthAsia;
   faCircleUser = faCircleUser;
+  faBell = faBell;
+  faMessage = faMessage;
 
-  isLogin = false;
   @Input() isIntro: boolean = true;
+  @Input() isLogin: boolean = false;
   constructor() {
 
   }

@@ -11,6 +11,10 @@ export const routes: Routes = [
     resolve: {},
     children: [
       {
+        path: 'pages',
+        component: JobcreatorPageComponent,
+      },
+      {
         path: 'create-work',
         component: CreateWorkComponent,
       },
