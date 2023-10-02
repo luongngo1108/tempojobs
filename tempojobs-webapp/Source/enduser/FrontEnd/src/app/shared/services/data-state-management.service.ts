@@ -1,0 +1,19 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { ReturnResult } from '../models/return-result';
+import { DataStateModel } from '../models/data-state.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class DataStateManagementService {
+  baseUrl = environment.apiDataStateManagement;
+
+  constructor(private http: HttpClient) { }
+
+  getDataStateByType(type: string = null) {
+    return this.http.get<ReturnResult<DataStateModel[]>>( !type ? `${this.baseUrl}/getDataStateByType` : `${this.baseUrl}/getDataStateByType?type=${type}` );
+  }
+}

@@ -2,7 +2,7 @@ import { prop, required } from "@rxweb/reactive-form-validators";
 
 export class WorkModel {
     @prop()
-    workId: string;
+    workId: number | null;
     @prop()
     workName: string | null;
     @prop()
@@ -21,4 +21,6 @@ export class WorkModel {
     createdBy: string | null;
     @prop()
     quantity: number | null;
+    @prop()
+    workProfit: number | null;
 }

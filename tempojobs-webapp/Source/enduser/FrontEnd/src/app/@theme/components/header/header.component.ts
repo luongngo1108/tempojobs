@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faCoffee, faEarthAsia, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faEarthAsia, faCircleUser, faBell, faMessage } from '@fortawesome/free-solid-svg-icons';
 import { NbAuthJWTToken, NbAuthService, NbTokenService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { Subject, Subscription } from 'rxjs';
@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   faCircleUser = faCircleUser;
   faBell = faBell;
   faMessage = faMessage;
+  isLogin: boolean = false;
 
   @Input() isIntro: boolean = true;
 

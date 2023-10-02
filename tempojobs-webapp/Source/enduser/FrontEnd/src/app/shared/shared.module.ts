@@ -14,9 +14,14 @@ import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbCardModule, NbIconModule, NbLayoutModule, NbMenuModule } from '@nebular/theme';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  NgxMatDatetimePickerModule, 
+  NgxMatNativeDateModule, 
+  NgxMatTimepickerModule 
+} from '@angular-material-components/datetime-picker';
 
 
 const materialModules = [
@@ -29,6 +34,7 @@ const materialModules = [
   MatButtonModule,
   MatGridListModule,
   MatSelectModule,
+  MatDatepickerModule,
 ];
 
 const nebularModules = [
@@ -43,7 +49,8 @@ const angularModules = [
 ];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
     FontAwesomeModule,
@@ -69,6 +76,9 @@ const angularModules = [
     ReactiveFormsModule,
     RxReactiveFormsModule,
     NgxDatatableModule,
+    NgxMatDatetimePickerModule, 
+    NgxMatNativeDateModule, 
+    NgxMatTimepickerModule,
     [...materialModules],
     [...nebularModules],
     [...angularModules]

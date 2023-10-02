@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ReturnResult } from '../models/return-result';
-import { WorkTypeModel } from '../models/work-type.model';
+import { WorkModel } from '../models/work.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,11 @@ export class WorkManagementService {
 
   constructor(private http: HttpClient) { }
 
-  getAllWorkType(): Observable<ReturnResult<WorkTypeModel[]>> {
-    return this.http.get<ReturnResult<WorkTypeModel[]>>(`${this.baseUrl}/getWorkTypes`);
+  getAllWork(): Observable<ReturnResult<WorkModel[]>> {
+    return this.http.get<ReturnResult<WorkModel[]>>(`${this.baseUrl}/getWorkAll`);
+  }
+
+  saveWork(model: WorkModel): Observable<ReturnResult<WorkModel>> {
+    return this.http.post<ReturnResult<WorkModel>>(`${this.baseUrl}/saveWork`, model);
   }
 }

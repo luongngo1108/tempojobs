@@ -1,10 +1,9 @@
 import { Router } from "express";
 const router = Router();
 
-import workController from "../controllers/workTypeController.js";
+import workController from "../controllers/workController.js";
 
-router.route('/saveWorkType').post(workController.saveWorkType);
-
-router.route('/getWorkTypes').get(workController.getAllWorkTypes);
+router.route('/getWorkAll').get(workController.getWorkAll);
+router.route('/saveWork').post(workController.saveWork);
 
 export default router;

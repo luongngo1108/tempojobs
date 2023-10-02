@@ -8,4 +8,5 @@ export const environment = {
     apiWorkManagement: apiUrl + '/work',
     apiAuth: apiUrl + '/auth',
     apiUser: apiUrl + '/user',
+    apiDataStateManagement: apiUrl + '/dataState',
 }
