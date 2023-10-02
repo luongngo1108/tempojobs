@@ -26,6 +26,7 @@
     "@nebular/theme": "^11.0.1",
     "@rxweb/reactive-form-validators": "^13.0.1",
     "@swimlane/ngx-charts": "^20.4.1",
+    "@swimlane/ngx-datatable": "^20.1.0",
     "angular2-chartjs": "^0.5.1",
     "bootstrap": "^4.3.1",
     "eva-icons": "^1.1.3",

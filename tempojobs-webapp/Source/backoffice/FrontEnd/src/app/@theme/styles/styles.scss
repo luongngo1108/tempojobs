@@ -17,6 +17,10 @@
 
 @import './layout';
 @import './overrides';
+@import "../../../../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import '../../../../node_modules/@swimlane/ngx-datatable/index.css';
+@import '../../../../node_modules/@swimlane/ngx-datatable/themes/material.scss';
+@import '../../../../node_modules/@swimlane/ngx-datatable/assets/icons.css';
 
 // install the framework and custom global styles
 @include nb-install() {
@@ -31,3 +35,5 @@
 
   @include nb-overrides();
 };
+
+

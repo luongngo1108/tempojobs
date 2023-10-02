@@ -4,6 +4,7 @@ import { AdminComponent } from './admin.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import { UserManagementComponent } from './user-management/user-management.component';
 
 const routes: Routes = [{
   path: '',
@@ -16,6 +17,10 @@ const routes: Routes = [{
     {
       path: 'iot-dashboard',
       component: DashboardComponent,
+    },
+    {
+      path: 'user',
+      component: UserManagementComponent,
     },
     {
       path: 'layout',

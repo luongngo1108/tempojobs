@@ -1,150 +1,119 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-content">
   <div class="container px-5">
-      <a class="navbar-brand" href="index.html"><span class="fw-bolder text-primary">TempoJobs TJ</span></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-size: large; font-weight: 300;">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
-              <li class="nav-item" *ngIf="!isLogin;">
-                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                  <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Tìm người làm việc
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
+    <a class="navbar-brand" href="index.html"><span class="fw-bolder text-primary">TempoJobs TJ</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+        class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-size: large; font-weight: 300;">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item">
+          <div class="collapse navbar-collapse dropdown" id="navbarNavDarkDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Tìm người làm việc
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
               </li>
-              <li class="nav-item" *ngIf="!isLogin;">
-                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                  <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Tìm việc làm thời vụ
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  Tìm việc làm thời vụ
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="#">Action</a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
               </li>
-              <li class="nav-item" *ngIf="isLogin;">
-                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                  <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <fa-icon [icon]="faBell" style="font-size: 20px;"></fa-icon>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item">
+          <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+            <fa-icon [icon]="faEarthAsia"></fa-icon>
+            <ul class="navbar-nav">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  VI
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark">
+                  <li><a class="dropdown-item" href="#">EN</a></li>
+                  <li><a class="dropdown-item" href="#">JP</a></li>
+                  <li><a class="dropdown-item" href="#">KO</a></li>
+                </ul>
               </li>
-              <li class="nav-item" *ngIf="isLogin;">
-                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                  <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <fa-icon [icon]="faMessage" style="font-size: 20px;"></fa-icon>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item">
-                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                  <fa-icon [icon]="faEarthAsia"></fa-icon>
-                  <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        VI
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-dark">
-                        <li><a class="dropdown-item" href="#">EN</a></li>
-                        <li><a class="dropdown-item" href="#">JP</a></li>
-                        <li><a class="dropdown-item" href="#">KO</a></li>
-                      </ul>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li class="nav-item" *ngIf="isLogin; then user else login">
-              </li>
-          </ul>
-      </div>
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item" *ngIf="isLogin; then user else login">
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
 <!-- Header-->
-<header *ngIf="isIntro" class="py-5">
-  <div class="container px-5 pb-5" style="margin-top: 40px !important;">
-      <div class="row gx-5 align-items-center">
-          <div class="col-xxl-5">
-              <!-- Header text content-->
-              <div class="text-center text-xxl-start">
-                  <!-- <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Design &middot; Development &middot; Marketing</div></div> -->
-                  <div class="fs-3 fw-light text-muted">Đảm bảo hoàn thành công việc với</div>
-                  <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">người giúp việc hàng đầu</span></h1>
-                  <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                      <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="jobcreator/create-work">Tạo công việc</a>
-                      <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="projects.html">Tìm người làm</a>
-                  </div>
-              </div>
+<header class="py-5">
+  <div *ngIf="isIntro" class="container px-5 pb-5">
+    <div class="row gx-5 align-items-center">
+      <div class="col-xxl-5">
+        <!-- Header text content-->
+        <div class="text-center text-xxl-start">
+          <!-- <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Design &middot; Development &middot; Marketing</div></div> -->
+          <div class="fs-3 fw-light text-muted">Đảm bảo hoàn thành công việc với</div>
+          <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">người giúp việc hàng đầu</span></h1>
+          <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
+            <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="jobcreator/create-work">Tạo công
+              việc</a>
+            <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="projects.html">Tìm người làm</a>
           </div>
-          <div class="col-xxl-7">
-              <!-- Header profile picture-->
-              <div class="d-flex justify-content-center mt-5 mt-xxl-0">
-                  <div class="bg-gradient-primary-to-secondary" style="border-radius: 30px;">
-                    <video width="600" autoplay muted style="border-radius: 20px;">
-                      <source src="../../../../assets/videos/intro_header_2.mp4" type="video/mp4">
-                      Your browser does not support HTML video.
-                    </video>
-                  </div>
-              </div>
-          </div>
+        </div>
       </div>
+      <div class="col-xxl-7">
+        <!-- Header profile picture-->
+        <div class="d-flex justify-content-center mt-5 mt-xxl-0">
+          <div class="bg-gradient-primary-to-secondary" style="border-radius: 30px;">
+            <video width="600" autoplay muted style="border-radius: 20px;">
+              <!-- <source src="../../../../assets/videos/intro_header_2.mp4" type="video/mp4"> -->
+              Your browser does not support HTML video.
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
 <ng-template #login>
   <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
     <fa-icon [icon]="faCircleUser"></fa-icon>
-    <a class="nav-link" href="index.html">Login</a>
+    <a class="nav-link" href="/auth">Login</a>
   </div>
 </ng-template>
 
 <ng-template #user>
-  <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
-    <ul class="navbar-nav">
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <fa-icon [icon]="faCircleUser"></fa-icon> UserName
-        </a>
-        <ul class="dropdown-menu dropdown-menu">
-          <li><a class="dropdown-item" href="#">Hồ sơ cá nhân</a></li>
-          <li><a class="dropdown-item" href="#">Chỉnh sửa hồ sơ</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Đăng xuất</a></li>
-        </ul>
-      </li>
-    </ul>
+
+  <div class="header-container collapse navbar-collapse" id="navbarNavDarkDropdown">
+    <nb-actions size="small">
+      <nb-action class="user-action">
+        <nb-user size="medium" [name]="userLoggedIn.user.username" [onlyPicture]="userPictureOnly" [nbContextMenu]="userMenu"></nb-user>
+      </nb-action>
+    </nb-actions>
+   
   </div>
 </ng-template>

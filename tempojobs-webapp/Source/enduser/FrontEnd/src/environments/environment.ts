@@ -6,4 +6,6 @@ export const environment = {
     host,
     apiUrl,
     apiWorkManagement: apiUrl + '/work',
+    apiAuth: apiUrl + '/auth',
+    apiUser: apiUrl + '/user',
 }
