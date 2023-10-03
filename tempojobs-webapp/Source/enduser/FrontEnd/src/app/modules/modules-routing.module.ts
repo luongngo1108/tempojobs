@@ -15,11 +15,6 @@ const routes: Routes = [
         loadChildren: () => import('./master-layout/master-layout.module')
             .then(m => m.MasterLayoutModule)
     },
-    { 
-        path: 'jobcreator',
-        loadChildren: () => import('./jobcreator/jobcreator.module')
-        .then(m => m.JobcreatorModule)
-     },
 ];
 
 @NgModule({

@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   faMessage = faMessage;
   isLogin: boolean = false;
 
-  @Input() isIntro: boolean = true;
+  isIntro: boolean = true;
 
   userMenu = [{ title: 'Profile', id: 'profile' }, { title: 'Log out', id: 'logout' }];
   constructor (
@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.userLoggedIn = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
           this.isLogin = true;
         }
-
       });
   }
 
@@ -66,6 +65,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
+
+      if (this.router.url !== "/") {
+        this.isIntro = false;
+      }
   }
 
   ngOnDestroy() {
