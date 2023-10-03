@@ -5,47 +5,42 @@
  */
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { NB_AUTH_OPTIONS, NbAuthResult, NbAuthService, NbAuthSocialLink } from '@nebular/auth';
+import { NB_AUTH_OPTIONS, NbAuthResult, NbAuthService } from '@nebular/auth';
 import { getDeepFromObject } from 'src/app/shared/utility/Helper';
 
 @Component({
-  selector: 'nb-login',
-  templateUrl: './login.component.html',
+  selector: 'nb-request-password-page',
+  styleUrls: ['./request-password.component.scss'],
+  templateUrl: './request-password.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class RequestPasswordComponent {
 
   redirectDelay: number = 0;
   showMessages: any = {};
   strategy: string = '';
 
+  submitted = false;
   errors: string[] = [];
   messages: string[] = [];
   user: any = {};
-  submitted: boolean = false;
-  socialLinks: NbAuthSocialLink[] = [];
-  rememberMe = false;
 
   constructor(protected service: NbAuthService,
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
               protected router: Router) {
 
-    this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
-    this.showMessages = this.getConfigValue('forms.login.showMessages');
-    this.strategy = this.getConfigValue('forms.login.strategy');
-    this.socialLinks = this.getConfigValue('forms.login.socialLinks');
-    this.rememberMe = this.getConfigValue('forms.login.rememberMe');
+    this.redirectDelay = this.getConfigValue('forms.requestPassword.redirectDelay');
+    this.showMessages = this.getConfigValue('forms.requestPassword.showMessages');
+    this.strategy = this.getConfigValue('forms.requestPassword.strategy');
   }
 
-  login(): void {
-    this.errors = [];
-    this.messages = [];
+  requestPass(): void {
+    this.errors = this.messages = [];
     this.submitted = true;
 
-    this.service.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
+    this.service.requestPassword(this.strategy, this.user).subscribe((result: NbAuthResult) => {
       this.submitted = false;
-
       if (result.isSuccess()) {
         this.messages = result.getMessages();
       } else {

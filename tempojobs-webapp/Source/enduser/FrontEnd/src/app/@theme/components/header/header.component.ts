@@ -35,10 +35,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private breakpointService: NbMediaBreakpointsService,
     private authService: NbAuthService
   ) {
-    this.authService.onTokenChange()
+    this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.userLoggedIn = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+          console.log(this.userLoggedIn);
           this.isLogin = true;
         }
 

@@ -24,6 +24,13 @@ import { environment } from 'src/environments/environment';
               failure: '/auth',
             },
           },
+          register: {
+            endpoint: '/register',
+            redirect: {
+              success: '/login',
+              failure: '/auth/register',
+            },
+          },
           requestPass: {
             endpoint: '/reset',
           },
