@@ -22,7 +22,7 @@
            [(ngModel)]="user.fullName"
            #fullName="ngModel"
            id="input-name"
-           name="fullName"
+           name="username"
            placeholder="Full name"
            autofocus
            fullWidth
@@ -126,13 +126,13 @@
     <nb-checkbox name="terms" [(ngModel)]="user.terms" [required]="getConfigValue('forms.register.terms')">
       Agree to <a href="#" target="_blank"><strong>Terms & Conditions</strong></a>
     </nb-checkbox>
-    <nb-radio-group cl>
+    <!-- <nb-radio-group cl>
         <nb-radio *ngFor="let option of radioOptions"
                 [checked]="radioOptions.checked"
                 [value]="option.value">
         {{ option.label }}
         </nb-radio>
-    </nb-radio-group>
+    </nb-radio-group> -->
   </div>
 
   <button nbButton

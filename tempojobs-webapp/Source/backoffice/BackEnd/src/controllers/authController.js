@@ -5,9 +5,10 @@ import { hash, compare } from 'bcrypt';
 class authController {
     // [POST] /register
     async register(req, res, next) {
-        const{username, email, password} = req.body;
-        console.log(username, email, password);
-        if(!username || !email || !password) {
+        const{fullName, email, password} = req.body;
+        console.log(req.body);
+        console.log(fullName, email, password);
+        if(!fullName || !email || !password) {
             res.status(400);
             throw new Error("All fields are madatory");
         }
@@ -22,13 +23,22 @@ class authController {
         //Hash password
         const hashedPassword = await hash(password, 10);
         const user = await User.create({
-            username,
+            username: fullName,
             email,
             password: hashedPassword
         });
 
         if(user) {
-            res.status(201).json({_id: user.id, email: user.email})
+            const accessToken = createToken(
+                {
+                    username: user.username, 
+                    email: user.email, 
+                    id: user.id,
+                    role: user.role,
+                });
+                
+            res.status(200).json({accessToken});
+            // res.status(201).json({_id: user.id, email: user.email})
         } else {
             res.status(400).json("Email or password is not valid!");
         }

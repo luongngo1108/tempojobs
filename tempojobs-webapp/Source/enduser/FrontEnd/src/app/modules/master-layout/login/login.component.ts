@@ -55,7 +55,7 @@ export class LoginComponent {
       const redirect = result.getRedirect();
       if (redirect) {
         setTimeout(() => {
-          return this.router.navigateByUrl(redirect);
+          return this.router.navigate([redirect]);
         }, this.redirectDelay);
       }
       this.cd.detectChanges();

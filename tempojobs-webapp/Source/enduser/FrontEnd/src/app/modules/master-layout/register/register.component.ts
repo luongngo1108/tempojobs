@@ -54,7 +54,8 @@ export class RegisterComponent {
       } else {
         this.errors = result.getErrors();
       }
-
+      console.log(this.messages);
+      console.log(this.errors);
       const redirect = result.getRedirect();
       if (redirect) {
         setTimeout(() => {

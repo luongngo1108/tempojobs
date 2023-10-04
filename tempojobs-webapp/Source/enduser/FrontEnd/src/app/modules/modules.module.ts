@@ -21,18 +21,23 @@ import { environment } from 'src/environments/environment';
             requireValidToken: true,
             redirect: {
               success: '/',
-              failure: '/auth',
+              failure: '/auth/login',
             },
           },
           register: {
             endpoint: '/register',
             redirect: {
-              success: '/login',
+              success: '/',
               failure: '/auth/register',
             },
+            defaultErrors: ['Email has been registered, pls try another one'],
           },
           requestPass: {
             endpoint: '/reset',
+            redirect: {
+              success: '/auth/reset-password',
+              failure: '/auth/request-password'
+            }
           },
           token: {
             class: NbAuthJWTToken,

@@ -1,49 +1,51 @@
-<app-header></app-header>
-
 <!--Navigation for Creator Page-->
-<nav *ngIf="userLogined" class="navbar navbar-expand-lg fixed-content">
-    <div class="container-fluid px-5" style="margin-left: 60px; margin-right: 60px;">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Quản lý công việc đã tạo
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
+<nb-layout windowMode>
+    <nb-layout-column>
+        <app-header></app-header>
+        <nav *ngIf="userLogined" class="navbar navbar-expand-lg fixed-content">
+            <div class="container-fluid px-5" style="margin-left: 60px; margin-right: 60px;">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Quản lý công việc đã tạo
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
                         </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Quản lý cái gì đó
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Quản lý cái gì đó
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
                         </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
-                </li>
-            </ul>
-            <a class="nav-link" href="/management-work" style="margin-right: 20px;">
-                <button type="button" class="btn btn-outline-success">Quản lý công việc đã tạo</button>
-            </a>
-            <a class="nav-link" href="/create-work">
-                <button type="button" class="btn btn-outline-primary">Tạo công việc</button>
-            </a>
-        </div>
-    </div>
-</nav>
+                    <a class="nav-link" href="/management-work" style="margin-right: 20px;">
+                        <button type="button" class="btn btn-outline-success">Quản lý công việc đã tạo</button>
+                    </a>
+                    <a class="nav-link" href="/create-work">
+                        <button type="button" class="btn btn-outline-primary">Tạo công việc</button>
+                    </a>
+                </div>
+            </div>
+        </nav>
 
-<router-outlet router-outlet></router-outlet>
-
-<app-footer></app-footer>
+        <router-outlet router-outlet></router-outlet>
+        <app-footer></app-footer>
+    </nb-layout-column>
+</nb-layout>
