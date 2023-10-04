@@ -4,7 +4,9 @@ import { faCoffee, faEarthAsia, faCircleUser } from '@fortawesome/free-solid-svg
 import { NbAuthJWTToken, NbAuthService, NbTokenService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { Subject, Subscription } from 'rxjs';
-import { map, takeUntil } from 'rxjs/operators';
+import { map, takeLast, takeUntil } from 'rxjs/operators';
+import { UserManagementService } from 'src/app/modules/home/profile/user-management.service';
+import { User } from 'src/app/modules/home/profile/user.model';
 
 
 @Component({
@@ -33,12 +35,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private tokenService: NbTokenService,
     private router: Router,
     private breakpointService: NbMediaBreakpointsService,
-    private authService: NbAuthService
+    private authService: NbAuthService,
+    private userService: UserManagementService,
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.userLoggedIn = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+          userService._currentUser.next(this.userLoggedIn);
+          // userService.getCurrentUser().subscribe(x => {
+          //   console.log(JSON.parse(JSON.stringify(x)))
+          // })
           console.log(this.userLoggedIn);
           this.isLogin = true;
         }
@@ -55,6 +62,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
         localStorage.clear();
         this.isLogin = false;
         this.router.navigateByUrl("/auth");
+      }
+    })
+
+    this.menuServiceObservable = this.menuService.onItemClick().subscribe((event) => {
+      if (event.item['id'] === 'profile') {
+        // this.userService._currentUser.next(this.userLoggedIn);
       }
     })
 
