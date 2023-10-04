@@ -1,0 +1,118 @@
+<div class="container px-5 fix-section">
+  <!-- Contact form-->
+  <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+    <div class="text-center mb-5">
+      <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i
+          class="bi bi-envelope"></i></div>
+      <h1 class="display-5 fw-bolder"><span class="text-gradient d-inline">Tạo công việc mới</span></h1>
+      <p class="lead fw-normal text-muted mb-0">Cùng nhau tạo thật nhiều công việc!</p>
+    </div>
+    <div class="row gx-5 justify-content-center">
+      <div class="col-lg-8 col-xl-6">
+        <!-- * * * * * * * * * * * * * * *-->
+        <!-- * * SB Forms Contact Form * *-->
+        <!-- * * * * * * * * * * * * * * *-->
+        <!-- This form is pre-integrated with SB Forms.-->
+        <!-- To make this form functional, sign up at-->
+        <!-- https://startbootstrap.com/solution/contact-forms-->
+        <!-- to get an API token!-->
+        <form [formGroup]="frmCreateWork">
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Tên công việc</mat-label>
+              <input matInput formControlName="workName" autocomplete="off" required trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workName?.errors &&
+                  (frmCreateWork.controls?.workName?.dirty ||
+                    frmCreateWork.controls?.workName?.touched)">
+                {{ frmCreateWork.controls.workName["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Loại công việc</mat-label>
+              <mat-select formControlName="workTypeId" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let workType of listWorkType" [value]="workType._id">
+                  {{workType.dataStateName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Số lượng người cần</mat-label>
+              <input matInput formControlName="quantity" autocomplete="off" required trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.quantity?.errors &&
+                  (frmCreateWork.controls?.quantity?.dirty ||
+                    frmCreateWork.controls?.quantity?.touched)">
+                {{ frmCreateWork.controls.quantity["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Thời gian bắt đầu làm việc</mat-label>
+              <input matInput [ngxMatDatetimePicker]="pickerCustomIcon" placeholder="Choose a date"
+                formControlName="startDate" [disabled]="false">
+              <ngx-mat-datepicker-toggle matSuffix [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [showSeconds]="true" [stepHour]="1"
+                [stepMinute]="1" [stepSecond]="1" [touchUi]="false" [enableMeridian]="false" [disableMinute]="false"
+                [hideTime]="false">
+                <ngx-mat-datepicker-actions>
+                  <button mat-button ngxMatDatepickerCancel>Cancel</button>
+                  <button mat-raised-button color="primary" ngxMatDatepickerApply>Apply</button>
+                </ngx-mat-datepicker-actions>
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Thời lượng làm việc</mat-label>
+              <input matInput formControlName="workHours" autocomplete="off" required trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workHours?.errors &&
+                  (frmCreateWork.controls?.workHours?.dirty ||
+                    frmCreateWork.controls?.workHours?.touched)">
+                {{ frmCreateWork.controls.workHours["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Địa chỉ công việc</mat-label>
+              <input matInput formControlName="workAddress" autocomplete="off" trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workAddress?.errors &&
+                  (frmCreateWork.controls?.workAddress?.dirty ||
+                    frmCreateWork.controls?.workAddress?.touched)">
+                {{ frmCreateWork.controls.workAddress["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Hoa hồng nhận được</mat-label>
+              <input matInput type="text" formControlName="workProfit" autocomplete="off" trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workProfit?.errors &&
+                  (frmCreateWork.controls?.workProfit?.dirty ||
+                    frmCreateWork.controls?.workProfit?.touched)">
+                {{ frmCreateWork.controls.workProfit["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Mô tả công việc</mat-label>
+              <input matInput type="text" formControlName="workDescription" autocomplete="off" trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workDescription?.errors &&
+                  (frmCreateWork.controls?.workDescription?.dirty ||
+                    frmCreateWork.controls?.workDescription?.touched)">
+                {{ frmCreateWork.controls.workDescription["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="d-grid"><button class="btn btn-primary" type="submit" (click)="saveData()"
+              [disabled]="!frmCreateWork.valid">Submit</button></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

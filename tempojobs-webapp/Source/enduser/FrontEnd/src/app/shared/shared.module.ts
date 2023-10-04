@@ -14,7 +14,15 @@ import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule } from '@nebular/theme';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { MatSelectModule } from '@angular/material/select';
+import { HttpClientModule } from '@angular/common/http';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
+import {
+  NgxMatDatetimePickerModule, 
+  NgxMatNativeDateModule, 
+  NgxMatTimepickerModule 
+} from '@angular-material-components/datetime-picker';
 
 
 const materialModules = [
@@ -26,6 +34,8 @@ const materialModules = [
   MatMenuModule,
   MatButtonModule,
   MatGridListModule,
+  MatSelectModule,
+  MatDatepickerModule,
   MatTabsModule,
 ];
 
@@ -38,8 +48,16 @@ const nebularModules = [
   NbRadioModule,
 ];
 
+const angularModules = [
+  ReactiveFormsModule,
+  MatFormFieldModule,
+  RxReactiveFormsModule,
+  HttpClientModule,
+];
+
 @NgModule({
-  declarations: [],
+  declarations: [
+  ],
   imports: [
     CommonModule,
     FontAwesomeModule,
@@ -65,8 +83,12 @@ const nebularModules = [
     ReactiveFormsModule,
     RxReactiveFormsModule,
     NgxDatatableModule,
+    NgxMatDatetimePickerModule, 
+    NgxMatNativeDateModule, 
+    NgxMatTimepickerModule,
     [...materialModules],
     [...nebularModules],
+    [...angularModules]
   ]
 })
 export class SharedModule { }

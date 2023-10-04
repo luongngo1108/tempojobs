@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { faCoffee, faEarthAsia, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faCoffee, faEarthAsia, faCircleUser, faBell, faMessage } from '@fortawesome/free-solid-svg-icons';
 import { NbAuthJWTToken, NbAuthService, NbTokenService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { Subject, Subscription } from 'rxjs';
@@ -24,9 +24,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   faCoffee = faCoffee;
   faEarthAsia = faEarthAsia;
   faCircleUser = faCircleUser;
+  faBell = faBell;
+  faMessage = faMessage;
+  isLogin: boolean = false;
 
-  isLogin = false;
-  @Input() isIntro: boolean = true;
+  isIntro: boolean = true;
 
   userMenu = [{ title: 'Profile', id: 'profile' }, { title: 'Log out', id: 'logout' }];
   constructor (
@@ -49,7 +51,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
           console.log(this.userLoggedIn);
           this.isLogin = true;
         }
-
       });
   }
 
@@ -78,6 +79,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
+
+      if (this.router.url !== "/") {
+        this.isIntro = false;
+      }
   }
 
   ngOnDestroy() {
