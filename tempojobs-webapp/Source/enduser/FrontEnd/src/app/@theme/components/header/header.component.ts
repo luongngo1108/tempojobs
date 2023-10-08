@@ -28,8 +28,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   faMessage = faMessage;
   isLogin: boolean = false;
 
-  isIntro: boolean = true;
-
   userMenu = [{ title: 'Profile', id: 'profile' }, { title: 'Log out', id: 'logout' }];
   constructor (
     private menuService: NbMenuService,
@@ -67,8 +65,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     })
 
     this.menuServiceObservable = this.menuService.onItemClick().subscribe((event) => {
-      if (event.item['id'] === 'profile') {
-        // this.userService._currentUser.next(this.userLoggedIn);
+      if (event.item['id'] === 'profile') { 
+        this.router.navigateByUrl("/profile");
       }
     })
 
@@ -79,10 +77,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
-
-      if (this.router.url !== "/") {
-        this.isIntro = false;
-      }
   }
 
   ngOnDestroy() {
