@@ -2,6 +2,9 @@ import { prop } from "@rxweb/reactive-form-validators";
 
 export class User {
   @prop()
+  id: string;
+  
+  @prop()
   username: string;
 
   @prop()

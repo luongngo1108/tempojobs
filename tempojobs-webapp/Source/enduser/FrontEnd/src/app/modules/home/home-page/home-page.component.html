@@ -1,15 +1,40 @@
 <!-- Section-->
 <section class="py-5">
   <h1 style="text-align: center;">Các công việc được quan tâm nhiều nhất</h1>
-  <div class="container px-4 px-lg-5 mt-5">
+  <div class="container px-4 px-lg-5 mt-5" style="text-align: center;">
     <div class="row gx-4 gx-lg-5 justify-content-center" *ngFor="let work of listWork">
       <nb-card accent="{{randomColor()}}" class="cardContext">
-        <nb-card-header>{{work.workName}}</nb-card-header>
+        <nb-card-header class="work-header">
+          <div class="row">
+            <span>{{work.workName}}</span>
+            <span>
+              <nb-icon icon="flash-outline"></nb-icon>
+              <nb-icon icon="flash-outline"></nb-icon>
+              <nb-icon icon="flash-outline"></nb-icon>
+              <nb-icon icon="flash-outline"></nb-icon>
+              <nb-icon icon="flash-outline"></nb-icon>
+              {{work?.createdBy?.username}}
+            </span>
+          </div>
+        </nb-card-header>
         <nb-card-body>
-          {{work.workDescription}}
+          <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container-fluid">
+              <span>{{work.workAddress}} | {{work.workProfit}} đ</span>
+              <form>
+                <span class="navbar-text">
+                  Timeline
+                </span>
+              </form>
+            </div>
+          </nav>
         </nb-card-body>
+        <nb-card-footer>{{work.workDescription}}</nb-card-footer>
       </nb-card>
     </div>
+    <button type="button" class="btn btn-outline-primary">
+      Xem tất cả <strong>{{listWork.length}}</strong> công việc
+    </button>
   </div>
 </section>
 

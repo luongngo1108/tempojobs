@@ -5,8 +5,10 @@ import { HomeRoutingModule } from './home-routing.module';
 import { ThemeModule } from 'src/app/@theme/theme.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { HomeComponent } from './home.component';
-import { CreateWorkComponent } from './create-work/create-work.component';
+import { CreateWorkComponent } from './work-management/create-work/create-work.component';
 import { ProfileComponent } from './profile/profile.component';
+import { WorkManagementComponent } from './work-management/work-management.component';
+import { WorkDetailComponent } from './work-management/work-detail/work-detail.component';
 
 
 
@@ -15,7 +17,9 @@ import { ProfileComponent } from './profile/profile.component';
     HomeComponent,
     HomePageComponent,
     CreateWorkComponent,
-    ProfileComponent
+    ProfileComponent,
+    WorkManagementComponent,
+    WorkDetailComponent
   ],
   imports: [
     CommonModule,

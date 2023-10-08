@@ -1,4 +1,5 @@
 import { Schema as _Schema, model } from 'mongoose';
+import User from '../models/userModel.js';
 const Schema = _Schema;
 
 const Work = new Schema ({
@@ -8,6 +9,14 @@ const Work = new Schema ({
     workName: { 
         type: String, 
         required: [true, "Please add the work name!"],
+    },
+    workProvince: {
+        type: String,
+        required: [true, "Please add the work province!"],
+    },
+    workDistrict: {
+        type: String,
+        required: [true, "Please add the work district!"],
     },
     workAddress: { 
         type: String, 
@@ -32,10 +41,10 @@ const Work = new Schema ({
     workStatusId: {
         type: String,
     },
-    createdBy: {
+    createdById: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: [true, "Please add the createBy!"]
+        required: [true, "Please add the createById!"]
     },
     quantity: {
         type: Number,
@@ -45,6 +54,9 @@ const Work = new Schema ({
         type: String,
         required: [true, "Please add the work profit!"]
     },
+    createdBy: {
+        type: Schema.Types.Object
+    }
     
 }, {
     timestamps: true,

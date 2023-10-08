@@ -13,6 +13,10 @@ export class DataStateManagementService {
 
   constructor(private http: HttpClient) { }
 
+  getListProvince() {
+    return this.http.get<any>(`https://provinces.open-api.vn/api/?depth=2`);
+  }
+
   getDataStateByType(type: string = null) {
     return this.http.get<ReturnResult<DataStateModel[]>>( !type ? `${this.baseUrl}/getDataStateByType` : `${this.baseUrl}/getDataStateByType?type=${type}` );
   }

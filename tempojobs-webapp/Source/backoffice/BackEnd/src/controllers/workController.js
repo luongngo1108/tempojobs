@@ -45,7 +45,6 @@ class WorkController {
                     findWork.workProfit = workBody.workProfit;
                     findWork.workAddress = workBody.workAddress;
                     findWork.workHours = workBody.workHours;
-                    findWork.createdBy = workBody.createdBy;
                 } else {
                     message = "Can't find work";
                     res.status(400).json({result: result, message: message});

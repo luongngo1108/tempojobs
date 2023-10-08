@@ -78,7 +78,27 @@
           </div>
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
-              <mat-label>Địa chỉ công việc</mat-label>
+              <mat-label>Tỉnh</mat-label>
+              <mat-select formControlName="workProvince" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let province of listProvince" [value]="province.codename">
+                  {{province.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Quận/Huyện</mat-label>
+              <mat-select formControlName="workDistrict" [errorStateMatcher]="matcher">
+                <mat-option *ngFor="let district of listDistrict" [value]="district.codename">
+                  {{district.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Địa chỉ chi tiết</mat-label>
               <input matInput formControlName="workAddress" autocomplete="off" trim="blur" />
               <mat-error *ngIf="
                   frmCreateWork.controls?.workAddress?.errors &&
