@@ -9,6 +9,8 @@ import { CreateWorkComponent } from './work-management/create-work/create-work.c
 import { ProfileComponent } from './profile/profile.component';
 import { WorkManagementComponent } from './work-management/work-management.component';
 import { WorkDetailComponent } from './work-management/work-detail/work-detail.component';
+import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
+import { ProfileActivityComponent } from './profile/profile-activity/profile-activity.component';
 
 
 
@@ -19,7 +21,9 @@ import { WorkDetailComponent } from './work-management/work-detail/work-detail.c
     CreateWorkComponent,
     ProfileComponent,
     WorkManagementComponent,
-    WorkDetailComponent
+    WorkDetailComponent,
+    EditProfileComponent,
+    ProfileActivityComponent
   ],
   imports: [
     CommonModule,
