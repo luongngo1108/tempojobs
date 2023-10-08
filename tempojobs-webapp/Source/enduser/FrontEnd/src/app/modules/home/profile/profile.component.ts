@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ProfileComponent implements OnInit {
   isEditProfile: boolean = false;
   ngOnInit(): void {
-    
+    this.isEditProfile = false;
   }
 
   changeTab(tabName: string) {

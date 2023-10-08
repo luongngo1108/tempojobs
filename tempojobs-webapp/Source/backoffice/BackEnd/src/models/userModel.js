@@ -1,8 +1,13 @@
 import { Schema as _Schema, model } from 'mongoose';
+import { randomUUID } from 'crypto'
 const Schema = _Schema;
 
 const User = new Schema ({
-    username: { 
+    _id: {
+        type: 'UUID',
+        default: () => randomUUID()
+    },
+    displayName: { 
         type: String, max: 25, 
         required: [true, "Invalid username!"],
     },
@@ -15,6 +20,10 @@ const User = new Schema ({
         type: String, 
         max: 10 , 
         required: [true, "Inavlid password!"],
+    },
+    userDetail: {
+        type: Schema.Types.ObjectId,
+        ref: 'UserDetail'
     },
     role: {
         type: String,

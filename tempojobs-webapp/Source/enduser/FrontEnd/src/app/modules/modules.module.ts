@@ -30,7 +30,7 @@ import { environment } from 'src/environments/environment';
               success: '/',
               failure: '/auth/register',
             },
-            defaultErrors: ['Email has been registered, pls try another one'],
+            defaultErrors: ['Email has been registered, please try another one'],
           },
           requestPass: {
             endpoint: '/reset',

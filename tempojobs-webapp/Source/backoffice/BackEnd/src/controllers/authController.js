@@ -1,14 +1,14 @@
 import User from "../models/userModel.js";
+import UserDetail from "../models/userDetailModel.js";
 import {createToken} from "../utils/jwtTokenUtils.js";
 import { hash, compare } from 'bcrypt';
 
 class authController {
     // [POST] /register
     async register(req, res, next) {
-        const{fullName, email, password} = req.body;
+        const{firstName, lastName, email, password} = req.body;
         console.log(req.body);
-        console.log(fullName, email, password);
-        if(!fullName || !email || !password) {
+        if(!firstName || !email || !password) {
             res.status(400);
             throw new Error("All fields are madatory");
         }
@@ -17,21 +17,25 @@ class authController {
         if(userAvailable) {
             res.status(400).json("User already registered");
             return;
-            // throw new Error("User already registered");
         }
 
         //Hash password
         const hashedPassword = await hash(password, 10);
         const user = await User.create({
-            username: fullName,
+            displayName: firstName + " " + lastName,
             email,
             password: hashedPassword
         });
 
+        const userDetail = await UserDetail.create ({
+            firstName,
+            lastName,
+            email
+        })
         if(user) {
             const accessToken = createToken(
                 {
-                    username: user.username, 
+                    displayName: user.displayName, 
                     email: user.email, 
                     id: user.id,
                     role: user.role,
@@ -60,12 +64,11 @@ class authController {
             
             const accessToken = createToken(
             {
-                username: user.username, 
+                displayName: user.displayName, 
                 email: user.email, 
                 id: user.id,
                 role: user.role,
             });
-            
             res.status(200).json({accessToken});
         } else {
             res.status(401).json("Email or password is not valid");

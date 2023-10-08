@@ -3,11 +3,13 @@
  * Copyright Akveo. All Rights Reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  */
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NB_AUTH_OPTIONS, NbAuthResult, NbAuthService, NbAuthSocialLink } from '@nebular/auth';
-import { NbComponentStatus } from '@nebular/theme';
 import { getDeepFromObject } from 'src/app/shared/utility/Helper';
+import { UserRegister } from '../../home/profile/user.model';
+import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'nb-register',
@@ -15,13 +17,13 @@ import { getDeepFromObject } from 'src/app/shared/utility/Helper';
   templateUrl: './register.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterComponent {
-  radioOptions = [
-    { value: 'isCreator', label: 'Đăng ký làm creator', checked: true },
-    { value: 'isTasker', label: 'Đăng ký làm tasker' },
-  ];
+export class RegisterComponent implements OnInit {
+  // radioOptions = [
+  //   { value: 'isCreator', label: 'Đăng ký làm creator', checked: true },
+  //   { value: 'isTasker', label: 'Đăng ký làm tasker' },
+  // ];
 
-  statuses: NbComponentStatus[] = ['basic', 'primary', 'success', 'warning', 'danger', 'info', 'control'];
+  // statuses: NbComponentStatus[] = ['basic', 'primary', 'success', 'warning', 'danger', 'info', 'control'];
   redirectDelay: number = 0;
   showMessages: any = {};
   strategy: string = '';
@@ -31,16 +33,23 @@ export class RegisterComponent {
   messages: string[] = [];
   user: any = {};
   socialLinks: NbAuthSocialLink[] = [];
+  registerFormGroup: FormGroup
 
   constructor(protected service: NbAuthService,
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
-              protected router: Router) {
+              protected router: Router,
+              private formBuilder: RxFormBuilder) {
 
-    this.redirectDelay = this.getConfigValue('forms.register.redirectDelay');
+    // this.redirectDelay = this.getConfigValue('forms.register.redirectDelay');
     this.showMessages = this.getConfigValue('forms.register.showMessages');
     this.strategy = this.getConfigValue('forms.register.strategy');
-    this.socialLinks = this.getConfigValue('forms.login.socialLinks');
+    // this.socialLinks = this.getConfigValue('forms.login.socialLinks');
+  }
+
+  ngOnInit(): void {
+    this.user = new UserRegister();
+    this.registerFormGroup = this.formBuilder.formGroup(this.user);
   }
 
   register(): void {
@@ -54,8 +63,6 @@ export class RegisterComponent {
       } else {
         this.errors = result.getErrors();
       }
-      console.log(this.messages);
-      console.log(this.errors);
       const redirect = result.getRedirect();
       if (redirect) {
         setTimeout(() => {
