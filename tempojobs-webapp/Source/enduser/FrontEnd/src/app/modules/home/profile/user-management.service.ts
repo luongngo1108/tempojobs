@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Subject, Observable } from "rxjs";
-import { User } from "./user.model";
+import { ProfileDetail, User } from "./user.model";
 import { environment } from "src/environments/environment";
 import { PagedData } from "src/app/shared/models/paged-data";
+import { ReturnResult } from "src/app/shared/models/return-result";
 
 @Injectable({
     providedIn: 'root'
@@ -32,4 +33,8 @@ export class UserManagementService {
     getCurrentUser(): Observable<any> {
        return this._currentUser.asObservable();
     }
+
+    getUserDetailById(id: string): Observable<ReturnResult<ProfileDetail>> {
+        return this.httpclient.get<ReturnResult<ProfileDetail>>(`${this.baseUrl}/getUserDetailById?id=${id}`);
+    } 
 }

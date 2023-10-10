@@ -23,6 +23,7 @@ import {
   NgxMatNativeDateModule, 
   NgxMatTimepickerModule 
 } from '@angular-material-components/datetime-picker';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 const materialModules = [
@@ -69,6 +70,7 @@ const angularModules = [
     ReactiveFormsModule,
     RxReactiveFormsModule,
     NgxDatatableModule,
+    GoogleMapsModule,
     [...materialModules],
     [...nebularModules],
   ],
@@ -86,6 +88,7 @@ const angularModules = [
     NgxMatDatetimePickerModule, 
     NgxMatNativeDateModule, 
     NgxMatTimepickerModule,
+    GoogleMapsModule,
     [...materialModules],
     [...nebularModules],
     [...angularModules]

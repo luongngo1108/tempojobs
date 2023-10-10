@@ -57,11 +57,13 @@ export class RegisterComponent implements OnInit {
     this.submitted = true;
 
     this.service.register(this.strategy, this.user).subscribe((result: NbAuthResult) => {
+      console.log(result)
       this.submitted = false;
       if (result.isSuccess()) {
         this.messages = result.getMessages();
       } else {
-        this.errors = result.getErrors();
+        this.errors = [result.getResponse().error];
+        console.log(this.errors)
       }
       const redirect = result.getRedirect();
       if (redirect) {

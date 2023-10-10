@@ -9,6 +9,10 @@ const UserDetail = new Schema ({
     lastName: { 
         type: String, max: 100
     },
+    googleLocation: {
+        type: Schema.Types.ObjectId,
+        ref: 'GoogleMapLocation'
+    },
     description: { 
         type: String
     },

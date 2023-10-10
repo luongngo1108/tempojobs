@@ -7,7 +7,6 @@ class authController {
     // [POST] /register
     async register(req, res, next) {
         const{firstName, lastName, email, password} = req.body;
-        console.log(req.body);
         if(!firstName || !email || !password) {
             res.status(400);
             throw new Error("All fields are madatory");
@@ -15,23 +14,25 @@ class authController {
 
         const userAvailable = await User.findOne({email});
         if(userAvailable) {
-            res.status(400).json("User already registered");
+            res.status(400).json("Email has been registered, please try another one");
             return;
         }
 
         //Hash password
         const hashedPassword = await hash(password, 10);
-        const user = await User.create({
-            displayName: firstName + " " + lastName,
-            email,
-            password: hashedPassword
-        });
-
         const userDetail = await UserDetail.create ({
             firstName,
             lastName,
             email
         })
+
+        const user = await User.create({
+            displayName: firstName + " " + lastName,
+            email,
+            password: hashedPassword,
+            userDetail: userDetail
+        });   
+        
         if(user) {
             const accessToken = createToken(
                 {
@@ -42,7 +43,6 @@ class authController {
                 });
                 
             res.status(200).json({accessToken});
-            // res.status(201).json({_id: user.id, email: user.email})
         } else {
             res.status(400).json("Email or password is not valid!");
         }
