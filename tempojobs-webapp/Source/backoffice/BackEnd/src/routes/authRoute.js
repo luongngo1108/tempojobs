@@ -5,6 +5,6 @@ import authController from "../controllers/authController.js";
 
 router.route('/register').post(authController.register);
 router.route('/login').post(authController.login);
-// router.route('/current').get(validateTokenHandler.validateToken(), authController.getCurrentUser());
-
+router.route('/sendEmailResetPassword').post(authController.sendEmailResetPassword);
+router.route('/resetPassword/:userId/:token').post(authController.changePassword);
 export default router;

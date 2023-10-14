@@ -3,6 +3,6 @@ export class ReturnResult {
         result = result;
         message = message;
     }
-    result;
-    message;
+    result = null;
+    message = null;
 }

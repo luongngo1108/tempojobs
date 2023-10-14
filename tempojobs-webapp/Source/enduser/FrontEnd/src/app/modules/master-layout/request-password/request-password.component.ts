@@ -7,6 +7,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@
 import { Router } from '@angular/router';
 import { NB_AUTH_OPTIONS, NbAuthResult, NbAuthService } from '@nebular/auth';
 import { getDeepFromObject } from 'src/app/shared/utility/Helper';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'nb-request-password-page',
@@ -25,10 +26,12 @@ export class RequestPasswordComponent {
   messages: string[] = [];
   user: any = {};
 
-  constructor(protected service: NbAuthService,
+  constructor(
               @Inject(NB_AUTH_OPTIONS) protected options = {},
               protected cd: ChangeDetectorRef,
-              protected router: Router) {
+              protected router: Router,
+              private authService: AuthService) {
+                
 
     this.redirectDelay = this.getConfigValue('forms.requestPassword.redirectDelay');
     this.showMessages = this.getConfigValue('forms.requestPassword.showMessages');
@@ -39,22 +42,16 @@ export class RequestPasswordComponent {
     this.errors = this.messages = [];
     this.submitted = true;
 
-    this.service.requestPassword(this.strategy, this.user).subscribe((result: NbAuthResult) => {
+    this.authService.sendEmailChangePassword(this.user.email).subscribe(res => {
       this.submitted = false;
-      if (result.isSuccess()) {
-        this.messages = result.getMessages();
+      if(res.result) {
+        this.messages = [res.result];
       } else {
-        this.errors = result.getErrors();
-      }
-
-      const redirect = result.getRedirect();
-      if (redirect) {
-        setTimeout(() => {
-          return this.router.navigateByUrl(redirect);
-        }, this.redirectDelay);
+        this.messages = [];
+        this.errors = ["Your email hasn't been registerd"];
       }
       this.cd.detectChanges();
-    });
+    })
   }
 
   getConfigValue(key: string): any {

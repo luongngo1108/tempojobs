@@ -3,10 +3,6 @@ import { randomUUID } from 'crypto'
 const Schema = _Schema;
 
 const User = new Schema ({
-    _id: {
-        type: 'UUID',
-        default: () => randomUUID()
-    },
     displayName: { 
         type: String, max: 25, 
         required: [true, "Invalid username!"],
