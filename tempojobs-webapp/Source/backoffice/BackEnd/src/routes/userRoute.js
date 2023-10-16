@@ -11,5 +11,6 @@ router.use(validateToken, checkUserRole);
 // ------------------- User APIs ---------------------------
 router.route('/get').get( userController.get);
 router.route('/getUserDetailById').get(userController.getUserDetailById)
+router.route('/saveUserDetail').post(userController.saveUserDetail)
 
 export default router;

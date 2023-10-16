@@ -1,4 +1,4 @@
-import { email, maxLength, password, prop, propObject, required } from "@rxweb/reactive-form-validators";
+import { email, maxLength, minLength, password, prop, propObject, required } from "@rxweb/reactive-form-validators";
 
 export class User {
   @prop()
@@ -36,28 +36,43 @@ export class UserRegister {
 }
 
 export class ProfileDetail {
+  // constructor(firstName, lastName, googleLocation, description, email, phone, facebook, instagram) {
+  //   this.firstName = firstName,
+  //   this.lastName = lastName,
+  //   this.googleLocation = googleLocation,
+  //   this.description = description,
+  //   this.email = email,
+  //   this.phone = phone,
+  //   this.facebook = facebook,
+  //   this.instagram = instagram
+  // }
   @prop()
   @required()
   @maxLength({ value: 100 })
-  firstName: string;
+  firstName: string = null;
   @prop()
   @maxLength({ value: 100 })
-  lastName: string;
-  @propObject()
-  googleLocation: GoogleMapLocation;
+  lastName: string = null;
+  googleLocation: GoogleMapLocation = null;
   @prop()
-  description: string;
+  description: string = null;
   @prop()
   @email()
   @required()
-  email: string;
+  email: string = null;
   @prop()
   @maxLength({value: 10})
-  phone: string;
+  @minLength({value: 10})
+  phone: string = null;
   @prop()
-  facebook: string;
+  facebook: string = null;
   @prop()
-  instagram: string;
+  instagram: string = null;
+  createdAt: string = null;
+  updatedAt: string = null;
+  __v: number  = 0;
+  @prop()
+  _id: string = null;
 }
 
 export class GoogleMapLocation {

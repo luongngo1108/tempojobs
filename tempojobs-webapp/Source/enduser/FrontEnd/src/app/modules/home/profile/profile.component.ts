@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, ViewChild, ElementRef, NgZone } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil, lastValueFrom } from 'rxjs';
 import { ProfileDetail } from './user.model';
 import { UserManagementService } from './user-management.service';
 
@@ -40,19 +40,20 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit(): void {
     this.isEditProfile = false;
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
-      .subscribe((token: NbAuthJWTToken) => {
+      .subscribe(async (token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
-          this.userService.getUserDetailById(this.user.user.id).subscribe(res => {
+          var res = await lastValueFrom(this.userService.getUserDetailById(this.user.user.id));
+          if(res.result) {
             this.userDetail = res.result;
-          })
+          }
         }
       });
     this.initializeMap();
   }
 
   ngAfterViewInit(): void {
-  
+    
   }
 
   ngOnDestroy(): void {
@@ -79,7 +80,6 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     };
 
     this.cdref.detectChanges()
-    console.log(this.mapElement.nativeElement);
 
     this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
     this.searchBox = new google.maps.places.SearchBox(this.pacInputElement.nativeElement);
@@ -147,5 +147,9 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.map.fitBounds(bounds);
+  }
+
+  updateProfileDetail(newProfileDetail: ProfileDetail) {
+    this.userDetail = newProfileDetail;
   }
 }

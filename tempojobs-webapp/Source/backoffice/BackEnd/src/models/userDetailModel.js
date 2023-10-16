@@ -5,29 +5,37 @@ const UserDetail = new Schema ({
     firstName: { 
         type: String, max: 100, 
         required: [true, "Invalid FistName"],
+        default: ""
     },
     lastName: { 
-        type: String, max: 100
+        type: String, max: 100,
+        default: ""
     },
     googleLocation: {
         type: Schema.Types.ObjectId,
-        ref: 'GoogleMapLocation'
+        ref: 'GoogleMapLocation',
+        default: null
     },
     description: { 
-        type: String
+        type: String,
+        default: ""
     },
     email: {
         type: String,
-        required: [true]
+        required: [true],
+        default: ""
     },
     phone: {
-        type: String
+        type: String,
+        default: ""
     },
     facebook: {
-        type: String
+        type: String,
+        default: ""
     },
     instagram: {
-        type: String
+        type: String,
+        default: ""
     } 
 }, {
     timestamps: true,

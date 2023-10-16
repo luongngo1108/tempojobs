@@ -7,7 +7,6 @@ class userController {
     // [GET] /get
     async get(req, res, next) {
         const data = await User.find({});
-        console.log(req);
         //compare password with hashedpassword
         if(data) {
             res.status(200).json({data});
@@ -32,6 +31,19 @@ class userController {
         catch(ex) {
             console.log(ex);
             result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
+    async saveUserDetail(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const userDetail = req.body;
+            let updatedUserDetail = await UserDetail.findByIdAndUpdate(userDetail._id, userDetail, {returnOriginal: false});
+            if(updatedUserDetail) result.result = updatedUserDetail;
+        }
+        catch (error) { 
+            console.log(error);
         }
         res.status(200).json(result);
     }

@@ -37,4 +37,8 @@ export class UserManagementService {
     getUserDetailById(id: string): Observable<ReturnResult<ProfileDetail>> {
         return this.httpclient.get<ReturnResult<ProfileDetail>>(`${this.baseUrl}/getUserDetailById?id=${id}`);
     } 
+
+    saveProfileDetail(profileDetail: ProfileDetail): Observable<ReturnResult<ProfileDetail>> {
+        return this.httpclient.post<ReturnResult<ProfileDetail>>(`${this.baseUrl}/saveUserDetail`, profileDetail)
+    }
 }

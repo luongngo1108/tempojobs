@@ -18,6 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
+import {MatTooltipModule} from '@angular/material/tooltip';
 import {
   NgxMatDatetimePickerModule, 
   NgxMatNativeDateModule, 
@@ -38,6 +39,7 @@ const materialModules = [
   MatSelectModule,
   MatDatepickerModule,
   MatTabsModule,
+  MatTooltipModule,
 ];
 
 const nebularModules = [

@@ -1,158 +1,102 @@
 <div class="tab-pane" id="settings">
-    <form>
+    <form (ngSubmit)="saveProfilDetail()" [formGroup]="frm">
         <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
             Personal Info</h5>
 
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="firstname">First Name</label>
-                    <input type="text" class="form-control" id="firstname"
+                <div class="form-control-group">
+                    <label class="fw-bold" for="firstname">First Name</label>
+                    <input formControlName="firstName" type="text" class="form-control" id="firstname"
                         placeholder="Enter first name">
+                    <small class="form-text text-danger"
+                        *ngIf="frm.controls.firstName.errors && (frm.controls.firstName.dirty || frm.controls.firstName.touched)">
+                        {{frm.controls.firstName['errorMessage']}}</small>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="form-group">
-                    <label for="lastname">Last Name</label>
-                    <input type="text" class="form-control" id="lastname"
+                <div class="form-control-group">
+                    <label class="fw-bold" for="lastname">Last Name</label>
+                    <input formControlName="lastName" type="text" class="form-control" id="lastname"
                         placeholder="Enter last name">
+                    <small class="form-text text-danger"
+                        *ngIf="frm.controls.lastName.errors && (frm.controls.lastName.dirty || frm.controls.lastName.touched)">
+                        {{frm.controls.lastName['errorMessage']}}</small>
                 </div>
             </div> <!-- end col -->
         </div> <!-- end row -->
 
         <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold" for="phone">Phone</label>
+                    <input formControlName="phone" type="text" class="form-control" id="phone"
+                        placeholder="Enter phone number">
+                    <small class="form-text text-danger"
+                        *ngIf="frm.controls.phone.errors && (frm.controls.phone.dirty || frm.controls.phone.touched)">
+                        {{frm.controls.phone['errorMessage']}}</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold" for="email">Your email account</label>
+                    <input formControlName="email" type="text" class="form-control" id="email"
+                        placeholder="Your email account" readonly>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <div class="row" style="margin-bottom: 10px;">
             <div class="col-12">
                 <div class="form-group">
-                    <label for="userbio">Bio</label>
-                    <textarea class="form-control" id="userbio" rows="4"
+                    <label class="fw-bold" for="userbio">Description</label>
+                    <textarea formControlName="description" class="form-control" id="userbio" rows="4"
                         placeholder="Write something..."></textarea>
-                </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="useremail">Email Address</label>
-                    <input type="email" class="form-control" id="useremail"
-                        placeholder="Enter email">
-                    <span class="form-text text-muted"><small>If you want to change email please <a
-                                href="javascript: void(0);">click</a> here.</small></span>
+                    <small class="form-text text-danger"
+                        *ngIf="frm.controls.description.errors && (frm.controls.description.dirty || frm.controls.description.touched)">
+                        {{frm.controls.description['errorMessage']}}</small>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="userpassword">Password</label>
-                    <input type="password" class="form-control" id="userpassword"
-                        placeholder="Enter password">
-                    <span class="form-text text-muted"><small>If you want to change password please
-                            <a href="javascript: void(0);">click</a> here.</small></span>
-                </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-
-        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-office-building mr-1"></i>
-            Company Info</h5>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="companyname">Company Name</label>
-                    <input type="text" class="form-control" id="companyname"
-                        placeholder="Enter company name">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="cwebsite">Website</label>
-                    <input type="text" class="form-control" id="cwebsite"
-                        placeholder="Enter website url">
-                </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
+        </div>
 
         <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth mr-1"></i> Social</h5>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="social-fb">Facebook</label>
+                    <label class="fw-bold" for="social-fb">Facebook</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i
-                                    class="fab fa-facebook-square"></i></span>
+                            <span class="input-group-text"><i class="fab fa-facebook-square"></i></span>
                         </div>
-                        <input type="text" class="form-control" id="social-fb" placeholder="Url">
+                        <input formControlName="facebook" type="text" class="form-control" id="social-fb"
+                            placeholder="Url">
+                        <small class="form-text text-danger"
+                            *ngIf="frm.controls.facebook.errors && (frm.controls.facebook.dirty || frm.controls.facebook.touched)">
+                            {{frm.controls.facebook['errorMessage']}}</small>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="social-tw">Twitter</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fab fa-twitter"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="social-tw"
-                            placeholder="Username">
-                    </div>
-                </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="social-insta">Instagram</label>
+                    <label class="fw-bold" for="social-insta">Instagram</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fab fa-instagram"></i></span>
                         </div>
-                        <input type="text" class="form-control" id="social-insta" placeholder="Url">
+                        <input formControlName="instagram" type="text" class="form-control" id="social-insta"
+                            placeholder="Url">
+                        <small class="form-text text-danger"
+                            *ngIf="frm.controls.facebook.errors && (frm.controls.instagram.dirty || frm.controls.instagram.touched)">
+                            {{frm.controls.instagram['errorMessage']}}</small>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="social-lin">Linkedin</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fab fa-linkedin"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="social-lin" placeholder="Url">
-                    </div>
-                </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="social-sky">Skype</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fab fa-skype"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="social-sky"
-                            placeholder="@username">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="social-gh">Github</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fab fa-github"></i></span>
-                        </div>
-                        <input type="text" class="form-control" id="social-gh"
-                            placeholder="Username">
-                    </div>
-                </div>
-            </div> <!-- end col -->
-        </div> <!-- end row -->
-
+        </div>
+        <span class="form-text text-muted"><small>If you want to change password please
+                <a href="javascript: void(0);">click</a> here.</small></span>
         <div class="text-right">
-            <button type="submit" class="btn btn-success waves-effect waves-light mt-2"><i
-                    class="mdi mdi-content-save"></i> Save</button>
+            <button [disabled]="submitted || !frm.valid" type="submit"
+                class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
         </div>
     </form>
 </div>

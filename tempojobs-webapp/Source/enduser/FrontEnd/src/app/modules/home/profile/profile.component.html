@@ -33,11 +33,13 @@
 
                 <ul class="social-list list-inline mt-3 mb-0">
                     <li class="list-inline-item">
-                        <a href="javascript: void(0);" class="social-list-item border-purple text-purple"><i
+                        <a target="_blank" [href]="userDetail?.facebook || 'javascript: void(0);'" [matTooltip]="userDetail?.facebook || 'No facebook account'"
+                        class="social-list-item border-purple text-purple"><i
                                 class="fab fa-facebook"></i></a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i
+                        <a target="_blank" [href]="userDetail?.instagram || 'javascript: void(0);'" [matTooltip]="userDetail?.instagram || 'No instagram account'" 
+                        class="social-list-item border-danger text-danger"><i
                                 class="fab fa-instagram"></i></a>
                     </li>
                 </ul>
@@ -139,7 +141,7 @@
                         <app-profile-activity></app-profile-activity>
                     </ng-template>
                     <ng-template #editProfile>
-                        <app-edit-profile></app-edit-profile>
+                        <app-edit-profile [profileDetail]="userDetail" (updatedProfileDetail)="updateProfileDetail($event)"></app-edit-profile>
                     </ng-template>
                 </div> 
             </div> 
