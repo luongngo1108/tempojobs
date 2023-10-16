@@ -2,6 +2,7 @@ import { constants } from "../../constants.js";
 import { ReturnResult } from "../DTO/returnResult.js";
 import User from "../models/userModel.js";
 import UserDetail from "../models/userDetailModel.js"
+import { hash } from 'bcrypt';
 
 class userController {
     // [GET] /get
@@ -16,7 +17,7 @@ class userController {
         }
     }
 
-    async getUserDetailById(req, res, next) {
+    async getUserDetailByUserId(req, res, next) {
         var result = new ReturnResult();
         try {
             const userId = req.query.id;
@@ -40,7 +41,18 @@ class userController {
         try {
             const userDetail = req.body;
             let updatedUserDetail = await UserDetail.findByIdAndUpdate(userDetail._id, userDetail, {returnOriginal: false});
-            if(updatedUserDetail) result.result = updatedUserDetail;
+            if(updatedUserDetail) {
+                result.result = updatedUserDetail;
+                var displayNameUser = `${updatedUserDetail.firstName} ${updatedUserDetail.lastName}`
+                if(userDetail.password) {
+                    const hashedPassword = await hash(userDetail.password, 10);
+                    console.log(hashedPassword);
+                    const user = await User.findOneAndUpdate({userDetail: updatedUserDetail}, {displayName: displayNameUser, password: hashedPassword});
+                }
+                else {
+                    const user = await User.findOneAndUpdate({userDetail: updatedUserDetail}, {displayName: displayNameUser});
+                }
+            } 
         }
         catch (error) { 
             console.log(error);

@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   map: google.maps.Map;
   searchBox: google.maps.places.SearchBox;
   markers: google.maps.Marker[] = [];
+  auth: NbAuthJWTToken
 
   private destroy$: Subject<void> = new Subject<void>();
   user: any = {};
@@ -34,7 +35,6 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     private cdref: ChangeDetectorRef,
     private ngZone: NgZone
   ) {
-
   }
   isEditProfile: boolean = false;
   ngOnInit(): void {
@@ -43,7 +43,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(async (token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
-          var res = await lastValueFrom(this.userService.getUserDetailById(this.user.user.id));
+          var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.user.user.id));
           if(res.result) {
             this.userDetail = res.result;
           }
@@ -151,5 +151,6 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
 
   updateProfileDetail(newProfileDetail: ProfileDetail) {
     this.userDetail = newProfileDetail;
+    this.userService._currentUserDetail.next(this.userDetail);
   }
 }

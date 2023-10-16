@@ -13,6 +13,7 @@ export class UserManagementService {
     constructor(private httpclient: HttpClient) {}
     baseUrl = environment.apiUser;
     _currentUser = new Subject<any>;
+    _currentUserDetail = new Subject<ProfileDetail>;
     _userList = new Subject<User[]>
     setUserList() {
         return this.httpclient.get(`${this.baseUrl}/get`).subscribe((resp:any) => {
@@ -20,6 +21,10 @@ export class UserManagementService {
                 this._userList.next(resp);
             }
         })
+    }
+
+    getCurrentUserDetail(): Observable<ProfileDetail> {
+        return this._currentUserDetail.asObservable();
     }
     
     getUserList(): Observable<User[]> {
@@ -33,10 +38,10 @@ export class UserManagementService {
     getCurrentUser(): Observable<any> {
        return this._currentUser.asObservable();
     }
-
-    getUserDetailById(id: string): Observable<ReturnResult<ProfileDetail>> {
-        return this.httpclient.get<ReturnResult<ProfileDetail>>(`${this.baseUrl}/getUserDetailById?id=${id}`);
-    } 
+    
+    getUserDetailByUserId(id: string): Observable<ReturnResult<ProfileDetail>> {
+        return this.httpclient.get<ReturnResult<ProfileDetail>>(`${this.baseUrl}/getUserDetailByUserId?id=${id}`);
+    }
 
     saveProfileDetail(profileDetail: ProfileDetail): Observable<ReturnResult<ProfileDetail>> {
         return this.httpclient.post<ReturnResult<ProfileDetail>>(`${this.baseUrl}/saveUserDetail`, profileDetail)

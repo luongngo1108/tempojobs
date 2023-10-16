@@ -46,6 +46,29 @@
             </div> <!-- end col -->
         </div> <!-- end row -->
 
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold" for="password">Password</label>
+                    <input formControlName="password" type="password" class="form-control" id="password"
+                        placeholder="Enter new password">
+                    <small class="form-text text-danger"
+                        *ngIf="frm.controls.password.errors && (frm.controls.password.dirty || frm.controls.password.touched)">
+                        {{frm.controls.password['errorMessage']}}</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="fw-bold" for="confirmPassword">Confirm password</label>
+                    <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword"
+                        placeholder="Confirm password">
+                    <p class="caption status-danger" *ngIf="frm.controls.password.value != frm.controls.confirmPassword.value">
+                        Confirm password does not match the password.
+                    </p>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-12">
                 <div class="form-group">
@@ -92,9 +115,9 @@
                 </div>
             </div>
         </div>
-        <span class="form-text text-muted"><small>If you want to change password please
-                <a href="javascript: void(0);">click</a> here.</small></span>
-        <div class="text-right">
+        <!-- <span class="form-text text-muted"><small>If you want to change password please
+                <a href="javascript: void(0);">click</a> here.</small></span> -->
+        <div class="text-right" style="margin-top: 10px;">
             <button [disabled]="submitted || !frm.valid" type="submit"
                 class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
         </div>

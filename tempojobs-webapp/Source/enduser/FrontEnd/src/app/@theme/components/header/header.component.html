@@ -122,7 +122,8 @@
     <div class="header-container collapse navbar-collapse" id="navbarNavDarkDropdown">
       <nb-actions size="small">
         <nb-action class="user-action">
-          <nb-user size="medium" [name]="userLoggedIn?.user?.displayName" [onlyPicture]="userPictureOnly" [nbContextMenu]="userMenu"></nb-user>
+          <nb-user size="medium" [name]="userDetail?.firstName + ' ' + userDetail?.lastName" 
+          [onlyPicture]="userPictureOnly" [nbContextMenu]="userMenu"></nb-user>
         </nb-action>
       </nb-actions>
     </div>

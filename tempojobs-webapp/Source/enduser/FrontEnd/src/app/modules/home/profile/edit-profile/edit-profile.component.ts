@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { ProfileDetail } from '../user.model';
+import { ProfileDetail, User } from '../user.model';
 import {  FormGroup } from '@angular/forms';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { UserManagementService } from '../user-management.service';
@@ -12,8 +12,10 @@ import { NbGlobalLogicalPosition, NbToastrService } from '@nebular/theme';
 })
 export class EditProfileComponent implements OnInit {
   @Input() profileDetail;
+  @Input() user;
   @Output() updatedProfileDetail = new EventEmitter<ProfileDetail>();
   frm: FormGroup;
+  userFrm: FormGroup;
   submitted: boolean = false;
   logicalPositions = NbGlobalLogicalPosition;
   constructor(
@@ -26,11 +28,16 @@ export class EditProfileComponent implements OnInit {
   
   ngOnInit(): void {
     this.frm = this.frmBuilder.formGroup(ProfileDetail, this.profileDetail);
+    this.userFrm = this.frmBuilder.formGroup(User, this.user);
+    console.log(this.frm);
   }
 
   saveProfilDetail() {  
+    if(this.frm.controls.password.value != this.frm.controls.confirmPassword.value) {
+      this.toast.danger("Please enter confirm password correctly!!", "", {position: this.logicalPositions.BOTTOM_END});
+      return;
+    }
     this.submitted = true;
-    console.log(this.profileDetail);
     this.userService.saveProfileDetail(this.frm.value).subscribe(res => {
       this.submitted = false;
       if(res.result) {

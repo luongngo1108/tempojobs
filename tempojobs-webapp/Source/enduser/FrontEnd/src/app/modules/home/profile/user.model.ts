@@ -73,6 +73,12 @@ export class ProfileDetail {
   __v: number  = 0;
   @prop()
   _id: string = null;
+
+  @prop()
+  @password({ validation: { maxLength: 40, minLength: 5 } })
+  password: string = null;
+  @prop()
+  confirmPassword;
 }
 
 export class GoogleMapLocation {

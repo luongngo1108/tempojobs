@@ -141,7 +141,7 @@
                         <app-profile-activity></app-profile-activity>
                     </ng-template>
                     <ng-template #editProfile>
-                        <app-edit-profile [profileDetail]="userDetail" (updatedProfileDetail)="updateProfileDetail($event)"></app-edit-profile>
+                        <app-edit-profile [profileDetail]="userDetail" [user]="user" (updatedProfileDetail)="updateProfileDetail($event)"></app-edit-profile>
                     </ng-template>
                 </div> 
             </div> 

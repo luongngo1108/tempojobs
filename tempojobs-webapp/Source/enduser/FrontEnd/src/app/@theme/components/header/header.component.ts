@@ -3,10 +3,10 @@ import { Router } from '@angular/router';
 import { faCoffee, faEarthAsia, faCircleUser, faBell, faMessage } from '@fortawesome/free-solid-svg-icons';
 import { NbAuthJWTToken, NbAuthService, NbTokenService } from '@nebular/auth';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
-import { Subject, Subscription } from 'rxjs';
+import { Subject, Subscription, lastValueFrom } from 'rxjs';
 import { map, takeLast, takeUntil } from 'rxjs/operators';
 import { UserManagementService } from 'src/app/modules/home/profile/user-management.service';
-import { User } from 'src/app/modules/home/profile/user.model';
+import { ProfileDetail, User } from 'src/app/modules/home/profile/user.model';
 
 
 @Component({
@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   userPictureOnly: boolean = false;
   userLoggedIn: any;
+  userDetail: ProfileDetail;
   menuServiceObservable: Subscription = null;
   faCoffee = faCoffee;
   faEarthAsia = faEarthAsia;
@@ -39,17 +40,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private userService: UserManagementService,
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
-      .subscribe((token: NbAuthJWTToken) => {
+      .subscribe(async (token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.userLoggedIn = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
-          userService._currentUser.next(this.userLoggedIn);
-          // userService.getCurrentUser().subscribe(x => {
-          //   console.log(JSON.parse(JSON.stringify(x)))
-          // })
-          console.log(this.userLoggedIn);
+          var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.userLoggedIn.user.id));
+          if(res.result) {
+            this.userDetail = res.result;
+            userService._currentUserDetail.next(this.userDetail);
+          }
           this.isLogin = true;
         }
       });
+
+    this.userService._currentUserDetail.pipe(takeUntil(this.destroy$)).subscribe(detail => {
+      if(detail) this.userDetail = detail;
+    })
   }
 
   ngOnInit() {
