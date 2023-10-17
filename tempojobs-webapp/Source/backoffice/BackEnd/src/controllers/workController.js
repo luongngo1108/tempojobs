@@ -1,3 +1,4 @@
+import { FilterMapping, Page, PagedData } from '../models/pageModel.js';
 import Work from '../models/workModel.js';
 
 class WorkController {
@@ -12,6 +13,30 @@ class WorkController {
             } else {
                 message = "Can't find all work";
                 res.status(400).json({result: result, message: message});
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async getWorkPaging(req, res, next) {
+        try {
+            var message = null;
+            var page = new Page();
+            page = req.body;
+            var filterMapping = new FilterMapping();
+            var pagedData = new PagedData();
+            const listWork = await Work.find();
+            page.totalElements = listWork.length;
+            pagedData.data = await Work.find()
+                                       .skip(page.pageNumber * page.size)
+                                       .limit(page.size);
+            pagedData.page = page;
+            if (listWork) {
+                res.status(200).json({result: pagedData, message: message});
+            } else {
+                message = "Can't find all work";
+                res.status(400).json({result: null, message: message});
             }
         } catch (error) {
             next(error);

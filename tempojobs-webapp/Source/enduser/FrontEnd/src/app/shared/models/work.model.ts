@@ -19,7 +19,7 @@ export class WorkModel {
     @prop()
     workHours: number | null;
     @prop()
-    workTypeId: number | null;
+    workTypeId: string | null;
     @prop()
     workStatusId: number | null;
     @prop()
@@ -31,4 +31,10 @@ export class WorkModel {
 
     @prop()
     createdBy: User | null;
+
+    @prop()
+    createdAt: Date | string | null;
+
+    workProvinceName: string | null;
+    timeLine: string | null;
 }

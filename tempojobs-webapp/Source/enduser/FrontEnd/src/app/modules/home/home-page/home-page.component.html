@@ -33,38 +33,45 @@
   <h1 style="text-align: center;">Các công việc được quan tâm nhiều nhất</h1>
   <div class="container px-4 px-lg-5 mt-5" style="text-align: center;">
     <div class="row gx-4 gx-lg-5 justify-content-center" *ngFor="let work of listWork">
-      <nb-card accent="{{randomColor()}}" class="cardContext">
+      <nb-card class="cardContext">
         <nb-card-header class="work-header">
-          <div class="row">
-            <span>{{work.workName}}</span>
+          <div class="row" style="text-align: left;">
+            <span style="color: rgb(0, 102, 255);">{{work?.workName}}</span>
             <span>
-              <nb-icon icon="flash-outline"></nb-icon>
-              <nb-icon icon="flash-outline"></nb-icon>
-              <nb-icon icon="flash-outline"></nb-icon>
-              <nb-icon icon="flash-outline"></nb-icon>
-              <nb-icon icon="flash-outline"></nb-icon>
+              <nb-icon icon="star-outline"></nb-icon>
+              <nb-icon icon="star-outline"></nb-icon>
+              <nb-icon icon="star-outline"></nb-icon>
+              <nb-icon icon="star-outline"></nb-icon>
+              <nb-icon icon="star-outline"></nb-icon>
               {{work?.createdBy?.username}}
             </span>
           </div>
         </nb-card-header>
         <nb-card-body>
           <nav class="navbar navbar-expand-lg bg-light">
-            <div class="container-fluid">
-              <span>{{work.workAddress}} | {{work.workProfit}} đ</span>
+            <div class="container-fluid" style="background-color: #dedede; padding: 10px;">
+              <span>{{work?.workProvinceName}} | {{work?.workProfit}} đ</span>
               <form>
                 <span class="navbar-text">
-                  Timeline
+                  Hạn nhận đăng ký: {{work?.timeLine}}
                 </span>
               </form>
             </div>
           </nav>
         </nb-card-body>
-        <nb-card-footer>{{work.workDescription}}</nb-card-footer>
+        <nb-card-footer>
+          <div style="text-align: left;">
+            {{work?.workDescription}}
+          </div>
+          <div style="text-align: right;">
+            Đã ứng tuyển: 
+          </div>
+        </nb-card-footer>
       </nb-card>
     </div>
-    <button type="button" class="btn btn-outline-primary">
+    <a class="btn btn-outline-primary" href="/work-list">
       Xem tất cả <strong>{{listWork.length}}</strong> công việc
-    </button>
+    </a>
   </div>
 </section>
 
@@ -81,13 +88,6 @@
       </div>
       <div class="row gx-5 justify-content-center">
         <div class="col-lg-8 col-xl-6">
-          <!-- * * * * * * * * * * * * * * *-->
-          <!-- * * SB Forms Contact Form * *-->
-          <!-- * * * * * * * * * * * * * * *-->
-          <!-- This form is pre-integrated with SB Forms.-->
-          <!-- To make this form functional, sign up at-->
-          <!-- https://startbootstrap.com/solution/contact-forms-->
-          <!-- to get an API token!-->
           <form id="contactForm" data-sb-form-api-token="API_TOKEN">
             <!-- Name input-->
             <div class="form-floating mb-3">

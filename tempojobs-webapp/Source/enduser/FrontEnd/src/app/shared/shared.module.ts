@@ -7,12 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { NbAuthModule } from '@nebular/auth';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule } from '@nebular/theme';
+import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule } from '@nebular/theme';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
@@ -24,8 +24,12 @@ import {
   NgxMatNativeDateModule, 
   NgxMatTimepickerModule 
 } from '@angular-material-components/datetime-picker';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { GoogleMapsModule } from '@angular/google-maps';
-
 
 const materialModules = [
   MatFormFieldModule,
@@ -39,6 +43,10 @@ const materialModules = [
   MatSelectModule,
   MatDatepickerModule,
   MatTabsModule,
+  MatAutocompleteModule,
+  MatExpansionModule,
+  MatRadioModule,
+  MatPaginatorModule,
   MatTooltipModule,
 ];
 
@@ -49,6 +57,7 @@ const nebularModules = [
   NbButtonModule,
   NbButtonGroupModule,
   NbRadioModule,
+  NbSearchModule,
   NbAlertModule,
 ];
 
@@ -57,6 +66,7 @@ const angularModules = [
   MatFormFieldModule,
   RxReactiveFormsModule,
   HttpClientModule,
+  FlexLayoutModule,
 ];
 
 @NgModule({

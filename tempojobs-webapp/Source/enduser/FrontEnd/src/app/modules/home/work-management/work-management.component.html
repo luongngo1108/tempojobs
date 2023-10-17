@@ -1,1 +1,113 @@
-<p>work-management works!</p>
+<div fxLayout="row" fxLayoutAlign="start start" style="margin: 0 100px;">
+  <div fxFlex="25" class="layout-custom">
+    <nb-card>
+      <nb-card-header>Loại công việc</nb-card-header>
+      <nb-card-body>
+        <span class="selectAll" (click)="filterWork($event, 'ALL_TYPE')">Tất cả</span>
+        <a class="nav-link collapsed dropdownIcon" href="#" data-bs-toggle="collapse" data-bs-target="#collapseWorkType"
+          aria-expanded="false" aria-controls="collapseLayouts">
+            <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+        </a>
+        <div class="collapse" id="collapseWorkType" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav" *ngFor="let workType of listWorkType">
+            <mat-checkbox (change)="filterWork($event, 'workType', workType._id)">{{workType.dataStateName}}</mat-checkbox>
+          </nav>
+        </div>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>Trạng thái</nb-card-header>
+      <nb-card-body>
+        <mat-radio-group aria-label="Select an option" class="radio-group">
+          <mat-radio-button value="1">Tất cả</mat-radio-button>
+          <mat-radio-button value="2">Đang nhận</mat-radio-button>
+          <mat-radio-button value="2">Đã giao việc</mat-radio-button>
+        </mat-radio-group>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>Thành phố</nb-card-header>
+      <nb-card-body>
+        <span class="selectAll" (click)="filterWork($event, 'ALL_PROVINCE')">Toàn quốc</span>
+        <a class="nav-link collapsed dropdownIcon" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProvince"
+          aria-expanded="false" aria-controls="collapseLayouts">
+            <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+        </a>
+        <div class="collapse" id="collapseProvince" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+          <nav class="sb-sidenav-menu-nested nav" *ngFor="let province of listProvince">
+            <mat-checkbox (change)="filterWork($event, 'workProvince', province.codename)">{{province.name}}</mat-checkbox>
+          </nav>
+        </div>
+      </nb-card-body>
+    </nb-card>
+    <nb-card>
+      <nb-card-header>Thời gian</nb-card-header>
+      <nb-card-body>
+
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div fxFlex="75" class="layout-custom">
+    <nb-card>
+      <nb-card-body>
+        <nb-button-group class="button-search">
+          <button nbButtonToggle class="button-search-item">Tất cả công việc</button>
+          <button nbButtonToggle class="button-search-item">Italic</button>
+          <button nbButtonToggle class="button-search-item">Underline</button>
+        </nb-button-group>
+        <form class="d-flex search-bar" role="search">
+          <input class="form-control me-2" type="search" placeholder="Tìm việc" aria-label="Search"
+            style="max-width: 720px;">
+          <button class="btn btn-outline-success">Tìm kiếm</button>
+        </form>
+        <div class="row gx-4 gx-lg-5 justify-content-center" [nbSpinner]="isCustomizing" nbSpinnerStatus="primary" *ngFor="let work of listWorkShow">
+          <nb-card class="cardContext">
+            <nb-card-header class="work-header">
+              <div class="row">
+                <span style="color: rgb(0, 102, 255);">{{work?.workName}}</span>
+                <span>
+                  <nb-icon icon="star-outline"></nb-icon>
+                  <nb-icon icon="star-outline"></nb-icon>
+                  <nb-icon icon="star-outline"></nb-icon>
+                  <nb-icon icon="star-outline"></nb-icon>
+                  <nb-icon icon="star-outline"></nb-icon>
+                  {{work?.createdBy?.username}}
+                </span>
+              </div>
+            </nb-card-header>
+            <nb-card-body>
+              <nav class="navbar navbar-expand-lg bg-light">
+                <div class="container-fluid" style="background-color: #dedede; padding: 10px;">
+                  <span>{{work?.workProvinceName}} | {{work?.workProfit}} đ</span>
+                  <form>
+                    <span class="navbar-text">
+                      Hạn nhận đăng ký: {{work?.timeLine}}
+                    </span>
+                  </form>
+                </div>
+              </nav>
+            </nb-card-body>
+            <nb-card-footer>
+              <div>
+                {{work?.workDescription}}
+              </div>
+              <div style="text-align: right;">
+                Đã ứng tuyển: 
+              </div>
+            </nb-card-footer>
+          </nb-card>
+        </div>
+      </nb-card-body>
+    </nb-card>
+    <mat-paginator #paginator
+               class="work-paginator"
+               (page)="handlePageEvent($event)"
+               [length]="paging?.totalElements"
+               [pageSize]="paging?.size"
+               [showFirstLastButtons]="true"
+               [pageSizeOptions]="pageSizeOptions ? pageSizeOptions : []"
+               [pageIndex]="paging?.pageNumber"
+               aria-label="Select page">
+    </mat-paginator>
+  </div>
+</div>
