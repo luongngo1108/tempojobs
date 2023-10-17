@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
 import { WorkModel } from 'src/app/shared/models/work.model';
 import { WorkManagementService } from 'src/app/shared/services/work-management.service';
-import { Subject, takeUntil, map } from 'rxjs';
+import { Subject, takeUntil, map, Observable, startWith } from 'rxjs';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
@@ -26,6 +26,8 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
   listDistrict: any;
   matcher = new MyErrorStateMatcher();
   private destroy$: Subject<void> = new Subject<void>();
+  filteredOptions: Observable<any>;
+  myControl = new FormControl<string>('');
 
   constructor(
     private frmBuilder: RxFormBuilder,
@@ -69,6 +71,13 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
         }
       })
     });
+    this.filteredOptions = this.myControl.valueChanges.pipe(
+      startWith(''),
+      map(value => {
+        const name = typeof value === 'string' ? value : '';
+        return name ? this._filter(name as string) : this.listProvince.slice();
+      }),
+    );
   }
 
   ngOnDestroy(): void {
@@ -81,6 +90,8 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
       const model: WorkModel = Object.assign({}, this.frmCreateWork.value);
       if (this.workModel.workId == null) {
         model.workId = 0;
+        var toDay = new Date();
+        model.startDate = toDay;
       }
       if (this.createBy) {
         model.createdById = this.createBy.user.id;
@@ -93,6 +104,16 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  displayFn(province: any): string {
+    return province && province.name ? province.name : '';
+  }
+
+  private _filter(name: string): any[] {
+    const filterValue = name.toLowerCase();
+
+    return this.listProvince.filter(option => option.name.toLowerCase().includes(filterValue));
   }
 }
 

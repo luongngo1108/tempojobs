@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { WorkModel } from 'src/app/shared/models/work.model';
 import { WorkManagementService } from 'src/app/shared/services/work-management.service';
 import { Router } from '@angular/router';
+import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
 
 @Component({
   selector: 'app-home-page',
@@ -11,31 +12,36 @@ import { Router } from '@angular/router';
 })
 export class HomePageComponent implements OnInit, OnDestroy {
   listWork: WorkModel[] = [];
+  listProvince: any[] = [];
   listColors: string[] = [];
   private destroy$: Subject<void> = new Subject<void>();
   isIntro: boolean = true;
   
   constructor(
     private workService: WorkManagementService,
-    private router: Router
+    private router: Router,
+    private dataStateService: DataStateManagementService,
   ) {
-    this.workService.getAllWork().pipe(takeUntil(this.destroy$)).subscribe(resp => {
-      if (resp.result) {
-        this.listWork = resp.result;
-        console.log(this.listWork);
+    this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
+      if (resp) {
+        this.listProvince = resp;
       }
     });
   }
 
   ngOnInit(): void {
-    this.listColors.push('info');
-    this.listColors.push('success');
-    this.listColors.push('warning');
-    this.listColors.push('danger');
-    this.listColors.push('primary');
     if (this.router.url !== "/") {
       this.isIntro = false;
     }
+    this.workService.getAllWork().pipe(takeUntil(this.destroy$)).subscribe(resp => {
+      if (resp.result) {
+        this.listWork = resp.result;
+        this.listWork.map((work) => {
+          work.workProvinceName = this.listProvince.find(item => item.codename === work.workProvince)?.name;
+          work.timeLine = this.getTimeLine(work?.createdAt);
+        });
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -43,7 +49,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
       this.destroy$.complete();
   }
 
-  randomColor(): string {
-    return this.listColors[Math.floor(Math.random() * this.listColors.length)];
+  getTimeLine(startDate: Date | string) {
+    var dateCreateWork = new Date(startDate);
+    dateCreateWork.setDate(dateCreateWork.getDate() + 10);
+    var toDay = new Date();
+    var timeLine = Math.ceil((dateCreateWork.getTime() - toDay.getTime()) / (60*60*1000));
+    var timeLineDate = Math.floor(timeLine / 24);
+    var timeLineHours = timeLine - timeLineDate * 24;
+    if (timeLineDate < 0) return 'Hết hạn';
+    return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
   }
 }
