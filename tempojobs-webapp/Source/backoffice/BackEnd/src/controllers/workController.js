@@ -23,14 +23,46 @@ class WorkController {
         try {
             var message = null;
             var page = new Page();
-            page = req.body;
-            var filterMapping = new FilterMapping();
             var pagedData = new PagedData();
-            const listWork = await Work.find();
-            page.totalElements = listWork.length;
-            pagedData.data = await Work.find()
-                                       .skip(page.pageNumber * page.size)
-                                       .limit(page.size);
+            var listWork;
+            page = req.body;
+            var filterMappingList = page?.filter;
+            var filterWorkType = [];
+            filterMappingList.map(item => {
+                if (item.prop === 'workType') filterWorkType.push({'workTypeId': item.value});
+            });
+            var filterProvince = [];
+            filterMappingList.filter(item => {
+                if (item.prop === 'workProvince') filterProvince.push({workProvince: item.value});
+            });
+            if (filterWorkType.length === 0 && filterProvince.length === 0) {
+                page.totalElements = await Work.find().count();
+                listWork = await Work.find().skip(page.pageNumber * page.size).limit(page.size);
+            } else if (filterWorkType.length > 0 && filterProvince.length > 0) {
+                page.totalElements = await Work.find({
+                    $or: filterWorkType,
+                    $or: filterProvince
+                }).count();
+                listWork = await Work.find({
+                    $or: filterWorkType,
+                    $or: filterProvince
+                }).skip(page.pageNumber * page.size).limit(page.size);
+            } else if (filterWorkType.length > 0) {
+                page.totalElements = await Work.find({
+                    $or: filterWorkType
+                }).count();
+                listWork = await Work.find({
+                    $or: filterWorkType
+                }).skip(page.pageNumber * page.size).limit(page.size);
+            } else if (filterProvince.length > 0) {
+                page.totalElements = await Work.find({
+                    $or: filterProvince
+                }).count();
+                listWork = await Work.find({
+                    $or: filterProvince
+                }).skip(page.pageNumber * page.size).limit(page.size);
+            }
+            pagedData.data = listWork;
             pagedData.page = page;
             if (listWork) {
                 res.status(200).json({result: pagedData, message: message});

@@ -8,6 +8,7 @@ import { WorkModel } from 'src/app/shared/models/work.model';
 import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
 import { WorkManagementService } from 'src/app/shared/services/work-management.service';
 import { PageEvent } from '@angular/material/paginator';
+import { FilterMapping } from 'src/app/shared/models/filter-mapping';
 
 @Component({
   selector: 'app-work-management',
@@ -35,6 +36,7 @@ export class WorkManagementComponent implements OnInit {
     private router: Router,
     private dataStateService: DataStateManagementService,
   ) {
+    this.paging.filter = [];
     this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
       if (resp) {
         this.listProvince = resp;
@@ -61,7 +63,7 @@ export class WorkManagementComponent implements OnInit {
           work.timeLine = this.getTimeLine(work?.createdAt);
         });
       }
-    }).add(() => this.filterWork());
+    });
   }
 
   ngOnDestroy(): void {
@@ -71,40 +73,41 @@ export class WorkManagementComponent implements OnInit {
 
   filterWork(event?: any, prop?: any, data?: any) {
     this.isCustomizing = true;
-    if (prop === 'ALL_TYPE') this.listFilterWorkType = [];
-    else if (prop === 'ALL_PROVINCE') this.listFilterProvinces = [];
+    if (prop === 'ALL_TYPE') this.paging.filter = this.paging.filter.filter(item => item.prop !== 'workType');
+    else if (prop === 'ALL_PROVINCE') this.paging.filter = this.paging.filter.filter(item => item.prop !== 'workProvince');
     else {
       if (event?.checked) {
-        if (prop === 'workType') this.listFilterWorkType.push(data);
-        if (prop === 'workProvince') this.listFilterProvinces.push(data);
+        var filter = new FilterMapping();
+        filter.prop = prop;
+        filter.value = data;
+        filter.filterType = 'check';
+        this.paging.filter.push(filter);
       } 
       else {
-        if (prop === 'workType') {
-          const index = this.listFilterWorkType.findIndex(item => item === data);
-          this.listFilterWorkType.splice(index, 1);
-        }
-        if (prop === 'workProvince') {
-          const index = this.listFilterProvinces.findIndex(item => item === data);
-          this.listFilterProvinces.splice(index, 1);
+        var indexFilter = this.paging?.filter?.findIndex(x => x.prop === prop && x.value === data);
+        if (indexFilter > -1) {
+          this.paging?.filter?.splice(indexFilter, 1);
         }
       }
     }
 
-    var listWorkFilter = [];
-    if (this.listFilterWorkType.length == 0 && this.listFilterProvinces.length == 0) {
-      listWorkFilter = this.listWork;
-    } else if (this.listFilterWorkType.length > 0 && this.listFilterProvinces.length > 0) {
-      var resultFilterType = [];
-      this.listFilterWorkType.map(item => resultFilterType = resultFilterType.concat(this.listWork.filter(work => work.workTypeId === item)));
-      this.listFilterProvinces.map(item => listWorkFilter = listWorkFilter.concat(resultFilterType.filter(work => work.workProvince === item)));
-    } else if (this.listFilterWorkType.length > 0) {
-      this.listFilterWorkType.map(item => listWorkFilter = listWorkFilter.concat(this.listWork.filter(work => work.workTypeId === item)));
-    } else if (this.listFilterProvinces.length > 0) {
-      this.listFilterProvinces.map(item => listWorkFilter = listWorkFilter.concat(this.listWork.filter(work => work.workProvince === item)));
-    }
+    this.getPagingWork();
 
-    listWorkFilter = listWorkFilter.filter((work, index) => listWorkFilter.indexOf(work) === index);
-    this.listWorkShow = [...listWorkFilter];
+    // var listWorkFilter = [];
+    // if (this.listFilterWorkType.length == 0 && this.listFilterProvinces.length == 0) {
+    //   listWorkFilter = this.listWork;
+    // } else if (this.listFilterWorkType.length > 0 && this.listFilterProvinces.length > 0) {
+    //   var resultFilterType = [];
+    //   this.listFilterWorkType.map(item => resultFilterType = resultFilterType.concat(this.listWork.filter(work => work.workTypeId === item)));
+    //   this.listFilterProvinces.map(item => listWorkFilter = listWorkFilter.concat(resultFilterType.filter(work => work.workProvince === item)));
+    // } else if (this.listFilterWorkType.length > 0) {
+    //   this.listFilterWorkType.map(item => listWorkFilter = listWorkFilter.concat(this.listWork.filter(work => work.workTypeId === item)));
+    // } else if (this.listFilterProvinces.length > 0) {
+    //   this.listFilterProvinces.map(item => listWorkFilter = listWorkFilter.concat(this.listWork.filter(work => work.workProvince === item)));
+    // }
+
+    // listWorkFilter = listWorkFilter.filter((work, index) => listWorkFilter.indexOf(work) === index);
+    // this.listWorkShow = [...listWorkFilter];
     this.isCustomizing = false;
   }
 
