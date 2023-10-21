@@ -9,6 +9,7 @@ import { DataStateManagementService } from 'src/app/shared/services/data-state-m
 import { WorkManagementService } from 'src/app/shared/services/work-management.service';
 import { PageEvent } from '@angular/material/paginator';
 import { FilterMapping } from 'src/app/shared/models/filter-mapping';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'app-work-management',
@@ -35,6 +36,7 @@ export class WorkManagementComponent implements OnInit {
     private workService: WorkManagementService,
     private router: Router,
     private dataStateService: DataStateManagementService,
+    private nbToast: NbToastrService
   ) {
     this.paging.filter = [];
     this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
@@ -132,6 +134,14 @@ export class WorkManagementComponent implements OnInit {
   setPageSizeOptions(setPageSizeOptionsInput: string) {
     if (setPageSizeOptionsInput) {
       this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
+  }
+
+  openWorkDetail(work: WorkModel = null) {
+    if(!work) {
+      this.nbToast.warning("Có lỗi xảy ra, xin vui lòng chọn công việc các", "Lỗi")
+    } else {
+      
     }
   }
 }

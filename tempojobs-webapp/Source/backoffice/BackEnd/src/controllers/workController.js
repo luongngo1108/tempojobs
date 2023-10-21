@@ -1,5 +1,7 @@
+import Counter from '../models/counterModel.js';
 import { FilterMapping, Page, PagedData } from '../models/pageModel.js';
 import Work from '../models/workModel.js';
+import { getLastCounterValue } from '../utils/counterUtil.js';
 
 class WorkController {
     async getWorkAll(req, res, next) {
@@ -29,7 +31,7 @@ class WorkController {
             var filterMappingList = page?.filter;
             var filterWorkType = [];
             filterMappingList.map(item => {
-                if (item.prop === 'workType') filterWorkType.push({'workTypeId': item.value});
+                if (item.prop === ' ') filterWorkType.push({'workTypeId': item.value});
             });
             var filterProvince = [];
             filterMappingList.filter(item => {
@@ -87,7 +89,11 @@ class WorkController {
                 res.status(400).json({result: result, message: message});
             }
             if (workBody.workId == 0) {
-                const work = await Work.create(req.body);
+                var workToSave = req.body;
+                var nextWorkId = await getLastCounterValue('workId')  + 1;
+                workToSave.workId = nextWorkId;
+                const work = await Work.create(workToSave);
+                const counterUpdated = await Counter.findOneAndUpdate({field: 'workId'}, {lastValue: nextWorkId});
                 if (work) {
                     result = work;
                     res.status(200).json({result: result, message: message});

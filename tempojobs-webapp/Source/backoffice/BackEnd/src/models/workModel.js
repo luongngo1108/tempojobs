@@ -1,5 +1,4 @@
 import { Schema as _Schema, model } from 'mongoose';
-import User from '../models/userModel.js';
 const Schema = _Schema;
 
 const Work = new Schema ({
