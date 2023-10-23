@@ -3,6 +3,8 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { Subject, takeUntil, lastValueFrom } from 'rxjs';
 import { ProfileDetail } from './user.model';
 import { UserManagementService } from './user-management.service';
+import { GoogleMap } from '@angular/google-maps';
+import { NbToast, NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'app-profile',
@@ -10,30 +12,40 @@ import { UserManagementService } from './user-management.service';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
-  // zoom = 12;
-  // center: google.maps.LatLngLiteral;
-  // options: google.maps.MapOptions = {
-  //   mapTypeId: 'hybrid',
-  //   zoomControl: true,
-  //   scrollwheel: true,
-  //   disableDoubleClickZoom: false,
-  // };
-  
-  @ViewChild('map', { static: false }) mapElement: ElementRef;
-  @ViewChild('pacInput', { static: false }) pacInputElement: ElementRef;
-  map: google.maps.Map;
-  searchBox: google.maps.places.SearchBox;
-  markers: google.maps.Marker[] = [];
   auth: NbAuthJWTToken
-
   private destroy$: Subject<void> = new Subject<void>();
   user: any = {};
   userDetail: ProfileDetail;
+
+  // Google map start
+  @ViewChild('search')
+  public searchElementRef!: ElementRef;
+  @ViewChild(GoogleMap)
+  public map!: GoogleMap;
+  geocoder = new google.maps.Geocoder();
+
+  zoom = 15;
+  center!: google.maps.LatLngLiteral;
+  options: google.maps.MapOptions = {
+    zoomControl: true,
+    scrollwheel: true,
+    disableDefaultUI: true,
+    fullscreenControl: true,
+    disableDoubleClickZoom: true,
+    mapTypeId: 'roadmap',
+    // maxZoom:this.maxZoom,
+    // minZoom:this.minZoom,
+  };
+  latitude!: any;
+  longitude!: any;
+  markers: google.maps.Marker[] = [];
+  // Google map end
+
   constructor(
     private authService: NbAuthService,
     private userService: UserManagementService,
-    private cdref: ChangeDetectorRef,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private nbToast: NbToastrService
   ) {
   }
   isEditProfile: boolean = false;
@@ -43,17 +55,103 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe(async (token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
-          var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.user.user.id));
-          if(res.result) {
-            this.userDetail = res.result;
-          }
         }
       });
-    this.initializeMap();
   }
 
-  ngAfterViewInit(): void {
-    
+  async ngAfterViewInit(): Promise<void> {
+    var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.user.user.id));
+    if (res.result) {
+      this.userDetail = res.result;
+    }      
+    // Set user marker on google map
+    if(this.userDetail?.googleLocation.latitude && this.userDetail?.googleLocation.longitude) {
+      this.latitude = this.userDetail.googleLocation.latitude;
+      this.longitude = this.userDetail.googleLocation.longitude;
+      this.center = {
+        lat: this.latitude,
+        lng: this.longitude,
+      };
+
+      this.setLocation(this.userDetail.googleLocation.address);
+    } else {
+      this.latitude = 10.8483685;
+      this.longitude = 106.7730437;
+      this.center = {
+        lat: this.latitude,
+        lng: this.longitude,
+      };
+    }  
+    // Binding autocomplete to search input control
+    let autocomplete = new google.maps.places.Autocomplete(
+      this.searchElementRef.nativeElement
+    );
+    // Align search box to center
+    // this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+    //   this.searchElementRef.nativeElement
+    // );
+    autocomplete.addListener('place_changed', () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const bounds = new google.maps.LatLngBounds();
+        let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+        //verify result
+        if (place.geometry === undefined || place.geometry === null) {
+          return;
+        }
+
+        console.log({ place }, place.geometry.location?.lat(), place.geometry.location?.lng());
+
+        //set latitude, longitude and zoom
+        this.latitude = place.geometry.location?.lat();
+        this.longitude = place.geometry.location?.lng();
+        
+        this.setLocation(place.name);
+      });
+    });
+
+    this.map.googleMap.addListener( 'click', (event) => {
+      var location = event.latLng;
+      this.latitude = location?.lat();
+      this.longitude = location?.lng();
+      const latLng = {
+        lat: parseFloat(this.latitude.toString()),
+        lng: parseFloat(this.longitude.toString())
+      }
+      
+      this.geocoder.geocode({ location: latLng }).then(response => {
+        if (response.results[0]) {
+          const address = response.results[0].formatted_address;
+          console.log(address);
+          this.setLocation(address);
+          
+        }
+      })
+    });
+  }
+
+  setLocation(title: string = null) {
+    this.center = {
+      lat: this.latitude,
+      lng: this.longitude,
+    };
+    // set marker
+    this.markers.forEach((marker) => {
+      marker.setMap(null);
+    });
+    this.markers = [];
+    const latLng = {
+      lat: parseFloat(this.latitude.toString()),
+      lng: parseFloat(this.longitude.toString())
+    }
+    this.markers.push(
+      new google.maps.Marker({
+        map: this.map.googleMap,
+        title: title,
+        position: latLng,
+      })
+    );
   }
 
   ngOnDestroy(): void {
@@ -72,81 +170,22 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  initializeMap() {
-    const mapProperties = {
-      center: { lat: -33.8688, lng: 151.2195 },
-      zoom: 13,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-
-    this.cdref.detectChanges()
-
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapProperties);
-    this.searchBox = new google.maps.places.SearchBox(this.pacInputElement.nativeElement);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.pacInputElement.nativeElement);
-
-    this.map.addListener("bounds_changed", () => {
-      this.ngZone.run(() => {
-        this.searchBox.setBounds(this.map.getBounds() as google.maps.LatLngBounds);
-      });
-    });
-
-    this.searchBox.addListener("places_changed", () => {
-      this.ngZone.run(() => {
-        this.onPlacesChanged();
-      });
-    });
-  }
-
-  onPlacesChanged() {
-    const places = this.searchBox.getPlaces();
-
-    if (places.length === 0) {
-      return;
+  saveLocation() {
+    const latLng = {
+      lat: parseFloat(this.latitude.toString()),
+      lng: parseFloat(this.longitude.toString())
     }
-
-    // Clear out the old markers.
-    this.markers.forEach((marker) => {
-      marker.setMap(null);
-    });
-    this.markers = [];
-
-    // For each place, get the icon, name, and location.
-    const bounds = new google.maps.LatLngBounds();
-
-    places.forEach((place) => {
-      if (!place.geometry || !place.geometry.location) {
-        console.log("Returned place contains no geometry");
-        return;
+    this.geocoder.geocode({ location: latLng }).then(response => {
+      if (response.results[0]) {
+        this.userDetail.googleLocation.address = response.results[0].formatted_address;
+        this.userDetail.googleLocation.latitude = this.latitude;
+        this.userDetail.googleLocation.longitude = this.longitude;
+        this.userService.saveGoogleMapLocation(this.userDetail.googleLocation).subscribe(res => {
+          if(res.result) this.nbToast.success(`Your new address: ${res.result.address}`,"Saved successfully!");
+          else this.nbToast.danger("Some error happened");
+        });
       }
-
-      const icon = {
-        url: place.icon as string,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25),
-      };
-
-      // Create a marker for each place.
-      this.markers.push(
-        new google.maps.Marker({
-          map: this.map,
-          icon,
-          title: place.name,
-          position: place.geometry.location,
-        })
-      );
-
-      if (place.geometry.viewport) {
-        // Only geocodes have a viewport.
-        bounds.union(place.geometry.viewport);
-      } else {
-        bounds.extend(place.geometry.location);
-      }
-    });
-
-    this.map.fitBounds(bounds);
+    })
   }
 
   updateProfileDetail(newProfileDetail: ProfileDetail) {

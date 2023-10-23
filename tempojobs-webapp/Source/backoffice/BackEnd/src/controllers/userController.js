@@ -3,6 +3,7 @@ import { ReturnResult } from "../DTO/returnResult.js";
 import User from "../models/userModel.js";
 import UserDetail from "../models/userDetailModel.js"
 import { hash } from 'bcrypt';
+import GoogleMapLocation from "../models/googleMapLocationModel.js";
 
 class userController {
     // [GET] /get
@@ -23,6 +24,8 @@ class userController {
             const userId = req.query.id;
             const user = await User.findById(userId, '-_id userDetail').lean().exec();
             const userDetail = await UserDetail.findById(user.userDetail);
+            const googleLocation = await GoogleMapLocation.findById(userDetail.googleLocation);
+            if(googleLocation) userDetail.googleLocation = googleLocation
             if(userDetail) {
                 result.result = userDetail;
             } else {
@@ -46,7 +49,6 @@ class userController {
                 var displayNameUser = `${updatedUserDetail.firstName} ${updatedUserDetail.lastName}`
                 if(userDetail.password) {
                     const hashedPassword = await hash(userDetail.password, 10);
-                    console.log(hashedPassword);
                     const user = await User.findOneAndUpdate({userDetail: updatedUserDetail}, {displayName: displayNameUser, password: hashedPassword});
                 }
                 else {

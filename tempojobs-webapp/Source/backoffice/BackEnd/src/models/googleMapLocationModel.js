@@ -3,17 +3,17 @@ const Schema = _Schema;
 
 const GoogleMapLocation = new Schema ({
     latitude: {
-        type: Number
+        type: Number,
+        default: null
     },
     longitude: {
         type: Number,
+        default: null,
     },
-    mapType: {
-        type: String
+    address: {
+        type: String,
+        default: null
     },
-    zoom: {
-        type: Number
-    }
 }, {
     timestamps: true,
 });

@@ -87,7 +87,5 @@ export class GoogleMapLocation {
   @prop()
   longitude: number;
   @prop()
-  mapType: string = 'satelite';
-  @prop()
-  zoom: number = 5;
+  address: string;
 }
