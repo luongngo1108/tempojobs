@@ -34,8 +34,8 @@ const Work = new Schema ({
         required: [true, "Please add the work hours!"]
     },
     workTypeId: {
-        type: Schema.Types.ObjectId,
-        ref: 'WorkType'
+        type: String,
+        required: [true, "Please add the work type!"],
     },
     workStatusId: {
         type: String,

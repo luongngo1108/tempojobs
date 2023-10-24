@@ -30,6 +30,7 @@ export class WorkManagementComponent implements OnInit {
 
   paging = new Page();
   pageSizeOptions = [5, 10, 25];
+  searchData: string;
 
   constructor(
     private formBuilder: RxFormBuilder,
@@ -84,7 +85,14 @@ export class WorkManagementComponent implements OnInit {
         filter.value = data;
         filter.filterType = 'check';
         this.paging.filter.push(filter);
-      } 
+      } else if (prop === 'SEARCHING') {
+        this.paging.filter = this.paging.filter.filter(item => item.prop !== 'SEARCHING');
+        var filter = new FilterMapping();
+        filter.prop = prop;
+        filter.value = this.searchData;
+        filter.filterType = 'search';
+        this.paging.filter.push(filter);
+      }
       else {
         var indexFilter = this.paging?.filter?.findIndex(x => x.prop === prop && x.value === data);
         if (indexFilter > -1) {

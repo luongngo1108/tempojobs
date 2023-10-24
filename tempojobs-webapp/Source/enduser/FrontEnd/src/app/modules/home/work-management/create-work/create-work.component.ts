@@ -11,6 +11,7 @@ import { DataStateModel } from 'src/app/shared/models/data-state.model';
 import { User } from '../../profile/user.model';
 import { UserManagementService } from '../../profile/user-management.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { QuillConfiguration } from 'src/app/shared/components/rich-inline-edit/rich-inline-edit.component';
 
 @Component({
   selector: 'app-create-work',
@@ -24,6 +25,7 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
   listWorkType: DataStateModel[] = [];
   listProvince: any;
   listDistrict: any;
+  editorOptions = QuillConfiguration;
   matcher = new MyErrorStateMatcher();
   private destroy$: Subject<void> = new Subject<void>();
   filteredOptions: Observable<any>;

@@ -24,7 +24,7 @@
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Loại công việc</mat-label>
-              <mat-select formControlName="workTypeId" [errorStateMatcher]="matcher">
+              <mat-select formControlName="workTypeId" required>
                 <mat-option *ngFor="let workType of listWorkType" [value]="workType._id">
                   {{workType.dataStateName}}
                 </mat-option>
@@ -46,14 +46,13 @@
             <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Thời gian bắt đầu làm việc</mat-label>
               <input matInput [ngxMatDatetimePicker]="pickerCustomIcon" placeholder="Choose a date"
-                formControlName="startDate" [disabled]="false">
+                formControlName="startDate" required>
               <ngx-mat-datepicker-toggle matSuffix [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
-              <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [showSeconds]="true" [stepHour]="1"
-                [stepMinute]="1" [stepSecond]="1" [touchUi]="false" [enableMeridian]="false" [disableMinute]="false"
-                [hideTime]="false">
+              <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [stepHour]="1"
+                [stepMinute]="15" [showSeconds]="false" [touchUi]="false" [enableMeridian]="false">
                 <ngx-mat-datepicker-actions>
-                  <button mat-button ngxMatDatepickerCancel>Cancel</button>
-                  <button mat-raised-button color="primary" ngxMatDatepickerApply>Apply</button>
+                  <button mat-button ngxMatDatepickerCancel>Hủy</button>
+                  <button mat-raised-button color="primary" ngxMatDatepickerApply>Đồng ý</button>
                 </ngx-mat-datepicker-actions>
               </ngx-mat-datetime-picker>
             </mat-form-field>
@@ -72,27 +71,17 @@
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Tỉnh</mat-label>
-              <mat-select formControlName="workProvince" [errorStateMatcher]="matcher">
+              <mat-select formControlName="workProvince" required>
                 <mat-option *ngFor="let province of listProvince" [value]="province.codename">
                   {{province.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-
-            <!-- <mat-form-field appearance="fill"  class="form-field">
-              <mat-label>Tỉnh</mat-label>
-              <input type="text" matInput [formControl]="myControl" formControlName="workProvince" [matAutocomplete]="auto">
-              <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                <mat-option *ngFor="let province of listProvince" [value]="province.codename">
-                  {{province.name}}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field> -->
           </div>
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Quận/Huyện</mat-label>
-              <mat-select formControlName="workDistrict" [errorStateMatcher]="matcher">
+              <mat-select formControlName="workDistrict" required>
                 <mat-option *ngFor="let district of listDistrict" [value]="district.codename">
                   {{district.name}}
                 </mat-option>
@@ -101,7 +90,7 @@
           </div>
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
-              <mat-label>Địa chỉ chi tiết</mat-label>
+              <mat-label>Chi tiết địa chỉ</mat-label>
               <input matInput formControlName="workAddress" autocomplete="off" trim="blur" />
               <mat-error *ngIf="
                   frmCreateWork.controls?.workAddress?.errors &&
@@ -122,7 +111,7 @@
             </mat-form-field>
           </div>
           <div class="form-floating mb-3">
-            <mat-form-field appearance="fill"  class="form-field">
+            <!-- <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Mô tả công việc</mat-label>
               <input matInput type="text" formControlName="workDescription" autocomplete="off" trim="blur" />
               <mat-error *ngIf="
@@ -130,7 +119,10 @@
                   (frmCreateWork.controls?.workDescription?.dirty ||
                     frmCreateWork.controls?.workDescription?.touched)">
                 {{ frmCreateWork.controls.workDescription["errorMessage"] }}</mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
+            <mat-label style="color: #666666">Mô tả công việc</mat-label>
+            <quill-editor [modules]="editorOptions" [styles]="{height: '200px'}"  placeholder="Mô tả" formControlName="workDescription">
+            </quill-editor>
           </div>
           <div class="d-grid"><button class="btn btn-primary" type="submit" (click)="saveData()"
               [disabled]="!frmCreateWork.valid">Submit</button></div>

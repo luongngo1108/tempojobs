@@ -30,6 +30,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inline-edit.component';
+import { QuillModule } from 'ngx-quill';
 
 const materialModules = [
   MatFormFieldModule,
@@ -48,6 +50,7 @@ const materialModules = [
   MatRadioModule,
   MatPaginatorModule,
   MatTooltipModule,
+  QuillModule,
 ];
 
 const nebularModules = [
@@ -71,6 +74,8 @@ const angularModules = [
 
 @NgModule({
   declarations: [
+  
+    RichInlineEditComponent
   ],
   imports: [
     CommonModule,

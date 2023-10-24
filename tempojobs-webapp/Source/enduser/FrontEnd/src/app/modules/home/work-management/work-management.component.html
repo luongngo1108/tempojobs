@@ -50,16 +50,16 @@
   <div fxFlex="75" class="layout-custom">
     <nb-card>
       <nb-card-body>
-        <nb-button-group class="button-search">
+        <!-- <nb-button-group class="button-search">
           <button nbButtonToggle class="button-search-item">Tất cả công việc</button>
           <button nbButtonToggle class="button-search-item">Italic</button>
           <button nbButtonToggle class="button-search-item">Underline</button>
-        </nb-button-group>
-        <form class="d-flex search-bar" role="search">
+        </nb-button-group> -->
+        <div class="d-flex search-bar" role="search">
           <input class="form-control me-2" type="search" placeholder="Tìm việc" aria-label="Search"
-            style="max-width: 720px;">
-          <button class="btn btn-outline-success">Tìm kiếm</button>
-        </form>
+            style="max-width: 720px;" [(ngModel)]="searchData">
+          <button class="btn btn-outline-success" (click)="filterWork($event, 'SEARCHING')">Tìm kiếm</button>
+        </div>
         <div class="row gx-4 gx-lg-5 justify-content-center" [nbSpinner]="isCustomizing" nbSpinnerStatus="primary" *ngFor="let work of listWork">
           <nb-card class="cardContext">
             <nb-card-header class="work-header">
@@ -96,6 +96,9 @@
               </div>
             </nb-card-footer>
           </nb-card>
+        </div>
+        <div class="row gx-4 gx-lg-5 justify-content-center" *ngIf="listWork.length == 0">
+          <span style="text-align: center; margin: 30px 0px;">Không có công việc phù hợp</span>
         </div>
       </nb-card-body>
     </nb-card>
