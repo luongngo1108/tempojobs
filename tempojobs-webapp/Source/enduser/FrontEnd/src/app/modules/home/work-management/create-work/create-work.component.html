@@ -1,5 +1,4 @@
 <div class="container px-5 fix-section">
-  <!-- Contact form-->
   <div class="bg-light rounded-4 py-5 px-4 px-md-5">
     <div class="text-center mb-5">
       <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i
@@ -7,8 +6,8 @@
       <h1 class="display-5 fw-bolder"><span class="text-gradient d-inline">Tạo công việc mới</span></h1>
       <p class="lead fw-normal text-muted mb-0">Cùng nhau tạo thật nhiều công việc!</p>
     </div>
-    <div class="row gx-5 justify-content-center">
-      <div class="col-lg-8 col-xl-6">
+    <div fxLayout="row" fxLayoutAlign="start start" style="margin: 0 100px;">
+      <div fxFlex="50" class="layout-custom">
         <form [formGroup]="frmCreateWork">
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
@@ -25,7 +24,7 @@
             <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Loại công việc</mat-label>
               <mat-select formControlName="workTypeId" required>
-                <mat-option *ngFor="let workType of listWorkType" [value]="workType._id">
+                <mat-option *ngFor="let workType of listWorkType" [value]="workType.dataStateId">
                   {{workType.dataStateName}}
                 </mat-option>
               </mat-select>
@@ -101,8 +100,8 @@
           </div>
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
-              <mat-label>Hoa hồng nhận được</mat-label>
-              <input matInput type="text" formControlName="workProfit" autocomplete="off" trim="blur" />
+              <mat-label>Ngân sách dự kiến chi trả cho công việc này</mat-label>
+              <input matInput required type="text" appFormatCurrency formControlName="workProfit" autocomplete="off" trim="blur" />
               <mat-error *ngIf="
                   frmCreateWork.controls?.workProfit?.errors &&
                   (frmCreateWork.controls?.workProfit?.dirty ||
@@ -127,6 +126,43 @@
           <div class="d-grid"><button class="btn btn-primary" type="submit" (click)="saveData()"
               [disabled]="!frmCreateWork.valid">Submit</button></div>
         </form>
+      </div>
+      <div fxFlex="50" class="layout-custom">
+        <nb-card class="cardContext">
+          <nb-card-header class="work-header">
+            <div class="row" style="text-align: left;">
+              <span style="color: rgb(0, 102, 255);">{{frmCreateWork?.get('workName')?.value}}</span>
+              <span>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                {{createBy?.username}}
+              </span>
+            </div>
+          </nb-card-header>
+          <nb-card-body>
+            <nav class="navbar navbar-expand-lg bg-light">
+              <div class="container-fluid" style="background-color: #dedede; padding: 10px;">
+                <span>{{provinceName}} | {{frmCreateWork?.get('workProfit')?.value}} đ</span>
+                <form>
+                  <span class="navbar-text">
+                    Hạn nhận đăng ký: 
+                  </span>
+                </form>
+              </div>
+            </nav>
+          </nb-card-body>
+          <nb-card-footer>
+            <div style="text-align: left;">
+              {{frmCreateWork?.get('workDescription')?.value}}
+            </div>
+            <div style="text-align: right;">
+              Đã ứng tuyển: 0/{{frmCreateWork?.get('quantity')?.value}}
+            </div>
+          </nb-card-footer>
+        </nb-card>
       </div>
     </div>
   </div>

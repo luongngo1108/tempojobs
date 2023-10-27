@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NbAuthModule } from '@nebular/auth';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule } from '@nebular/theme';
+import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule, NbTabsetModule } from '@nebular/theme';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,6 +32,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inline-edit.component';
 import { QuillModule } from 'ngx-quill';
+import { FormatCurrencyDirective } from './directives/format-currency.directive';
+import { MatTableModule } from '@angular/material/table';
 
 const materialModules = [
   MatFormFieldModule,
@@ -50,6 +52,7 @@ const materialModules = [
   MatRadioModule,
   MatPaginatorModule,
   MatTooltipModule,
+  MatTableModule,
   QuillModule,
 ];
 
@@ -62,6 +65,7 @@ const nebularModules = [
   NbRadioModule,
   NbSearchModule,
   NbAlertModule,
+  NbTabsetModule,
 ];
 
 const angularModules = [
@@ -74,8 +78,8 @@ const angularModules = [
 
 @NgModule({
   declarations: [
-  
-    RichInlineEditComponent
+    RichInlineEditComponent,
+    FormatCurrencyDirective
   ],
   imports: [
     CommonModule,
@@ -109,7 +113,8 @@ const angularModules = [
     GoogleMapsModule,
     [...materialModules],
     [...nebularModules],
-    [...angularModules]
+    [...angularModules],
+    FormatCurrencyDirective
   ]
 })
 export class SharedModule { }

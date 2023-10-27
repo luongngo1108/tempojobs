@@ -11,6 +11,7 @@ import { WorkManagementComponent } from './work-management/work-management.compo
 import { WorkDetailComponent } from './work-management/work-detail/work-detail.component';
 import { EditProfileComponent } from './profile/edit-profile/edit-profile.component';
 import { ProfileActivityComponent } from './profile/profile-activity/profile-activity.component';
+import { CreatedManageComponent } from './work-management/created-manage/created-manage.component';
 
 
 
@@ -23,7 +24,8 @@ import { ProfileActivityComponent } from './profile/profile-activity/profile-act
     WorkManagementComponent,
     WorkDetailComponent,
     EditProfileComponent,
-    ProfileActivityComponent
+    ProfileActivityComponent,
+    CreatedManageComponent
   ],
   imports: [
     CommonModule,

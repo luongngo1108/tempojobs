@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { Subject, takeUntil } from 'rxjs';
@@ -16,7 +16,7 @@ import { NbToastrService } from '@nebular/theme';
   templateUrl: './work-management.component.html',
   styleUrls: ['./work-management.component.scss']
 })
-export class WorkManagementComponent implements OnInit {
+export class WorkManagementComponent implements OnInit, OnDestroy {
   listWork: WorkModel[] = [];
   listWorkShow: WorkModel[] = [];
   listColors: string[] = [];

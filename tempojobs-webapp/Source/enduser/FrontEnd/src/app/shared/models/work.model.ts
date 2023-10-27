@@ -1,4 +1,4 @@
-import { prop, required } from "@rxweb/reactive-form-validators";
+import { NumericValueType, numeric, prop, required } from "@rxweb/reactive-form-validators";
 import { User } from "src/app/modules/home/profile/user.model";
 
 export class WorkModel {
@@ -17,16 +17,19 @@ export class WorkModel {
     @prop()
     startDate: Date | string | null;
     @prop()
+    @numeric({ acceptValue: NumericValueType.PositiveNumber, message: 'Chỉ cho phép nhập số' })
     workHours: number | null;
     @prop()
-    workTypeId: string | null;
+    workTypeId: number | null;
     @prop()
     workStatusId: number | null;
     @prop()
     createdById: string | null;
     @prop()
+    @numeric({ acceptValue: NumericValueType.PositiveNumber, message: 'Chỉ cho phép nhập số' })
     quantity: number | null;
     @prop()
+    // @numeric({ acceptValue: NumericValueType.PositiveNumber, message: 'Chỉ cho phép nhập số' })
     workProfit: number | null;
 
     @prop()
@@ -36,5 +39,7 @@ export class WorkModel {
     createdAt: Date | string | null;
 
     workProvinceName: string | null;
+    workTypeName: string | null;
+    workStatusName: string | null;
     timeLine: string | null;
 }

@@ -104,9 +104,9 @@ class WorkController {
                 message = "Data is required";
                 res.status(400).json({result: result, message: message});
             }
-            if (workBody.workId == 0) {
+            if (workBody.workId === 0) {
                 var workToSave = req.body;
-                var nextWorkId = await getLastCounterValue('workId')  + 1;
+                var nextWorkId = await getLastCounterValue('workId') + 1;
                 workToSave.workId = nextWorkId;
                 const work = await Work.create(workToSave);
                 const counterUpdated = await Counter.findOneAndUpdate({field: 'workId'}, {lastValue: nextWorkId});
@@ -118,7 +118,7 @@ class WorkController {
                     res.status(400).json({result: result, message: message});
                 }
             } else {
-                const findWork = await Work.findById({id: id});
+                const findWork = await Work.findById({workId: workId});
                 if (findWork) {
                     findWork.workName = workBody.workName;
                     findWork.workProfit = workBody.workProfit;
