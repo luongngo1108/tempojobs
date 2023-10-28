@@ -9,13 +9,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbLayoutModule, NbSidebarModule, NbMenuModule, NbDatepickerModule, NbDialogModule, NbWindowModule, NbToastrModule, NbChatModule, NbCardModule } from '@nebular/theme';
 import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientJsonpModule, HttpClient } from '@angular/common/http';
 import { TokenInterceptor } from './TokenInterceptor';
 import { QuillModule } from 'ngx-quill'
+import { DatePipe } from '@angular/common';
+import { DatePipePipe } from './shared/pipes/date-pipe.pipe';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     HttpClientModule,
@@ -33,7 +35,7 @@ import { QuillModule } from 'ngx-quill'
     NbToastrModule.forRoot(),
     QuillModule.forRoot(),
     NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
+      messageGoogleMapKey: 'AIzaSyBIc-pRp0fEh49vJDQFlFh5FoTBeBNx0s4',
     }),
     NbLayoutModule,
     NbEvaIconsModule,
@@ -45,7 +47,9 @@ import { QuillModule } from 'ngx-quill'
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    DatePipe,
+    DatePipePipe
   ],
   bootstrap: [AppComponent]
 })

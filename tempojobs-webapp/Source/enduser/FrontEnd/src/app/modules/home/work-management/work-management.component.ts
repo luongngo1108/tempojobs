@@ -149,7 +149,7 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     if(!work) {
       this.nbToast.warning("Có lỗi xảy ra, xin vui lòng chọn công việc các", "Lỗi")
     } else {
-      
+      this.router.navigateByUrl(`/work/${work.workId}`);
     }
   }
 }

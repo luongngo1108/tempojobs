@@ -6,6 +6,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { CreateWorkComponent } from './work-management/create-work/create-work.component';
 import { WorkManagementComponent } from './work-management/work-management.component';
 import { CreatedManageComponent } from './work-management/created-manage/created-manage.component';
+import { WorkDetailComponent } from './work-management/work-detail/work-detail.component';
 export const routes: Routes = [
   {
     path: '',
@@ -32,6 +33,10 @@ export const routes: Routes = [
         path: 'created-manage',
         component: CreatedManageComponent
       },
+      {
+        path: 'work/:workId',
+        component: WorkDetailComponent
+      }
     ]
   },
 ];

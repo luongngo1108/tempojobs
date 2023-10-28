@@ -124,7 +124,7 @@
             </quill-editor>
           </div>
           <div class="d-grid"><button class="btn btn-primary" type="submit" (click)="saveData()"
-              [disabled]="!frmCreateWork.valid">Submit</button></div>
+              [disabled]="!frmCreateWork.valid">Đăng công việc</button></div>
         </form>
       </div>
       <div fxFlex="50" class="layout-custom">
@@ -155,8 +155,8 @@
             </nav>
           </nb-card-body>
           <nb-card-footer>
-            <div style="text-align: left;">
-              {{frmCreateWork?.get('workDescription')?.value}}
+            <div style="text-align: left;" [innerHTML]="frmCreateWork?.get('workDescription')?.value">
+              
             </div>
             <div style="text-align: right;">
               Đã ứng tuyển: 0/{{frmCreateWork?.get('quantity')?.value}}

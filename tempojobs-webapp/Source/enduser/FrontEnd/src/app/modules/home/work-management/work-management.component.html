@@ -88,8 +88,8 @@
               </nav>
             </nb-card-body>
             <nb-card-footer>
-              <div>
-                {{work?.workDescription}}
+              <div [innerHTML]="work?.workDescription">
+                
               </div>
               <div style="text-align: right;">
                 Đã ứng tuyển: /{{work?.quantity}}

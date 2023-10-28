@@ -34,6 +34,7 @@ import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inli
 import { QuillModule } from 'ngx-quill';
 import { FormatCurrencyDirective } from './directives/format-currency.directive';
 import { MatTableModule } from '@angular/material/table';
+import { DatePipePipe } from './pipes/date-pipe.pipe';
 
 const materialModules = [
   MatFormFieldModule,
@@ -79,7 +80,8 @@ const angularModules = [
 @NgModule({
   declarations: [
     RichInlineEditComponent,
-    FormatCurrencyDirective
+    FormatCurrencyDirective,
+    DatePipePipe
   ],
   imports: [
     CommonModule,
@@ -114,7 +116,8 @@ const angularModules = [
     [...materialModules],
     [...nebularModules],
     [...angularModules],
-    FormatCurrencyDirective
+    FormatCurrencyDirective,
+    DatePipePipe
   ]
 })
 export class SharedModule { }

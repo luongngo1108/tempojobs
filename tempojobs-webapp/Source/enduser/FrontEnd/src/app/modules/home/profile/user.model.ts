@@ -5,7 +5,7 @@ export class User {
   id: string;
 
   @prop()
-  username: string;
+  displayname: string;
 
   @prop()
   email: string;

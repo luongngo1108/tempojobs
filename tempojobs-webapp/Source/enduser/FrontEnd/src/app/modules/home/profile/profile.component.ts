@@ -45,7 +45,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: NbAuthService,
     private userService: UserManagementService,
     private ngZone: NgZone,
-    private nbToast: NbToastrService
+    private nbToast: NbToastrService,
+    private cdref: ChangeDetectorRef
   ) {
   }
   isEditProfile: boolean = false;
@@ -82,6 +83,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
         lng: this.longitude,
       };
     }  
+    this.cdref.detectChanges();
     // Binding autocomplete to search input control
     let autocomplete = new google.maps.places.Autocomplete(
       this.searchElementRef.nativeElement

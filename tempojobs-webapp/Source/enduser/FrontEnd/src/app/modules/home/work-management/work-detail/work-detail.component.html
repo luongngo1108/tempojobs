@@ -1,1 +1,127 @@
-<p>work-detail works!</p>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container pb50">
+    <div class="row">
+        <div class="col-sm-12 col-lg-8 col-md-12 mb40">
+            <article>
+                <div class="post-content">
+                    <ul class="post-meta list-inline">
+                        <li class="list-inline-item">
+                            <i class="fa fa-user-circle-o"></i> <a href="/">Trang chủ</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fa fa-calendar-o"></i> <a href="/work-list">Các công việc</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <i class="fa fa-tags"></i> <a href="/work/{{workModel?.workId}}">{{workModel?.workId}}</a>
+                        </li>
+                    </ul>
+                    <h1>{{workModel?.workName}}</h1>
+                    <div [innerHTML]="workModel?.workDescription || 'Không có miêu tả công việc!'">
+                    </div>
+                    <ul class="list-inline share-buttons">
+                        <li class="list-inline-item">Loại công việc:</li>
+                        <li class="list-inline-item">
+                            <i><a href="/work-list">
+                                    {{workModel?.workType?.dataStateName}}
+                                </a></i>
+                        </li>
+                    </ul>
+                    <!-- <hr class="mb40"> -->
+                    <!-- <h4 class="mb40 text-uppercase font500">About Author</h4>
+                    <div class="media mb40">
+                        <i class="d-flex mr-3 fa fa-user-circle fa-5x text-primary"></i>
+                        <div class="media-body">
+                            <h5 class="mt-0 font700">Jane Doe</h5> Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        </div>
+                    </div>
+                    <hr class="mb40">
+                    <h4 class="mb40 text-uppercase font500">Comments</h4>
+                    <div class="media mb40">
+                        <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
+                        <div class="media-body">
+                            <h5 class="mt-0 font400 clearfix">
+                                        <a href="#" class="float-right">Reply</a>
+                                        Jane Doe</h5> Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        </div>
+                    </div>
+                    <div class="media mb40">
+                        <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
+                        <div class="media-body">
+                            <h5 class="mt-0 font400 clearfix">
+                                        <a href="#" class="float-right">Reply</a>
+                                        Jane Doe</h5> Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        </div>
+                    </div>
+                    <div class="media mb40">
+                        <i class="d-flex mr-3 fa fa-user-circle-o fa-3x"></i>
+                        <div class="media-body">
+                            <h5 class="mt-0 font400 clearfix">
+                                        <a href="#" class="float-right">Reply</a>
+                                        Jane Doe</h5> Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        </div>
+                    </div>
+                    <hr class="mb40">
+                    <h4 class="mb40 text-uppercase font500">Post a comment</h4>
+                    <form role="form">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control" placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" placeholder="john@doe.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Comment</label>
+                            <textarea class="form-control" rows="5" placeholder="Comment"></textarea>
+                        </div>
+                        <div class="clearfix float-right">
+                            <button type="button" class="btn btn-primary btn-lg">Submit</button>
+                        </div>
+                    </form> -->
+                </div>
+            </article>
+            <!-- post article-->
+
+        </div>
+        <div class="col-sm-12 col-lg-4 col-md-12 mb40 job-information">
+            <!--/col-->
+            <div class="mb16">
+                <h2 class="sidebar-title">Thông tin công việc</h2>
+                <dl>
+                    <dt>ID công việc: </dt>
+                    <dd>{{workModel?.workId ?? 'Không có'}}</dd>
+                    <dt>Ngày đăng: </dt>
+                    <dd>{{workModel?.createdAt | datePipe: workModel?.createdAt ?? "Không có"}}</dd>
+                    <dt>Hạn ứng tuyển: </dt>
+                    <dd>{{workModel?.startDate | datePipe:workModel?.startDate ?? 'Không có'}}</dd>
+                    <dt>Địa chỉ: </dt>
+                    <dd>{{workModel?.workAddress ?? 'Không có'}}</dd>
+                    <dt>Tiền trả: </dt>
+                    <dd>{{workModel?.workProfit ?? 'Không có'}}</dd>
+                </dl>
+            </div>
+            <!--/col-->
+            <div>
+                <h2 class="sidebar-title">Khách hàng đăng công việc</h2>    
+                <div class="row">
+                    <div class="col-lg-3 col-sm-4 col-md-4">
+                        <img class="d-flex mr-3 img-fluid" width="64" 
+                        src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="Generic placeholder image">
+                    </div>
+                    <div class="col-lg-9 col-sm-8 col-md-8">
+                        <p style="margin-left: 5px; color: #0088CC;">{{workModel?.createdBy?.displayName }}</p>
+                        <i style="margin-left: 5px;;">{{workModel?.createdBy?.email }}</i>
+                    </div>
+                    <div class="col-12" style="margin-top: 10px;">
+                        <dl>
+                            <dt style="width: 20%;">Mô tả: </dt>
+                            <dd class="max-description">{{userDetailModel?.description ?? 'Không có mô tả'}}</dd>
+                        </dl>
+                    </div>
+                </div>
+                <button status="success" style="width: 100%; margin-top: 10px;" nbButton>Đăng ký nhận việc</button>
+            </div>
+        </div>
+    </div>
+</div>

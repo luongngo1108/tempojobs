@@ -1,5 +1,6 @@
 import { NumericValueType, numeric, prop, required } from "@rxweb/reactive-form-validators";
 import { User } from "src/app/modules/home/profile/user.model";
+import { DataStateModel } from "./data-state.model";
 
 export class WorkModel {
     @prop()
@@ -42,4 +43,5 @@ export class WorkModel {
     workTypeName: string | null;
     workStatusName: string | null;
     timeLine: string | null;
+    workType: DataStateModel | null;
 }

@@ -26,4 +26,8 @@ export class WorkManagementService {
   saveWork(model: WorkModel): Observable<ReturnResult<WorkModel>> {
     return this.http.post<ReturnResult<WorkModel>>(`${this.baseUrl}/saveWork`, model);
   }
+
+  getWorkByWorkId(workId: string): Observable<ReturnResult<WorkModel>> {
+    return this.http.get<ReturnResult<WorkModel>>(`${this.baseUrl}/getWorkByWorkId/${workId}`);
+  }
 }

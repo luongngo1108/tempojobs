@@ -56,8 +56,10 @@ const Work = new Schema ({
     },
     createdBy: {
         type: Schema.Types.Object
+    },
+    workType: {
+        type: Schema.Types.Object
     }
-    
 }, {
     timestamps: true,
 });
