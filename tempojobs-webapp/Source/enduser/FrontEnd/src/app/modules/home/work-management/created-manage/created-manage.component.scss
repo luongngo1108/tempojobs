@@ -1,0 +1,44 @@
+:host nb-tab {
+    padding: 1.25rem;
+}
+
+.custom-button-group {
+    font-family: "Arial", sans-serif;
+    font-size: 14px;
+    padding: 20px;
+    text-transform: lowercase;
+}
+
+.custom-card {
+    margin: 0 100px;
+}
+
+.custom-tabset {
+    text-align: center;
+}
+
+.demo-table {
+    width: 100%;
+}
+
+.mat-column-demo-position {
+    width: 32px;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.mat-column-demo-name {
+    padding-left: 16px;
+    font-size: 20px;
+}
+
+.mat-column-demo-weight {
+    font-style: italic;
+}
+
+.mat-column-demo-symbol {
+    width: 32px;
+    text-align: center;
+    font-weight: bold;
+}

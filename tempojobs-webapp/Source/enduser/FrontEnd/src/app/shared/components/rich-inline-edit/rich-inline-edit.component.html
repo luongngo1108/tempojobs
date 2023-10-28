@@ -1,0 +1,42 @@
+<ng-container *ngIf="isEditing; else readonlyModeTmpl">
+    <quill-editor class="content-editor" [modules]="editorOptions" [formControl]="inputControl" [placeholder]="''"
+      (onEditorCreated)="editorCreated($event)"  (onContentChanged)="inputChange($event)">
+    </quill-editor>
+    <div class="pt-3 flex items-center float-right">
+      <button mat-raised-button color="primary" class="mr-2" (click)="save()">
+        Save</button>
+      <button (click)="cancel()" mat-button class="hover">
+        Cancel
+      </button>
+    </div>
+  </ng-container>
+  
+  <ng-template #readonlyModeTmpl>
+    <div class="row">
+      <div class="col-12" *ngIf ="!clickableIcon; else iconClick" title="Click to edit" >    
+        <div class="ql-snow content-readonly" *ngIf="!isEditing"  (click)="readonlyRichInline ? '' : setEditMode(true)">
+          <div class="ql-editor" [innerHTML]="inputData || 'Click to add content' | safeHtml"></div>
+          <div class="icon-edit">
+            <i title="Click to edit">
+              <mat-icon style="font-size:18px;">edit</mat-icon>
+            </i>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </ng-template>
+  
+  <ng-template #iconClick>
+    <div class="col-12">
+      <div class="ql-snow content-readonly" *ngIf="!isEditing" title="Click the icon to edit" >
+        <div class="ql-editor" [innerHTML]="inputData || 'Click to add content' | safeHtml"></div>
+        <div class="icon-edit" (click)="readonlyRichInline ? '' : setEditMode(true)" >
+          <i >
+            <mat-icon style="font-size:18px;" >edit</mat-icon>
+          </i>
+        </div>
+      </div>
+    </div>
+   
+  </ng-template>

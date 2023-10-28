@@ -8,7 +8,6 @@
           class="navbar-toggler-icon"></span></button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-size: large; font-weight: 300;">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
           <li class="nav-item">
             <div class="collapse navbar-collapse dropdown" id="navbarNavDarkDropdown">
               <ul class="navbar-nav">
@@ -18,7 +17,22 @@
                     Tìm người làm việc
                   </a>
                   <ul class="dropdown-menu dropdown-menu-dark">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li>
+                      <a class="dropdown-item" href="#">
+                        <div>Tìm & Đăng tin</div>
+                        <div>Nơi hội tụ những Tasker chuyên nghiệp nhất</div>
+                      </a>
+                    </li>
+                    <li class="dropdown-submenu">
+                      <a class="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Tìm & Đăng tin
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a href="#">Child Option 1</a></li>
+                        <li><a href="#">Child Option 2</a></li>
+                      </ul>
+                    </li>
                     <li><a class="dropdown-item" href="#">Another action</a></li>
                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                   </ul>
@@ -75,37 +89,28 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Quản lý công việc đã tạo
+                        Quản lý cho người tạo việc
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item" href="created-manage">Quản lý công việc đã tạo</a></li>
+                        <li><a class="dropdown-item" href="#">Danh sách ứng viên yêu thích</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
-                        Quản lý cái gì đó
+                        Quản lý cho người làm việc
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item" href="#">Quản lý công việc nhận làm</a></li>
                     </ul>
                 </li>
             </ul>
-            <a class="nav-link" href="/management-work" style="margin-right: 20px;">
-                <button type="button" class="btn btn-outline-success">Quản lý công việc đã tạo</button>
-            </a>
-            <a class="nav-link" href="/create-work">
-                <button type="button" class="btn btn-outline-primary">Tạo công việc</button>
+            <!-- <a class="nav-link" href="/management-work" style="margin-right: 20px;">
+                <button type="button" class="btn btn-outline-primary">Quản lý công việc đã tạo</button>
+            </a> -->
+            <a class="nav-link" href="/create-work" style="margin-right: 80px;">
+                <button type="button" class="btn btn-success" style="background-color: #2db964;">Tạo công việc</button>
             </a>
         </div>
     </div>
@@ -120,6 +125,8 @@
   
   <ng-template #user>
     <div class="header-container collapse navbar-collapse" id="navbarNavDarkDropdown">
+      <nb-icon class="nav-item-icon" icon="bell-outline"></nb-icon>
+      <nb-icon class="nav-item-icon" icon="message-square-outline"></nb-icon>
       <nb-actions size="small">
         <nb-action class="user-action">
           <nb-user size="medium" [name]="userDetail?.firstName + ' ' + userDetail?.lastName" 

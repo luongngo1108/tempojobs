@@ -31,38 +31,54 @@ class WorkController {
             var filterMappingList = page?.filter;
             var filterWorkType = [];
             filterMappingList.map(item => {
-                if (item.prop === ' ') filterWorkType.push({'workTypeId': item.value});
+                if (item.prop === 'workType') filterWorkType.push({workTypeId: item.value});
             });
             var filterProvince = [];
             filterMappingList.filter(item => {
                 if (item.prop === 'workProvince') filterProvince.push({workProvince: item.value});
             });
-            if (filterWorkType.length === 0 && filterProvince.length === 0) {
-                page.totalElements = await Work.find().count();
-                listWork = await Work.find().skip(page.pageNumber * page.size).limit(page.size);
-            } else if (filterWorkType.length > 0 && filterProvince.length > 0) {
+            var filterSearch = filterMappingList.find(item => item.prop === 'SEARCHING')?.value;
+            if (filterSearch) {
                 page.totalElements = await Work.find({
-                    $or: filterWorkType,
-                    $or: filterProvince
+                    $or: [
+                        {workName: { $regex: filterSearch, $options: "i"}},
+                        {workDescription: { $regex: filterSearch, $options: "i"}}
+                    ]
                 }).count();
                 listWork = await Work.find({
-                    $or: filterWorkType,
-                    $or: filterProvince
+                    $or: [
+                        {workName: { $regex: filterSearch, $options: "i"}},
+                        {workDescription: { $regex: filterSearch, $options: "i"}}
+                    ]
                 }).skip(page.pageNumber * page.size).limit(page.size);
-            } else if (filterWorkType.length > 0) {
-                page.totalElements = await Work.find({
-                    $or: filterWorkType
-                }).count();
-                listWork = await Work.find({
-                    $or: filterWorkType
-                }).skip(page.pageNumber * page.size).limit(page.size);
-            } else if (filterProvince.length > 0) {
-                page.totalElements = await Work.find({
-                    $or: filterProvince
-                }).count();
-                listWork = await Work.find({
-                    $or: filterProvince
-                }).skip(page.pageNumber * page.size).limit(page.size);
+            } else {
+                if (filterWorkType.length === 0 && filterProvince.length === 0) {
+                    page.totalElements = await Work.find().count();
+                    listWork = await Work.find().skip(page.pageNumber * page.size).limit(page.size);
+                } else if (filterWorkType.length > 0 && filterProvince.length > 0) {
+                    page.totalElements = await Work.find({
+                        $or: filterWorkType,
+                        $or: filterProvince
+                    }).count();
+                    listWork = await Work.find({
+                        $or: filterWorkType,
+                        $or: filterProvince
+                    }).skip(page.pageNumber * page.size).limit(page.size);
+                } else if (filterWorkType.length > 0) {
+                    page.totalElements = await Work.find({
+                        $or: filterWorkType
+                    }).count();
+                    listWork = await Work.find({
+                        $or: filterWorkType
+                    }).skip(page.pageNumber * page.size).limit(page.size);
+                } else if (filterProvince.length > 0) {
+                    page.totalElements = await Work.find({
+                        $or: filterProvince
+                    }).count();
+                    listWork = await Work.find({
+                        $or: filterProvince
+                    }).skip(page.pageNumber * page.size).limit(page.size);
+                }
             }
             pagedData.data = listWork;
             pagedData.page = page;
@@ -88,9 +104,9 @@ class WorkController {
                 message = "Data is required";
                 res.status(400).json({result: result, message: message});
             }
-            if (workBody.workId == 0) {
+            if (workBody.workId === 0) {
                 var workToSave = req.body;
-                var nextWorkId = await getLastCounterValue('workId')  + 1;
+                var nextWorkId = await getLastCounterValue('workId') + 1;
                 workToSave.workId = nextWorkId;
                 const work = await Work.create(workToSave);
                 const counterUpdated = await Counter.findOneAndUpdate({field: 'workId'}, {lastValue: nextWorkId});
@@ -102,7 +118,7 @@ class WorkController {
                     res.status(400).json({result: result, message: message});
                 }
             } else {
-                const findWork = await Work.findById({id: id});
+                const findWork = await Work.findById({workId: workId});
                 if (findWork) {
                     findWork.workName = workBody.workName;
                     findWork.workProfit = workBody.workProfit;

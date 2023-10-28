@@ -1,4 +1,6 @@
+import counterModel from '../models/counterModel.js';
 import DataState from '../models/dataStateModel.js'
+import { getLastCounterValue } from '../utils/counterUtil.js';
 
 class DataStateController {
     async getDataStateAll(req, res, next) {
@@ -20,7 +22,11 @@ class DataStateController {
                 res.status(400).json({result: result, message: message});
                 return;
             }
-            const dataState = await DataState.create(req.body);
+            const dataStateToSave = req.body;
+            var nextDataStateId = await getLastCounterValue('dataStateId') + 1;
+            const counterUpdated = await counterModel.findOneAndUpdate({field: 'dataStateId'}, {lastValue: nextDataStateId});
+            dataStateToSave.dataStateId = nextDataStateId;
+            const dataState = await DataState.create(dataStateToSave);
             if (dataState) {
                 result = dataState;
                 res.status(200).json({result: result, message: message});

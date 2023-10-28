@@ -11,6 +11,7 @@ import { DataStateModel } from 'src/app/shared/models/data-state.model';
 import { User } from '../../profile/user.model';
 import { UserManagementService } from '../../profile/user-management.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { QuillConfiguration } from 'src/app/shared/components/rich-inline-edit/rich-inline-edit.component';
 
 @Component({
   selector: 'app-create-work',
@@ -22,12 +23,15 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
   workModel: WorkModel;
   createBy: any;
   listWorkType: DataStateModel[] = [];
+  listWorkStatus: DataStateModel[] = [];
   listProvince: any;
   listDistrict: any;
+  editorOptions = QuillConfiguration;
   matcher = new MyErrorStateMatcher();
   private destroy$: Subject<void> = new Subject<void>();
   filteredOptions: Observable<any>;
   myControl = new FormControl<string>('');
+  provinceName: string;
 
   constructor(
     private frmBuilder: RxFormBuilder,
@@ -40,11 +44,16 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
     this.workModel = new WorkModel();
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.frmCreateWork = this.frmBuilder.formGroup(WorkModel, this.workModel);
     this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).subscribe(resp => {
       if (resp.result) {
         this.listWorkType = resp.result;
+      }
+    });
+    this.dataStateService.getDataStateByType("WORK_STATUS").pipe(takeUntil(this.destroy$)).subscribe(resp => {
+      if (resp.result) {
+        this.listWorkStatus = resp.result;
       }
     });
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
@@ -62,9 +71,9 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
     this.frmCreateWork.patchValue({
       quantity: this.workModel.quantity == null ? "0" : this.workModel.quantity,
       workHours: this.workModel.workHours == null ? "0" : this.workModel.workHours,
-      workProfit: this.workModel.workProfit == null ? "0" : this.workModel.workProfit,
     });
     this.frmCreateWork.get('workProvince').valueChanges.subscribe((valueChanges) => {
+      this.provinceName = this.listProvince?.find(province => province.codename === valueChanges)?.name;
       this.listProvince.map((province, index) => {
         if (province.codename === valueChanges) {
           this.listDistrict = this.listProvince[index].districts;
@@ -88,19 +97,18 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
   saveData() {
     if (this.frmCreateWork.valid) {
       const model: WorkModel = Object.assign({}, this.frmCreateWork.value);
-      if (this.workModel.workId == null) {
+      if (!this.workModel.workId) {
         model.workId = 0;
-        var toDay = new Date();
-        model.startDate = toDay;
+        model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
       }
       if (this.createBy) {
-        model.createdById = this.createBy.user.id;
-        model.createdBy = this.createBy.user;
+        model.createdById = this.createBy?.user?.id;
+        model.createdBy = this.createBy?.user;
       }
       this.workService.saveWork(model).pipe(takeUntil(this.destroy$)).subscribe(resp => {
         if (resp.result) {
           this.workModel = resp.result;
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl('/created-manage');
         }
       });
     }

@@ -5,6 +5,7 @@ import { HomeComponent } from './home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { CreateWorkComponent } from './work-management/create-work/create-work.component';
 import { WorkManagementComponent } from './work-management/work-management.component';
+import { CreatedManageComponent } from './work-management/created-manage/created-manage.component';
 export const routes: Routes = [
   {
     path: '',
@@ -26,7 +27,11 @@ export const routes: Routes = [
       {
         path: 'profile',
         component: ProfileComponent
-      }
+      },
+      {
+        path: 'created-manage',
+        component: CreatedManageComponent
+      },
     ]
   },
 ];

@@ -11,6 +11,7 @@ import { NbEvaIconsModule } from '@nebular/eva-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 import { TokenInterceptor } from './TokenInterceptor';
+import { QuillModule } from 'ngx-quill'
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { TokenInterceptor } from './TokenInterceptor';
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
+    QuillModule.forRoot(),
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),

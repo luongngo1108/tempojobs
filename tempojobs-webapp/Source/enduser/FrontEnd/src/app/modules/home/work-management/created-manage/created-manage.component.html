@@ -1,0 +1,62 @@
+<nb-card class="custom-card">
+  <nb-card-body>
+    <nb-button-group size="large" class="custom-button-group">
+      <button nbButtonToggle pressed>Tin tuyển dụng</button>
+    </nb-button-group>
+    <nb-tabset fullWidth class="custom-tabset" (changeTab)="changeTab($event)">
+      <nb-tab tabTitle="1. Đăng việc" badgeText="99+" badgeStatus="danger" tabId="1">
+        <div class="mat-elevation-z8" *ngIf="listWork.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWork" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element"> {{element.workName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="workTypeName">
+              <th mat-header-cell *matHeaderCellDef> Loại việc </th>
+              <td mat-cell *matCellDef="let element"> {{element.workTypeName}} </td>
+            </ng-container>
+            <ng-container matColumnDef="workProfit">
+              <th mat-header-cell *matHeaderCellDef> Ngân sách </th>
+              <td mat-cell *matCellDef="let element"> {{element.workProfit}} </td>
+            </ng-container>
+            <ng-container matColumnDef="workStatusName">
+              <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+              <td mat-cell *matCellDef="let element"> {{element.workStatusName}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="2. Nhận hồ sơ" badgeText="12" badgeStatus="warning" tabId="2">
+        <p>List of <strong>orders</strong>.</p>
+      </nb-tab>
+      <nb-tab tabTitle="3. Giao việc" badgeText="new" badgeStatus="success" tabId="3">
+        <p>List of <strong>transactions</strong>.</p>
+      </nb-tab>
+      <nb-tab tabTitle="4. Đánh giá" badgeDot badgeStatus="danger" tabId="4">
+        <p>List of <strong>notifications</strong>.</p>
+      </nb-tab>
+    </nb-tabset>
+
+  </nb-card-body>
+</nb-card>
+
+<ng-template #skeleton>
+  <div class="container px-5">
+    <div class="row gx-5 justify-content-center">
+      <div class="col-xxl-8">
+        <div class="text-center my-5">
+          <h2 class="display-5"><span>Chưa có việc nào được hiển thị</span></h2>
+          <p>Công việc được hiển thị hoàn toàn miễn phí trên TempoJobs.</p>
+          <p>Bạn có thể tìm ứng viên để làm các công việc, bán thời gian hay toàn thời gian.</p>
+          <a class="btn" style="background-color: #2db964; color: white;" href="create-work" role="button">Đăng công việc mới</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

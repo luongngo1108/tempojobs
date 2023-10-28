@@ -5,8 +5,14 @@ header {
     box-sizing: border-box;
     z-index: 1000;
 }
+
 .nav-item {
     margin-right: 15px;
+}
+
+.nav-item-icon {
+    margin: 0 15px;
+    font-size: 25px;
 }
 
 .fixed-content-nav {

@@ -2,6 +2,9 @@ import { Schema as _Schema, model } from 'mongoose';
 const Schema = _Schema;
 
 const DataState = new Schema ({
+    dataStateId: {
+        type: Number,
+    },
     dataStateName: {
         type: String,
         required: [true, "Please add the data state name!"],
