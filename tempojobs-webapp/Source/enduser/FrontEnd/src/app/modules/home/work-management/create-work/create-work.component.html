@@ -123,7 +123,28 @@
             <quill-editor [modules]="editorOptions" [styles]="{height: '200px'}"  placeholder="Mô tả" formControlName="workDescription">
             </quill-editor>
           </div>
-          <div class="d-grid"><button class="btn btn-primary" type="submit" (click)="saveData()"
+          <!-- <div style="margin-bottom: 10px;">
+            <mat-label style="color: #666666;">Vui lòng tìm kiếm địa chỉ hoặc chọn địa chỉ trên bản đồ</mat-label>
+            <input nbInput
+            type="text"
+            style="width: 100%; margin-top: 10px;"
+            class="my-search-box"
+            (keydown.enter)="$event.preventDefault()"
+            placeholder="Tìm kiếm địa chỉ"
+            type="text"
+            #search
+            />
+          </div>
+        
+          <google-map
+              #myGoogleMap
+              height="400px"
+              width="100%"
+              [zoom]="zoom"
+              [center]="center"
+              [options]="options"
+          ></google-map> -->
+          <div class="d-grid" style="margin-top: 10px;"><button class="btn btn-primary" type="submit" (click)="saveData()"
               [disabled]="!frmCreateWork.valid">Đăng công việc</button></div>
         </form>
       </div>

@@ -33,6 +33,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     fullscreenControl: true,
     disableDoubleClickZoom: true,
     mapTypeId: 'roadmap',
+    mapId: 'f9761bc900e107a5'
     // maxZoom:this.maxZoom,
     // minZoom:this.minZoom,
   };

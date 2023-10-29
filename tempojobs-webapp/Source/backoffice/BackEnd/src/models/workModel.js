@@ -59,6 +59,10 @@ const Work = new Schema ({
     },
     workType: {
         type: Schema.Types.Object
+    },
+    paymentToken: {
+        type: String,
+        default: null
     }
 }, {
     timestamps: true,

@@ -13738,3 +13738,12 @@ nb-layout-column {
 nb-card {
   height: 100% !important;
 }
+
+.limit-work-description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    /* number of lines to show */
+    line-clamp: 5;
+    -webkit-box-orient: vertical;
+}

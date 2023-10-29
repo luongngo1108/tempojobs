@@ -44,4 +44,5 @@ export class WorkModel {
     workStatusName: string | null;
     timeLine: string | null;
     workType: DataStateModel | null;
+    orderId: string | null;
 }

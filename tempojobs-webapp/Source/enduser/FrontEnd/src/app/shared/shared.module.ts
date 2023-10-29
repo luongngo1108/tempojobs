@@ -35,6 +35,8 @@ import { QuillModule } from 'ngx-quill';
 import { FormatCurrencyDirective } from './directives/format-currency.directive';
 import { MatTableModule } from '@angular/material/table';
 import { DatePipePipe } from './pipes/date-pipe.pipe';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
 
 const materialModules = [
   MatFormFieldModule,
@@ -55,6 +57,7 @@ const materialModules = [
   MatTooltipModule,
   MatTableModule,
   QuillModule,
+  MatDialogModule,
 ];
 
 const nebularModules = [
@@ -81,7 +84,8 @@ const angularModules = [
   declarations: [
     RichInlineEditComponent,
     FormatCurrencyDirective,
-    DatePipePipe
+    DatePipePipe,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -118,6 +122,9 @@ const angularModules = [
     [...angularModules],
     FormatCurrencyDirective,
     DatePipePipe
+  ],
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ]
 })
 export class SharedModule { }

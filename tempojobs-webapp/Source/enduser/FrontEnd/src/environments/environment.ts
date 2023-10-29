@@ -10,4 +10,5 @@ export const environment = {
     apiUser: apiUrl + '/user',
     apiLocation: apiUrl + '/location',
     apiDataStateManagement: apiUrl + '/dataState',
+    apiPayment: apiUrl + '/payment',
 }
