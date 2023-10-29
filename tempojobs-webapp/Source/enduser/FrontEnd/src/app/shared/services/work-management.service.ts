@@ -19,8 +19,8 @@ export class WorkManagementService {
     return this.http.get<ReturnResult<WorkModel[]>>(`${this.baseUrl}/getWorkAll`);
   }
 
-  getWorkById(id: string): Observable<ReturnResult<WorkModel[]>> {
-    return this.http.get<ReturnResult<WorkModel[]>>(`${this.baseUrl}/getWorkById?id=${id}`);
+  getWorkByCreatorId(id: string): Observable<ReturnResult<WorkModel[]>> {
+    return this.http.get<ReturnResult<WorkModel[]>>(`${this.baseUrl}/getWorkByCreatorId?id=${id}`);
   }
 
   getWorkPaging(page: Page): Observable<ReturnResult<PagedData<WorkModel>>> {
@@ -34,7 +34,7 @@ export class WorkManagementService {
   deleteWork(id: number): Observable<ReturnResult<boolean>> {
     return this.http.delete<ReturnResult<boolean>>(`${this.baseUrl}/${id}`);
   }
-  
+
   getWorkByWorkId(workId: string): Observable<ReturnResult<WorkModel>> {
     return this.http.get<ReturnResult<WorkModel>>(`${this.baseUrl}/getWorkByWorkId/${workId}`);
   }

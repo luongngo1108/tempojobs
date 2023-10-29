@@ -1,169 +1,190 @@
 <div class="container px-5 fix-section">
-    <div class="bg-light rounded-4 py-5 px-4 px-md-5">
-      <div class="text-center mb-5">
-        <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i
-            class="bi bi-envelope"></i></div>
-        <h1 class="display-5 fw-bolder"><span class="text-gradient d-inline">Tạo công việc mới</span></h1>
-        <p class="lead fw-normal text-muted mb-0">Cùng nhau tạo thật nhiều công việc!</p>
+  <div class="bg-light rounded-4 py-5 px-4 px-md-5">
+    <div class="text-center mb-5">
+      <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i
+          class="bi bi-envelope"></i></div>
+      <h1 class="display-5 fw-bolder"><span class="text-gradient d-inline">Tạo công việc mới</span></h1>
+      <p class="lead fw-normal text-muted mb-0">Cùng nhau tạo thật nhiều công việc!</p>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start start" style="margin: 0 100px;">
+      <div fxFlex="50" class="layout-custom">
+        <form [formGroup]="frmCreateWork">
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Tên công việc</mat-label>
+              <input matInput formControlName="workName" autocomplete="off" required trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workName?.errors &&
+                  (frmCreateWork.controls?.workName?.dirty ||
+                    frmCreateWork.controls?.workName?.touched)">
+                {{ frmCreateWork.controls.workName["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Loại công việc</mat-label>
+              <mat-select formControlName="workTypeId" required>
+                <mat-option *ngFor="let workType of listWorkType" [value]="workType.dataStateId">
+                  {{workType.dataStateName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Số lượng người cần</mat-label>
+              <input matInput formControlName="quantity" autocomplete="off" required trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.quantity?.errors &&
+                  (frmCreateWork.controls?.quantity?.dirty ||
+                    frmCreateWork.controls?.quantity?.touched)">
+                {{ frmCreateWork.controls.quantity["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Thời gian bắt đầu làm việc</mat-label>
+              <input matInput [ngxMatDatetimePicker]="pickerCustomIcon" placeholder="Choose a date"
+                formControlName="startDate" required>
+              <ngx-mat-datepicker-toggle matSuffix [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
+              <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [stepHour]="1"
+                [stepMinute]="15" [showSeconds]="false" [touchUi]="false" [enableMeridian]="false">
+                <ngx-mat-datepicker-actions>
+                  <button mat-button ngxMatDatepickerCancel>Hủy</button>
+                  <button mat-raised-button color="primary" ngxMatDatepickerApply>Đồng ý</button>
+                </ngx-mat-datepicker-actions>
+              </ngx-mat-datetime-picker>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Thời lượng làm việc</mat-label>
+              <input matInput formControlName="workHours" autocomplete="off" required trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workHours?.errors &&
+                  (frmCreateWork.controls?.workHours?.dirty ||
+                    frmCreateWork.controls?.workHours?.touched)">
+                {{ frmCreateWork.controls.workHours["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Tỉnh</mat-label>
+              <mat-select formControlName="workProvince" required>
+                <mat-option *ngFor="let province of listProvince" [value]="province.codename">
+                  {{province.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Quận/Huyện</mat-label>
+              <mat-select formControlName="workDistrict" required>
+                <mat-option *ngFor="let district of listDistrict" [value]="district.codename">
+                  {{district.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Chi tiết địa chỉ</mat-label>
+              <input matInput formControlName="workAddress" autocomplete="off" trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workAddress?.errors &&
+                  (frmCreateWork.controls?.workAddress?.dirty ||
+                    frmCreateWork.controls?.workAddress?.touched)">
+                {{ frmCreateWork.controls.workAddress["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Ngân sách dự kiến chi trả cho công việc này</mat-label>
+              <input matInput required type="text" appFormatCurrency formControlName="workProfit" autocomplete="off" trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workProfit?.errors &&
+                  (frmCreateWork.controls?.workProfit?.dirty ||
+                    frmCreateWork.controls?.workProfit?.touched)">
+                {{ frmCreateWork.controls.workProfit["errorMessage"] }}</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="form-floating mb-3">
+            <!-- <mat-form-field appearance="fill"  class="form-field">
+              <mat-label>Mô tả công việc</mat-label>
+              <input matInput type="text" formControlName="workDescription" autocomplete="off" trim="blur" />
+              <mat-error *ngIf="
+                  frmCreateWork.controls?.workDescription?.errors &&
+                  (frmCreateWork.controls?.workDescription?.dirty ||
+                    frmCreateWork.controls?.workDescription?.touched)">
+                {{ frmCreateWork.controls.workDescription["errorMessage"] }}</mat-error>
+            </mat-form-field> -->
+            <mat-label style="color: #666666">Mô tả công việc</mat-label>
+            <quill-editor [modules]="editorOptions" [styles]="{height: '200px'}"  placeholder="Mô tả" formControlName="workDescription">
+            </quill-editor>
+          </div>
+          <!-- <div style="margin-bottom: 10px;">
+            <mat-label style="color: #666666;">Vui lòng tìm kiếm địa chỉ hoặc chọn địa chỉ trên bản đồ</mat-label>
+            <input nbInput
+            type="text"
+            style="width: 100%; margin-top: 10px;"
+            class="my-search-box"
+            (keydown.enter)="$event.preventDefault()"
+            placeholder="Tìm kiếm địa chỉ"
+            type="text"
+            #search
+            />
+          </div>
+        
+          <google-map
+              #myGoogleMap
+              height="400px"
+              width="100%"
+              [zoom]="zoom"
+              [center]="center"
+              [options]="options"
+          ></google-map> -->
+          <div class="d-grid" style="margin-top: 10px;"><button class="btn btn-primary" type="submit" (click)="saveData()"
+              [disabled]="!frmCreateWork.valid">Đăng công việc</button></div>
+        </form>
       </div>
-      <div fxLayout="row" fxLayoutAlign="start start" style="margin: 0 100px;">
-        <div fxFlex="50" class="layout-custom">
-          <form [formGroup]="frmCreateWork">
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Tên công việc</mat-label>
-                <input matInput formControlName="workName" autocomplete="off" required trim="blur" />
-                <mat-error *ngIf="
-                    frmCreateWork?.controls?.workName?.errors &&
-                    (frmCreateWork?.controls?.workName?.dirty ||
-                      frmCreateWork?.controls?.workName?.touched)">
-                  {{ frmCreateWork?.controls?.workName["errorMessage"] }}</mat-error>
-              </mat-form-field>
+      <div fxFlex="50" class="layout-custom">
+        <nb-card class="cardContext">
+          <nb-card-header class="work-header">
+            <div class="row" style="text-align: left;">
+              <span style="color: rgb(0, 102, 255);">{{frmCreateWork?.get('workName')?.value}}</span>
+              <span>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                <nb-icon icon="star-outline"></nb-icon>
+                {{createBy?.username}}
+              </span>
             </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Loại công việc</mat-label>
-                <mat-select formControlName="workTypeId" required>
-                  <mat-option *ngFor="let workType of listWorkType" [value]="workType?.dataStateId">
-                    {{workType?.dataStateName}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Số lượng người cần</mat-label>
-                <input matInput formControlName="quantity" autocomplete="off" required trim="blur" />
-                <mat-error *ngIf="
-                    frmCreateWork?.controls?.quantity?.errors &&
-                    (frmCreateWork?.controls?.quantity?.dirty ||
-                      frmCreateWork?.controls?.quantity?.touched)">
-                  {{ frmCreateWork?.controls?.quantity["errorMessage"] }}</mat-error>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Thời gian bắt đầu làm việc</mat-label>
-                <input matInput [ngxMatDatetimePicker]="pickerCustomIcon" placeholder="Choose a date"
-                  formControlName="startDate" required>
-                <ngx-mat-datepicker-toggle matSuffix [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
-                <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [stepHour]="1"
-                  [stepMinute]="15" [showSeconds]="false" [touchUi]="false" [enableMeridian]="false">
-                  <ngx-mat-datepicker-actions>
-                    <button mat-button ngxMatDatepickerCancel>Hủy</button>
-                    <button mat-raised-button color="primary" ngxMatDatepickerApply>Đồng ý</button>
-                  </ngx-mat-datepicker-actions>
-                </ngx-mat-datetime-picker>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Thời lượng làm việc</mat-label>
-                <input matInput formControlName="workHours" autocomplete="off" required trim="blur" />
-                <mat-error *ngIf="
-                    frmCreateWork?.controls?.workHours?.errors &&
-                    (frmCreateWork?.controls?.workHours?.dirty ||
-                      frmCreateWork?.controls?.workHours?.touched)">
-                  {{ frmCreateWork?.controls?.workHours["errorMessage"] }}</mat-error>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Tỉnh</mat-label>
-                <mat-select formControlName="workProvince" required>
-                  <mat-option *ngFor="let province of listProvince" [value]="province?.codename">
-                    {{province?.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Quận/Huyện</mat-label>
-                <mat-select formControlName="workDistrict" required>
-                  <mat-option *ngFor="let district of listDistrict" [value]="district?.codename">
-                    {{district?.name}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Chi tiết địa chỉ</mat-label>
-                <input matInput formControlName="workAddress" autocomplete="off" trim="blur" />
-                <mat-error *ngIf="
-                    frmCreateWork?.controls?.workAddress?.errors &&
-                    (frmCreateWork?.controls?.workAddress?.dirty ||
-                      frmCreateWork?.controls?.workAddress?.touched)">
-                  {{ frmCreateWork?.controls?.workAddress["errorMessage"] }}</mat-error>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Ngân sách dự kiến chi trả cho công việc này</mat-label>
-                <input matInput required appFormatCurrency formControlName="workProfit" autocomplete="off" trim="blur" />
-                <mat-error *ngIf="
-                    frmCreateWork?.controls?.workProfit?.errors &&
-                    (frmCreateWork?.controls?.workProfit?.dirty ||
-                      frmCreateWork?.controls?.workProfit?.touched)">
-                  {{ frmCreateWork?.controls?.workProfit["errorMessage"] }}</mat-error>
-              </mat-form-field>
-            </div>
-            <div class="form-floating mb-3">
-              <!-- <mat-form-field appearance="fill"  class="form-field">
-                <mat-label>Mô tả công việc</mat-label>
-                <input matInput type="text" formControlName="workDescription" autocomplete="off" trim="blur" />
-                <mat-error *ngIf="
-                    frmCreateWork?.controls?.workDescription?.errors &&
-                    (frmCreateWork?.controls?.workDescription?.dirty ||
-                      frmCreateWork?.controls?.workDescription?.touched)">
-                  {{ frmCreateWork?.controls?.workDescription["errorMessage"] }}</mat-error>
-              </mat-form-field> -->
-              <mat-label style="color: #666666">Mô tả công việc</mat-label>
-              <quill-editor [modules]="editorOptions" [styles]="{height: '200px'}"  placeholder="Mô tả" formControlName="workDescription">
-              </quill-editor>
-            </div>
-            <div class="d-grid"><button class="btn btn-primary" type="submit" (click)="saveData()"
-                [disabled]="!frmCreateWork.valid">Submit</button></div>
-          </form>
-        </div>
-        <div fxFlex="50" class="layout-custom">
-          <nb-card class="cardContext">
-            <nb-card-header class="work-header">
-              <div class="row" style="text-align: left;">
-                <span style="color: rgb(0, 102, 255);">{{frmCreateWork?.get('workName')?.value}}</span>
-                <span>
-                  <nb-icon icon="star-outline"></nb-icon>
-                  <nb-icon icon="star-outline"></nb-icon>
-                  <nb-icon icon="star-outline"></nb-icon>
-                  <nb-icon icon="star-outline"></nb-icon>
-                  <nb-icon icon="star-outline"></nb-icon>
-                  {{createBy?.username}}
-                </span>
+          </nb-card-header>
+          <nb-card-body>
+            <nav class="navbar navbar-expand-lg bg-light">
+              <div class="container-fluid" style="background-color: #dedede; padding: 10px;">
+                <span>{{provinceName}} | {{frmCreateWork?.get('workProfit')?.value}} đ</span>
+                <form>
+                  <span class="navbar-text">
+                    Hạn nhận đăng ký: 
+                  </span>
+                </form>
               </div>
-            </nb-card-header>
-            <nb-card-body>
-              <nav class="navbar navbar-expand-lg bg-light">
-                <div class="container-fluid" style="background-color: #dedede; padding: 10px;">
-                  <span>{{provinceName}} | {{frmCreateWork?.get('workProfit')?.value}}</span>
-                  <form>
-                    <span class="navbar-text">
-                      Hạn nhận đăng ký: 
-                    </span>
-                  </form>
-                </div>
-              </nav>
-            </nb-card-body>
-            <nb-card-footer>
-              <div style="text-align: left;">
-                {{frmCreateWork?.get('workDescription')?.value}}
-              </div>
-              <div style="text-align: right;">
-                Đã ứng tuyển: 0/{{frmCreateWork?.get('quantity')?.value}}
-              </div>
-            </nb-card-footer>
-          </nb-card>
-        </div>
+            </nav>
+          </nb-card-body>
+          <nb-card-footer>
+            <div style="text-align: left;" [innerHTML]="frmCreateWork?.get('workDescription')?.value">
+              
+            </div>
+            <div style="text-align: right;">
+              Đã ứng tuyển: 0/{{frmCreateWork?.get('quantity')?.value}}
+            </div>
+          </nb-card-footer>
+        </nb-card>
       </div>
     </div>
   </div>
+</div>

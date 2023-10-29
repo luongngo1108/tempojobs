@@ -26,10 +26,6 @@ export const routes: Routes = [
         component: AddEditWorkComponent
       },
       {
-        path: 'add-edit-work/:id',
-        component: AddEditWorkComponent
-      },
-      {
         path: 'profile',
         component: ProfileComponent
       },

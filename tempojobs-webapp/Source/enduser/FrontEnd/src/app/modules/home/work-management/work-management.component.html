@@ -10,7 +10,7 @@
         </a>
         <div class="collapse" id="collapseWorkType" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
           <nav class="sb-sidenav-menu-nested nav" *ngFor="let workType of listWorkType">
-            <mat-checkbox (change)="filterWork($event, 'workType', workType._id)">{{workType.dataStateName}}</mat-checkbox>
+            <mat-checkbox (change)="filterWork($event, 'workType', workType.dataStateId)">{{workType.dataStateName}}</mat-checkbox>
           </nav>
         </div>
       </nb-card-body>

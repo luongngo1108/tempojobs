@@ -155,8 +155,8 @@ class WorkController {
                 createdById: id,
                 deleted: false,
             });
-            if (listWWork) {
-                result = listWWork;
+            if (listWork) {
+                result = listWork;
                 res.status(200).json({result: result, message: message});
             } else {
                 message = "Error get Work by id: " + id;

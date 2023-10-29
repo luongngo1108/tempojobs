@@ -77,14 +77,6 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         if (res.result) this.toast.success("Bạn đã thanh toán thành công!!", "Thanh toán thành công", { duration: 30000 });
       })
     }
-    var resultListWork = await this.workService.getAllWork().pipe(takeUntil(this.destroy$)).toPromise();
-    if (resultListWork.result) {
-      this.listWork = resultListWork.result;
-      this.listWork.map(work => {
-        work.workTypeName = this.listWorkType.find(type => type.dataStateId === work.workTypeId)?.dataStateName;
-      });
-    }
-
   }
 
   async getDataDefaults() {
@@ -102,7 +94,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   async getListWorksDefaults() {
-    var resultListWork = await this.workService.getWorkById(this.currentUser?.user?.id).pipe(takeUntil(this.destroy$)).toPromise();
+    var resultListWork = await this.workService.getWorkByCreatorId(this.currentUser?.user?.id).pipe(takeUntil(this.destroy$)).toPromise();
     if (resultListWork.result) {
       this.listWork = resultListWork.result;
       this.listWork.map(work => {
