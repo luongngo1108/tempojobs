@@ -35,7 +35,6 @@ const checkAdminRole = async(req, res, next) => {
 const checkUserRole = async(req, res, next) => {
     // validateToken(req, res, next);
     const {role} = req.user;
-    console.log("role ne: " + role);
     if(role !== User) {
         res.status(403).json("Forbidden!!!");
         return;

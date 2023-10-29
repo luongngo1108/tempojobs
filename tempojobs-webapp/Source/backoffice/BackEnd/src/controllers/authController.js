@@ -7,6 +7,7 @@ import { ReturnResult } from "../DTO/returnResult.js";
 import { sendEmail } from "../utils/emailUtil.js";
 import { ObjectId } from "mongoose";
 import crypto from "crypto";
+import googleMapLocationModel from "../models/googleMapLocationModel.js";
 
 class authController {
     // [POST] /register
@@ -25,9 +26,11 @@ class authController {
 
         //Hash password
         const hashedPassword = await hash(password, 10);
+        const googleLocation = await googleMapLocationModel.create({});
         const userDetail = await UserDetail.create({
             firstName,
             lastName,
+            googleLocation,
             email
         })
 

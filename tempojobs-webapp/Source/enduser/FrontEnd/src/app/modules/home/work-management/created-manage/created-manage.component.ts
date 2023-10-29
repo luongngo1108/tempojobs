@@ -2,8 +2,9 @@ import { AfterViewInit, Component, ViewChild, OnInit, OnDestroy } from '@angular
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { WorkModel } from 'src/app/shared/models/work.model';
+import { ActivatedRoute } from '@angular/router';
 import { WorkManagementService } from 'src/app/shared/services/work-management.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, lastValueFrom, takeUntil } from 'rxjs';
 import { DataStateModel } from 'src/app/shared/models/data-state.model';
 import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
@@ -11,7 +12,8 @@ import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
-
+import { PaymentServiceService } from 'src/app/shared/services/payment-service.service';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -34,6 +36,10 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   countTab2: number;
   countTab3: number;
   countTab4: number;
+  paymentToken = null;
+  paymentMessage = null;
+  amount = null;
+  userId = null;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -44,17 +50,41 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     private router: Router,
     private toast: NbToastrService,
     private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private paymentService: PaymentServiceService,
+    private _location: Location
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$)).subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.currentUser = token.getPayload();
       }
     });
+    
+    this.route.queryParams.subscribe(params => {
+      this.paymentToken = params['paymentToken'];
+      this.paymentMessage = params['message'];
+      this.userId = params['userId'];
+      this.amount = params['amount'];
+    });
+    this._location.go('created-manage');
   }
 
   async ngOnInit() {
     await this.getDataDefaults();
     await this.refreshData();
+    if (this.paymentToken && this.paymentMessage.includes("Successful.") && this.userId) {
+      this.paymentService.momoPayementSuccess({ paymentToken: this.paymentToken, amount: this.amount, userId: this.userId }).subscribe(res => {
+        if (res.result) this.toast.success("Bạn đã thanh toán thành công!!", "Thanh toán thành công", { duration: 30000 });
+      })
+    }
+    var resultListWork = await this.workService.getAllWork().pipe(takeUntil(this.destroy$)).toPromise();
+    if (resultListWork.result) {
+      this.listWork = resultListWork.result;
+      this.listWork.map(work => {
+        work.workTypeName = this.listWorkType.find(type => type.dataStateId === work.workTypeId)?.dataStateName;
+      });
+    }
+
   }
 
   async getDataDefaults() {
@@ -122,6 +152,17 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
+  async createPayment(workModel: any) {
+    var startDate = new Date(workModel.startDate);
+    var createdAt = new Date(workModel.createdAt);
+    const diffTime = Math.abs(Number(startDate) - Number(createdAt));
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    var amount = diffDays * 5000 + workModel.quantity * 1000;
+    var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
+      userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
+    }));
+    if (respCreatePayment.result) window.location.href = respCreatePayment.result;
+  }
   handleDisplayStatus(state: number, isDisplayColor: boolean = false): string {
     if (this.listWorkStatus?.length <= 0) {
       return isDisplayColor ? '#0000' : '';
@@ -139,20 +180,20 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     }
   }
-
+  
   editWork(work: WorkModel) {
     if (work) {
       this.router.navigate(['add-edit-work'], { state: {work: work}});
     }
   }
-
+  
   deleteWork(work: WorkModel) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       data: {
         message: "Bạn chắc chắn muốn xóa công việc này?"
       }
     });
-
+  
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (work) {

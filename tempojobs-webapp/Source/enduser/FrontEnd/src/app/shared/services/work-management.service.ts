@@ -34,4 +34,8 @@ export class WorkManagementService {
   deleteWork(id: number): Observable<ReturnResult<boolean>> {
     return this.http.delete<ReturnResult<boolean>>(`${this.baseUrl}/${id}`);
   }
+  
+  getWorkByWorkId(workId: string): Observable<ReturnResult<WorkModel>> {
+    return this.http.get<ReturnResult<WorkModel>>(`${this.baseUrl}/getWorkByWorkId/${workId}`);
+  }
 }

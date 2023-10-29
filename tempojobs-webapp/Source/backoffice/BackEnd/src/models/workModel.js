@@ -59,6 +59,10 @@ const Work = new Schema ({
     },
     deleted: {
         type: Boolean,
+    },
+    paymentToken: {
+        type: String,
+        default: null
     }
 }, {
     timestamps: true,

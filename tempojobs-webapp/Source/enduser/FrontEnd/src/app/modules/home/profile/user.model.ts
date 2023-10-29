@@ -5,7 +5,7 @@ export class User {
   id: string;
 
   @prop()
-  username: string;
+  displayname: string;
 
   @prop()
   email: string;
@@ -87,7 +87,5 @@ export class GoogleMapLocation {
   @prop()
   longitude: number;
   @prop()
-  mapType: string = 'satelite';
-  @prop()
-  zoom: number = 5;
+  address: string;
 }

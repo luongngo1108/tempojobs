@@ -1,6 +1,8 @@
+import { ReturnResult } from '../DTO/returnResult.js';
 import Counter from '../models/counterModel.js';
 import { FilterMapping, Page, PagedData } from '../models/pageModel.js';
 import Work from '../models/workModel.js';
+import DataState from '../models/dataStateModel.js';
 import { getLastCounterValue } from '../utils/counterUtil.js';
 
 class WorkController {
@@ -139,7 +141,7 @@ class WorkController {
         }
     }
 
-    async getWorkById(req, res, next) {
+    async getWorkByCreatorId(req, res, next) {
         try {
             var result = null;
             var message = null;
@@ -149,7 +151,7 @@ class WorkController {
                 res.status(400).json({result: result, message: message});
                 return;
             }
-            const listWWork = await Work.find({
+            const listWork = await Work.find({
                 createdById: id,
                 deleted: false,
             });
@@ -190,6 +192,20 @@ class WorkController {
             next(error);
         }
     }
+    async getWorkByWorkId(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const work = await Work.findOne({workId: req.params.workId});
+            if(work) {
+                result.result = work;
+                work.workType = await DataState.findOne({dataStateId: work.workTypeId});
+            } 
+        }
+        catch(error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }  
 };
 
 export default new WorkController;

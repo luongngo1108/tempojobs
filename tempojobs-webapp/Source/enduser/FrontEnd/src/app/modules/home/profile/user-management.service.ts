@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Subject, Observable } from "rxjs";
-import { ProfileDetail, User } from "./user.model";
+import { GoogleMapLocation, ProfileDetail, User } from "./user.model";
 import { environment } from "src/environments/environment";
 import { PagedData } from "src/app/shared/models/paged-data";
 import { ReturnResult } from "src/app/shared/models/return-result";
@@ -12,6 +12,7 @@ import { ReturnResult } from "src/app/shared/models/return-result";
 export class UserManagementService {
     constructor(private httpclient: HttpClient) {}
     baseUrl = environment.apiUser;
+    locationUrl = environment.apiLocation;
     _currentUser = new Subject<any>;
     _currentUserDetail = new Subject<ProfileDetail>;
     _userList = new Subject<User[]>
@@ -45,5 +46,9 @@ export class UserManagementService {
 
     saveProfileDetail(profileDetail: ProfileDetail): Observable<ReturnResult<ProfileDetail>> {
         return this.httpclient.post<ReturnResult<ProfileDetail>>(`${this.baseUrl}/saveUserDetail`, profileDetail)
+    }
+
+    saveGoogleMapLocation(googleLocation: GoogleMapLocation): Observable<ReturnResult<GoogleMapLocation>> {
+        return this.httpclient.post<ReturnResult<GoogleMapLocation>>(`${this.locationUrl}/saveGoogleMapLocation`, googleLocation)
     }
 }

@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Vui lòng xác nhận!</h1>
+<div mat-dialog-content>
+  <p>{{content}}</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Hủy</button>
+  <button mat-button (click)="onNextClick()" cdkFocusInitial>{{nextButtonContent}}</button>
+</div>
