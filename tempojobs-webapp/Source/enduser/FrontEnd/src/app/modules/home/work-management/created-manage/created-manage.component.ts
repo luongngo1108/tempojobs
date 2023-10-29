@@ -6,6 +6,11 @@ import { WorkManagementService } from 'src/app/shared/services/work-management.s
 import { Subject, takeUntil } from 'rxjs';
 import { DataStateModel } from 'src/app/shared/models/data-state.model';
 import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { Router } from '@angular/router';
+import { NbToastrService } from '@nebular/theme';
+import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-created-manage',
@@ -13,41 +18,52 @@ import { DataStateManagementService } from 'src/app/shared/services/data-state-m
   styleUrls: ['./created-manage.component.scss']
 })
 export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy {
-  displayedColumns: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+  displayedColumns: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   listWork: WorkModel[] = [];
+  listWorkShow: WorkModel[] = [];
   listWorkType: DataStateModel[] = [];
   listWorkStatus: DataStateModel[] = [];
+  approvingId: number;
+  approvedId: number;
+  refuseApprovalId: number;
+  currentUser;
+  countTab1: number;
+  countTab2: number;
+  countTab3: number;
+  countTab4: number;
 
   private destroy$: Subject<void> = new Subject<void>();
 
   constructor(
     private workService: WorkManagementService,
     private dataStateService: DataStateManagementService,
+    private authService: NbAuthService,
+    private router: Router,
+    private toast: NbToastrService,
+    private dialog: MatDialog,
   ) {
-    
+    this.authService.onTokenChange().pipe(takeUntil(this.destroy$)).subscribe((token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.currentUser = token.getPayload();
+      }
+    });
   }
 
   async ngOnInit() {
     await this.getDataDefaults();
-    var resultListWork = await this.workService.getAllWork().pipe(takeUntil(this.destroy$)).toPromise();
-    if (resultListWork.result) {
-      this.listWork = resultListWork.result;
-        this.listWork.map(work => {
-          work.workStatusName = this.listWorkStatus.find(status => status.dataStateId === work.workStatusId)?.dataStateName;
-          work.workTypeName = this.listWorkType.find(type => type.dataStateId === work.workTypeId)?.dataStateName;
-        });
-    }
-    
+    await this.refreshData();
   }
 
   async getDataDefaults() {
     var resultStatus = await this.dataStateService.getDataStateByType("WORK_STATUS").pipe(takeUntil(this.destroy$)).toPromise();
     if (resultStatus.result) {
       this.listWorkStatus = resultStatus.result;
+      this.approvingId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang duyệt').dataStateId;
+      this.approvedId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đã duyệt').dataStateId;
+      this.refuseApprovalId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt').dataStateId;
     }
     var resultType = await this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).toPromise();
     if (resultType.result) {
@@ -55,8 +71,35 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
+  async getListWorksDefaults() {
+    var resultListWork = await this.workService.getWorkById(this.currentUser?.user?.id).pipe(takeUntil(this.destroy$)).toPromise();
+    if (resultListWork.result) {
+      this.listWork = resultListWork.result;
+      this.listWork.map(work => {
+        work.workTypeName = this.listWorkType.find(type => type.dataStateId === work.workTypeId)?.dataStateName;
+      });
+      this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+    }
+  }
+
+  counterTab() {
+    const filterTab1 = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+    if (filterTab1.length > 0) {
+      this.countTab1 = filterTab1.length;
+    }
+    const filterTab2 = this.listWork.filter(work => work.workStatusId === this.approvedId);
+    if (filterTab2.length > 0) {
+      this.countTab2 = filterTab2.length;
+    }
+  }
+
+  async refreshData() {
+    await this.getListWorksDefaults();
+    this.counterTab();
+  }
+
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
+
   }
 
   ngOnDestroy(): void {
@@ -65,36 +108,63 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   changeTab(event) {
-    console.log(event);
+    switch (Number(event.tabId)) {
+      case 1:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+        break;
+      case 2:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
+        break;
+      case 3:
+        break;
+      case 4:
+        break;
+    }
+  }
+
+  handleDisplayStatus(state: number, isDisplayColor: boolean = false): string {
+    if (this.listWorkStatus?.length <= 0) {
+      return isDisplayColor ? '#0000' : '';
+    }
+    if (state) {
+      if (isDisplayColor) {
+        var findColor = this.listWorkStatus.find(x => x.dataStateId === state);
+        if (findColor) return findColor.colorCode;
+        else return '#0000';
+      }
+      else {
+        var findName = this.listWorkStatus.find(x => x.dataStateId === state);
+        if (findName) return findName.dataStateName;
+        else return '';
+      }
+    }
+  }
+
+  editWork(work: WorkModel) {
+    if (work) {
+      this.router.navigate(['add-edit-work'], { state: {work: work}});
+    }
+  }
+
+  deleteWork(work: WorkModel) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      data: {
+        message: "Bạn chắc chắn muốn xóa công việc này?"
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        if (work) {
+          this.workService.deleteWork(work.workId).subscribe(resp => {
+            if (resp.result) {
+              this.toast.success("Xóa công việc thành công!");
+            } else {
+              this.toast.danger("Bạn không thể xóa công việc này!");
+            }
+          }).add(() => this.refreshData())
+        }
+      }
+    });
   }
 }
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];

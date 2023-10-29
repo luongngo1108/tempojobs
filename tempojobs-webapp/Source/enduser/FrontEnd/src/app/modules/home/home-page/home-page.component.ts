@@ -22,17 +22,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private router: Router,
     private dataStateService: DataStateManagementService,
   ) {
-    this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
-      if (resp) {
-        this.listProvince = resp;
-      }
-    });
+
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     if (this.router.url !== "/") {
       this.isIntro = false;
     }
+    await this.getDataDefaults();
     this.workService.getAllWork().pipe(takeUntil(this.destroy$)).subscribe(resp => {
       if (resp.result) {
         this.listWork = resp.result;
@@ -42,6 +39,13 @@ export class HomePageComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  async getDataDefaults() {
+    var resultProvince = await this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).toPromise();
+    if (resultProvince) {
+      this.listProvince = resultProvince;
+    }
   }
 
   ngOnDestroy(): void {

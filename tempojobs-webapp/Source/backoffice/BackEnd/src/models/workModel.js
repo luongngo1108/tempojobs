@@ -56,8 +56,10 @@ const Work = new Schema ({
     },
     createdBy: {
         type: Schema.Types.Object
+    },
+    deleted: {
+        type: Boolean,
     }
-    
 }, {
     timestamps: true,
 });

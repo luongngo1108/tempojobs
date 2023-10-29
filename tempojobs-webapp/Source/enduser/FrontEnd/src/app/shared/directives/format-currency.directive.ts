@@ -14,11 +14,8 @@ export class FormatCurrencyDirective {
     // Format the value with commas and currency symbol
     const formattedValue = this.formatCurrency(cleanValue);
 
-    // Remove currency symbol "đ"
-    const valueWithoutSymbol = formattedValue.replace(' ₫', '');
-
     // Set the formatted value back into the input field
-    this.el.nativeElement.value = valueWithoutSymbol;
+    this.el.nativeElement.value = formattedValue;
   }
 
   formatCurrency(value: string): string {

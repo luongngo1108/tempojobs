@@ -4,12 +4,27 @@
       <button nbButtonToggle pressed>Tin tuyển dụng</button>
     </nb-button-group>
     <nb-tabset fullWidth class="custom-tabset" (changeTab)="changeTab($event)">
-      <nb-tab tabTitle="1. Đăng việc" badgeText="99+" badgeStatus="danger" tabId="1">
-        <div class="mat-elevation-z8" *ngIf="listWork.length > 0; else skeleton">
-          <table mat-table [dataSource]="listWork" class="mat-elevation-z8 demo-table">
+      <nb-tab tabTitle="1. Đăng việc" badgeText="{{countTab1}}" badgeStatus="success" tabId="1">
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
             <ng-container matColumnDef="workName">
               <th mat-header-cell *matHeaderCellDef> Tên việc </th>
-              <td mat-cell *matCellDef="let element"> {{element.workName}} </td>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                        <div style="color: white; ">
+                          {{handleDisplayStatus(element.workStatusId)}}
+                          <nb-icon icon="lock-outline"></nb-icon>
+                        </div>
+                      </div>
+                      <p>Chưa tìm được người làm việc</p>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
             </ng-container>
             <ng-container matColumnDef="workTypeName">
               <th mat-header-cell *matHeaderCellDef> Loại việc </th>
@@ -21,7 +36,13 @@
             </ng-container>
             <ng-container matColumnDef="workStatusName">
               <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-              <td mat-cell *matCellDef="let element"> {{element.workStatusName}} </td>
+              <td mat-cell *matCellDef="let element"> {{handleDisplayStatus(element.workStatusId)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="moreAction" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab1; context: {row: element}"></ng-container>
+              </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -32,13 +53,13 @@
           </mat-paginator>
         </div>
       </nb-tab>
-      <nb-tab tabTitle="2. Nhận hồ sơ" badgeText="12" badgeStatus="warning" tabId="2">
+      <nb-tab tabTitle="2. Nhận hồ sơ" badgeText="{{countTab2}}" badgeStatus="success" tabId="2">
         <p>List of <strong>orders</strong>.</p>
       </nb-tab>
-      <nb-tab tabTitle="3. Giao việc" badgeText="new" badgeStatus="success" tabId="3">
+      <nb-tab tabTitle="3. Giao việc" badgeText="{{countTab3}}" badgeStatus="success" tabId="3">
         <p>List of <strong>transactions</strong>.</p>
       </nb-tab>
-      <nb-tab tabTitle="4. Đánh giá" badgeDot badgeStatus="danger" tabId="4">
+      <nb-tab tabTitle="4. Đánh giá" badgeText="{{countTab4}}" badgeStatus="success" tabId="4">
         <p>List of <strong>notifications</strong>.</p>
       </nb-tab>
     </nb-tabset>
@@ -54,9 +75,25 @@
           <h2 class="display-5"><span>Chưa có việc nào được hiển thị</span></h2>
           <p>Công việc được hiển thị hoàn toàn miễn phí trên TempoJobs.</p>
           <p>Bạn có thể tìm ứng viên để làm các công việc, bán thời gian hay toàn thời gian.</p>
-          <a class="btn" style="background-color: #2db964; color: white;" href="create-work" role="button">Đăng công việc mới</a>
+          <a class="btn" style="background-color: #2db964; color: white;" href="add-edit-work" role="button">Đăng công việc mới</a>
         </div>
       </div>
     </div>
   </div>
+</ng-template>
+
+<ng-template #templateTab1 let-row="row">
+  <button mat-icon-button [matMenuTriggerFor]="matMenuTab1" aria-label="Example icon-button with a menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #matMenuTab1="matMenu">
+    <button mat-menu-item (click)="editWork(row)">
+      <mat-icon style="color: #3366ff;">edit</mat-icon>
+      <span>Chỉnh sửa công việc</span>
+    </button>
+    <button mat-menu-item (click)="deleteWork(row)">
+      <mat-icon style="color: red;">delete</mat-icon>
+      <span>Xóa công việc</span>
+    </button>
+  </mat-menu>
 </ng-template>

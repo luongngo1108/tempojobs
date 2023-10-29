@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CreateWorkComponent } from './create-work.component';
+import { ConfirmModalComponent } from './confirm-modal.component';
 
-describe('CreateWorkComponent', () => {
-  let component: CreateWorkComponent;
-  let fixture: ComponentFixture<CreateWorkComponent>;
+describe('ConfirmModalComponent', () => {
+  let component: ConfirmModalComponent;
+  let fixture: ComponentFixture<ConfirmModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CreateWorkComponent ]
+      declarations: [ ConfirmModalComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(CreateWorkComponent);
+    fixture = TestBed.createComponent(ConfirmModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

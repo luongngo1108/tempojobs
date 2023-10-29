@@ -14,11 +14,11 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { QuillConfiguration } from 'src/app/shared/components/rich-inline-edit/rich-inline-edit.component';
 
 @Component({
-  selector: 'app-create-work',
-  templateUrl: './create-work.component.html',
-  styleUrls: ['./create-work.component.scss']
+  selector: 'app-add-edit-work',
+  templateUrl: './add-edit-work.component.html',
+  styleUrls: ['./add-edit-work.component.scss']
 })
-export class CreateWorkComponent implements OnInit, OnDestroy {
+export class AddEditWorkComponent implements OnInit, OnDestroy {
   frmCreateWork: FormGroup;
   workModel: WorkModel;
   createBy: any;
@@ -41,11 +41,20 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
     private userService: UserManagementService,
     private authService: NbAuthService,
   ) {
-    this.workModel = new WorkModel();
-  }
-
-  ngOnInit() {
-    this.frmCreateWork = this.frmBuilder.formGroup(WorkModel, this.workModel);
+    this.workModel = window?.history?.state?.work ?? new WorkModel();
+    this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
+      if (resp) {
+        this.listProvince = resp;
+      }
+    }).add(() => {
+      if (this.workModel?.workProvince) {
+        this.listProvince.map((province, index) => {
+          if (province.codename === this.workModel?.workProvince) {
+            this.listDistrict = this.listProvince[index].districts;
+          }
+        })
+      }
+    });
     this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).subscribe(resp => {
       if (resp.result) {
         this.listWorkType = resp.result;
@@ -56,17 +65,16 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
         this.listWorkStatus = resp.result;
       }
     });
+  }
+
+  ngOnInit() {
+    this.frmCreateWork = this.frmBuilder.formGroup(WorkModel, this.workModel);
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.createBy = token.getPayload();
         }
       });
-    this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
-      if (resp) {
-        this.listProvince = resp;
-      }
-    });
 
     this.frmCreateWork.patchValue({
       quantity: this.workModel.quantity == null ? "0" : this.workModel.quantity,
@@ -79,6 +87,9 @@ export class CreateWorkComponent implements OnInit, OnDestroy {
           this.listDistrict = this.listProvince[index].districts;
         }
       })
+    });
+    this.frmCreateWork.get('workProfit').valueChanges.subscribe((valueChanges) => {
+      console.log(valueChanges);
     });
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),

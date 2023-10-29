@@ -18,7 +18,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   NgxMatDatetimePickerModule, 
   NgxMatNativeDateModule, 
@@ -34,6 +34,9 @@ import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inli
 import { QuillModule } from 'ngx-quill';
 import { FormatCurrencyDirective } from './directives/format-currency.directive';
 import { MatTableModule } from '@angular/material/table';
+import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { HtmlSafetyPipe } from './pipes/safety-html.pipe';
 
 const materialModules = [
   MatFormFieldModule,
@@ -53,6 +56,7 @@ const materialModules = [
   MatPaginatorModule,
   MatTooltipModule,
   MatTableModule,
+  MatDialogModule,
   QuillModule,
 ];
 
@@ -79,7 +83,9 @@ const angularModules = [
 @NgModule({
   declarations: [
     RichInlineEditComponent,
-    FormatCurrencyDirective
+    FormatCurrencyDirective,
+    ConfirmModalComponent,
+    HtmlSafetyPipe,
   ],
   imports: [
     CommonModule,
@@ -111,6 +117,7 @@ const angularModules = [
     NgxMatNativeDateModule, 
     NgxMatTimepickerModule,
     GoogleMapsModule,
+    HtmlSafetyPipe,
     [...materialModules],
     [...nebularModules],
     [...angularModules],

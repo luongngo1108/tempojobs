@@ -30,7 +30,7 @@ export class WorkModel {
     quantity: number | null;
     @prop()
     // @numeric({ acceptValue: NumericValueType.PositiveNumber, message: 'Chỉ cho phép nhập số' })
-    workProfit: number | null;
+    workProfit: string | null;
 
     @prop()
     createdBy: User | null;
@@ -40,6 +40,5 @@ export class WorkModel {
 
     workProvinceName: string | null;
     workTypeName: string | null;
-    workStatusName: string | null;
     timeLine: string | null;
 }
