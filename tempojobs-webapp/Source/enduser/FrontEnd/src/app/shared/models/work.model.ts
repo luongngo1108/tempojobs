@@ -38,9 +38,10 @@ export class WorkModel {
 
     @prop()
     createdAt: Date | string | null;
+    @prop()
+    taskers: string[] | null;
 
     workProvinceName: string | null;
-    workTypeName: string | null;
     timeLine: string | null;
     workType: DataStateModel | null;
     orderId: string | null;

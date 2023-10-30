@@ -20,7 +20,8 @@ import { Location } from '@angular/common';
   styleUrls: ['./created-manage.component.scss']
 })
 export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy {
-  displayedColumns: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
+  displayedColumnsTab1: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
+  displayedColumnsTab2: string[] = ['workName', 'candidate'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -97,9 +98,6 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     var resultListWork = await this.workService.getWorkByCreatorId(this.currentUser?.user?.id).pipe(takeUntil(this.destroy$)).toPromise();
     if (resultListWork.result) {
       this.listWork = resultListWork.result;
-      this.listWork.map(work => {
-        work.workTypeName = this.listWorkType.find(type => type.dataStateId === work.workTypeId)?.dataStateName;
-      });
       this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
     }
   }
@@ -167,6 +165,24 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       }
       else {
         var findName = this.listWorkStatus.find(x => x.dataStateId === state);
+        if (findName) return findName.dataStateName;
+        else return '';
+      }
+    }
+  }
+
+  handleDisplayWorkType(type: number, isDisplayColor: boolean = false): string {
+    if (this.listWorkType?.length <= 0) {
+      return isDisplayColor ? '#0000' : '';
+    }
+    if (type) {
+      if (isDisplayColor) {
+        var findColor = this.listWorkType.find(x => x.dataStateId === type);
+        if (findColor) return findColor.colorCode;
+        else return '#0000';
+      }
+      else {
+        var findName = this.listWorkType.find(x => x.dataStateId === type);
         if (findName) return findName.dataStateName;
         else return '';
       }

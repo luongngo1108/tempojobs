@@ -10,13 +10,13 @@
             <ng-container matColumnDef="workName">
               <th mat-header-cell *matHeaderCellDef> Tên việc </th>
               <td mat-cell *matCellDef="let element">
-                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                <nb-card accent="{{handleDisplayStatus(element?.workStatusId, true)}}" style="max-width: 500px;">
                   <nb-card-body>
                     <div class="row">
-                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
-                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                      <p><strong>[{{element?.workId}}] {{element?.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element?.workStatusId, true)" style="max-width: 200px; text-align: center;">
                         <div style="color: white; ">
-                          {{handleDisplayStatus(element.workStatusId)}}
+                          {{handleDisplayStatus(element?.workStatusId)}}
                           <nb-icon icon="lock-outline"></nb-icon>
                         </div>
                       </div>
@@ -28,15 +28,15 @@
             </ng-container>
             <ng-container matColumnDef="workTypeName">
               <th mat-header-cell *matHeaderCellDef> Loại việc </th>
-              <td mat-cell *matCellDef="let element"> {{element.workTypeName}} </td>
+              <td mat-cell *matCellDef="let element"> {{handleDisplayWorkType(element?.workTypeId)}} </td>
             </ng-container>
             <ng-container matColumnDef="workProfit">
               <th mat-header-cell *matHeaderCellDef> Ngân sách </th>
-              <td mat-cell *matCellDef="let element"> {{element.workProfit}} </td>
+              <td mat-cell *matCellDef="let element"> {{element?.workProfit}} </td>
             </ng-container>
             <ng-container matColumnDef="workStatusName">
               <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
-              <td mat-cell *matCellDef="let element"> {{handleDisplayStatus(element.workStatusId)}} </td>
+              <td mat-cell *matCellDef="let element"> {{handleDisplayStatus(element?.workStatusId)}} </td>
             </ng-container>
             <ng-container matColumnDef="moreAction" stickyEnd>
               <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
@@ -47,12 +47,12 @@
             <ng-container matColumnDef="action">
               <th mat-header-cell *matHeaderCellDef> Hành động </th>
               <td mat-cell *matCellDef="let element">
-                <button *ngIf="element.workStatusId === 1" nbButton status="success">Hủy</button>
-                <button (click)="createPayment(element)" *ngIf="element.workStatusId === 6" nbButton status="success">Thanh toán</button>
+                <button *ngIf="element?.workStatusId === 1" nbButton status="success">Hủy</button>
+                <button (click)="createPayment(element)" *ngIf="element?.workStatusId === 6" nbButton status="success">Thanh toán</button>
               </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab1"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab1;"></tr>
           </table>
           <mat-paginator [pageSizeOptions]="[5, 10, 20]"
                          showFirstLastButtons
@@ -61,7 +61,48 @@
         </div>
       </nb-tab>
       <nb-tab tabTitle="2. Nhận hồ sơ" badgeText="{{countTab2}}" badgeStatus="success" tabId="2">
-        <p>List of <strong>orders</strong>.</p>
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                        <div style="color: white; ">
+                          {{handleDisplayStatus(element.workStatusId)}}
+                          <nb-icon icon="unlock-outline"></nb-icon>
+                        </div>
+                      </div>
+                      <p>Chưa tìm được người làm việc</p>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="candidate" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Ứng viên </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab2; context: {row: element}"></ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef> Hành động </th>
+              <td mat-cell *matCellDef="let element">
+                <button *ngIf="element.workStatusId === 1" nbButton status="success">Hủy</button>
+                <button (click)="createPayment(element)" *ngIf="element.workStatusId === 6" nbButton status="success">Thanh toán</button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab2"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab2;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
       </nb-tab>
       <nb-tab tabTitle="3. Giao việc" badgeText="{{countTab3}}" badgeStatus="success" tabId="3">
         <p>List of <strong>transactions</strong>.</p>
@@ -101,6 +142,18 @@
     <button mat-menu-item (click)="deleteWork(row)">
       <mat-icon style="color: red;">delete</mat-icon>
       <span>Xóa công việc</span>
+    </button>
+  </mat-menu>
+</ng-template>
+
+<ng-template #templateTab2 let-row="row">
+  <button mat-button [matMenuTriggerFor]="matMenuTab2">
+    Danh sách ứng viên
+  </button>
+  <mat-menu #matMenuTab2="matMenu">
+    <button mat-menu-item (click)="editWork(row)">
+      <mat-icon style="color: #3366ff;">edit</mat-icon>
+      <span>Chỉnh sửa công việc</span>
     </button>
   </mat-menu>
 </ng-template>

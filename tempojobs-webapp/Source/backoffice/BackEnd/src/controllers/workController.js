@@ -8,19 +8,17 @@ import { getLastCounterValue } from '../utils/counterUtil.js';
 class WorkController {
     async getWorkAll(req, res, next) {
         try {
-            var result = null;
-            var message = null;
+            var result = new ReturnResult();
             const work = await Work.find({ deleted: false});
             if (work) {
-                result = work;
-                res.status(200).json({result: result, message: message});
+                result.result = work;
             } else {
-                message = "Can't find all work";
-                res.status(400).json({result: result, message: message});
+                result.message = "Can't find all work";
             }
         } catch (error) {
             next(error);
-        }
+        } 
+        res.status(200).json(result);
     }
 
     async getWorkPaging(req, res, next) {
@@ -105,14 +103,12 @@ class WorkController {
 
     async saveWork(req, res, next) {
         try {
-            var result = null;
-            var message = null;
+            var result = new ReturnResult();
             var workBody = new Work();
             workBody = req.body;
             if (!workBody.workName || !workBody.workProfit || !workBody.workAddress
                 || !workBody.workHours || !workBody.createdBy) {
-                message = "Data is required";
-                res.status(400).json({result: result, message: message});
+                result.message = "Data is required";
             }
             if (workBody.workId === 0) {
                 var workToSave = req.body;
@@ -122,33 +118,30 @@ class WorkController {
                 const work = await Work.create(workToSave);
                 const counterUpdated = await Counter.findOneAndUpdate({field: 'workId'}, {lastValue: nextWorkId});
                 if (work) {
-                    res.status(200).json({result: work, message: message});
+                    result.result = work;
                 } else {
-                    message = "Can't create work";
-                    res.status(400).json({result: result, message: message});
+                    result.message = "Can't create work";
                 }
             } else {
                 const updateWork = await Work.updateOne({workId: workBody.workId}, workBody);
                 if (updateWork) {
-                    res.status(200).json({result: updateWork, message: message});
+                    result.result = updateWork;
                 } else {
-                    message = "Can't find work";
-                    res.status(400).json({result: result, message: message});
+                    result.message = "Can't find work";
                 }
             }
         } catch (error) {
             next(error);
         }
+        res.status(200).json(result);
     }
 
     async getWorkByCreatorId(req, res, next) {
         try {
-            var result = null;
-            var message = null;
+            var result = new ReturnResult();
             const id = req.query.id;
             if (!id) {
-                message = "Id is required";
-                res.status(400).json({result: result, message: message});
+                result.message = "Id is required";
                 return;
             }
             const listWork = await Work.find({
@@ -156,25 +149,23 @@ class WorkController {
                 deleted: false,
             });
             if (listWork) {
-                result = listWork;
-                res.status(200).json({result: result, message: message});
+                result.result = listWork;
             } else {
-                message = "Error get Work by id: " + id;
-                res.status(400).json({result: result, message: message});
+                result.message = "Error get Work by id: " + id;
             }
         } catch (error) {
             next(error);
         }
+        res.status(200).json(result);
     }
 
     async deleteWork(req, res, next) {
         try {
-            var result = null;
-            var message = null;
+            var result = new ReturnResult();
             const id = req.params.id;
             if (!id) {
-                message = "Id is required";
-                res.status(400).json({result: result, message: message});
+                result.message = "Id is required";
+                res.status(400).json(result);
                 return;
             }
             const resultDeleted = await Work.findOneAndUpdate(
@@ -182,15 +173,14 @@ class WorkController {
                 { $set: { deleted: true } }
             );
             if (resultDeleted) {
-                result = resultDeleted;
-                res.status(200).json({result: result, message: message});
+                result.result = resultDeleted;
             } else {
-                message = "Error get Work by id: " + id;
-                res.status(400).json({result: result, message: message});
+                result.message = "Error get Work by id: " + id;
             }
         } catch (error) {
             next(error);
         }
+        res.status(200).json(result);
     }
     async getWorkByWorkId(req, res, next) {
         var result = new ReturnResult();
