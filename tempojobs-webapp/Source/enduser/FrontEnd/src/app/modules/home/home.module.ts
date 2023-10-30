@@ -13,6 +13,7 @@ import { ProfileActivityComponent } from './profile/profile-activity/profile-act
 import { CreatedManageComponent } from './work-management/created-manage/created-manage.component';
 import { AddEditWorkComponent } from './work-management/add-edit-work/add-edit-work.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AppyWorkComponent } from './work-management/work-detail/appy-work/appy-work.component';
 
 
 
@@ -27,7 +28,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
     ProfileActivityComponent,
     CreatedManageComponent,
     AddEditWorkComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    AppyWorkComponent
   ],
   imports: [
     CommonModule,

@@ -9,5 +9,6 @@ router.route('/saveWork').post(workController.saveWork);
 router.route('/getWorkPaging').post(workController.getWorkPaging);
 router.route('/:id').delete(workController.deleteWork);
 router.route('/getWorkByWorkId/:workId').get(workController.getWorkByWorkId);
+router.route('/applyForWork').post(workController.applyForWork);
 
 export default router;

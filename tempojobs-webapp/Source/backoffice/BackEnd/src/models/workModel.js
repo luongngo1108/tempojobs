@@ -69,9 +69,9 @@ const Work = new Schema ({
         type: String,
         default: null
     },
-    taskers: [{
+    workApply: [{
         type: Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'WorkApply',
     }],
     googleLocation: {
         type: Schema.Types.Object,

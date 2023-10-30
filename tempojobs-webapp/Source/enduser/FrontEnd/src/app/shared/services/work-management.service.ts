@@ -6,6 +6,7 @@ import { ReturnResult } from '../models/return-result';
 import { WorkModel } from '../models/work.model';
 import { Page } from '../models/page';
 import { PagedData } from '../models/paged-data';
+import { WorkApply } from 'src/app/modules/home/work-management/work-detail/appy-work/work-appy.model';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,9 @@ export class WorkManagementService {
 
   getWorkByWorkId(workId: string): Observable<ReturnResult<WorkModel>> {
     return this.http.get<ReturnResult<WorkModel>>(`${this.baseUrl}/getWorkByWorkId/${workId}`);
+  }
+
+  applyForWork(workApplyModel: WorkApply): Observable<ReturnResult<WorkModel>> {
+    return this.http.post<ReturnResult<WorkModel>>(`${this.baseUrl}/applyForWork`, workApplyModel);
   }
 }
