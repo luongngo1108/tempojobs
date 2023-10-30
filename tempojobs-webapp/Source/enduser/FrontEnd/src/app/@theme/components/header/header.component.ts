@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { faEarthAsia, faCircleUser, faBell, faMessage } from '@fortawesome/free-solid-svg-icons';
 import { NbAuthJWTToken, NbAuthService, NbTokenService } from '@nebular/auth';
@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private breakpointService: NbMediaBreakpointsService,
     private authService: NbAuthService,
     private userService: UserManagementService,
+    private cdref: ChangeDetectorRef
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe(async (token: NbAuthJWTToken) => {
@@ -43,9 +44,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
           var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.userLoggedIn.user.id));
           if(res.result) {
             this.userDetail = res.result;
-            userService._currentUserDetail.next(this.userDetail);
+            userService._currentUserDetail.next(this.userDetail); 
           }
           this.isLogin = true;
+          cdref.detectChanges();
         }
       });
 
