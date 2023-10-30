@@ -14,13 +14,15 @@ import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/c
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentServiceService } from 'src/app/shared/services/payment-service.service';
 import { Location } from '@angular/common';
+import { UserManagementService } from '../../profile/user-management.service';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
   styleUrls: ['./created-manage.component.scss']
 })
 export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy {
-  displayedColumns: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
+  displayedColumnsTab1: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
+  displayedColumnsTab2: string[] = ['workName', 'candidate'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -52,7 +54,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private paymentService: PaymentServiceService,
-    private _location: Location
+    private _location: Location,
+    private userService: UserManagementService,
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$)).subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
@@ -97,9 +100,6 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     var resultListWork = await this.workService.getWorkByCreatorId(this.currentUser?.user?.id).pipe(takeUntil(this.destroy$)).toPromise();
     if (resultListWork.result) {
       this.listWork = resultListWork.result;
-      this.listWork.map(work => {
-        work.workTypeName = this.listWorkType.find(type => type.dataStateId === work.workTypeId)?.dataStateName;
-      });
       this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
     }
   }
@@ -136,6 +136,17 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         break;
       case 2:
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
+        this.listWorkShow.map(work => {
+          if (work.taskers && work.taskers.length > 0) {
+            work.listTaskers = [];
+            work.taskers.map(async tasker => {
+              var resp = await lastValueFrom(this.userService.getUserDetailByUserId(tasker));
+              if(resp.result) {
+                work.listTaskers.push(resp.result);
+              }
+            })
+          }
+        })
         break;
       case 3:
         break;
@@ -167,6 +178,24 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       }
       else {
         var findName = this.listWorkStatus.find(x => x.dataStateId === state);
+        if (findName) return findName.dataStateName;
+        else return '';
+      }
+    }
+  }
+
+  handleDisplayWorkType(type: number, isDisplayColor: boolean = false): string {
+    if (this.listWorkType?.length <= 0) {
+      return isDisplayColor ? '#0000' : '';
+    }
+    if (type) {
+      if (isDisplayColor) {
+        var findColor = this.listWorkType.find(x => x.dataStateId === type);
+        if (findColor) return findColor.colorCode;
+        else return '#0000';
+      }
+      else {
+        var findName = this.listWorkType.find(x => x.dataStateId === type);
         if (findName) return findName.dataStateName;
         else return '';
       }

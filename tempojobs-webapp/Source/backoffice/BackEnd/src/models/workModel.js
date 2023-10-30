@@ -55,7 +55,8 @@ const Work = new Schema ({
         required: [true, "Please add the work profit!"]
     },
     createdBy: {
-        type: Schema.Types.Object
+        type: Schema.Types.Object,
+        ref: 'User',
     },
     deleted: {
         type: Boolean,
@@ -68,6 +69,10 @@ const Work = new Schema ({
         type: String,
         default: null
     },
+    taskers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }],
     googleLocation: {
         type: Schema.Types.Object,
         ref: 'GoogleMapLocation',
