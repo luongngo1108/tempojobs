@@ -8,7 +8,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
 import { DataStateModel } from 'src/app/shared/models/data-state.model';
-import { User } from '../../profile/user.model';
+import { GoogleMapLocation, User } from '../../profile/user.model';
 import { UserManagementService } from '../../profile/user-management.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { QuillConfiguration } from 'src/app/shared/components/rich-inline-edit/rich-inline-edit.component';
@@ -132,59 +132,59 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    // this.latitude = 10.8483685;
-    // this.longitude = 106.7730437;
-    // this.center = {
-    //   lat: this.latitude,
-    //   lng: this.longitude,
-    // };
-    // // Binding autocomplete to search input control
-    // let autocomplete = new google.maps.places.Autocomplete(
+    this.latitude = 10.8483685;
+    this.longitude = 106.7730437;
+    this.center = {
+      lat: this.latitude,
+      lng: this.longitude,
+    };
+    // Binding autocomplete to search input control
+    let autocomplete = new google.maps.places.Autocomplete(
+      this.searchElementRef.nativeElement
+    );
+    // Align search box to center
+    // this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
     //   this.searchElementRef.nativeElement
     // );
-    // // Align search box to center
-    // // this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
-    // //   this.searchElementRef.nativeElement
-    // // );
-    // autocomplete.addListener('place_changed', () => {
-    //   this.ngZone.run(() => {
-    //     //get the place result
-    //     const bounds = new google.maps.LatLngBounds();
-    //     let place: google.maps.places.PlaceResult = autocomplete.getPlace();
+    autocomplete.addListener('place_changed', () => {
+      this.ngZone.run(() => {
+        //get the place result
+        const bounds = new google.maps.LatLngBounds();
+        let place: google.maps.places.PlaceResult = autocomplete.getPlace();
 
-    //     //verify result
-    //     if (place.geometry === undefined || place.geometry === null) {
-    //       return;
-    //     }
+        //verify result
+        if (place.geometry === undefined || place.geometry === null) {
+          return;
+        }
 
-    //     console.log({ place }, place.geometry.location?.lat(), place.geometry.location?.lng());
+        console.log({ place }, place.geometry.location?.lat(), place.geometry.location?.lng());
 
-    //     //set latitude, longitude and zoom
-    //     this.latitude = place.geometry.location?.lat();
-    //     this.longitude = place.geometry.location?.lng();
+        //set latitude, longitude and zoom
+        this.latitude = place.geometry.location?.lat();
+        this.longitude = place.geometry.location?.lng();
 
-    //     this.setLocation(place.name);
-    //   });
-    // });
+        this.setLocation(place.name);
+      });
+    });
 
-    // this.map.googleMap.addListener('click', (event) => {
-    //   var location = event.latLng;
-    //   this.latitude = location?.lat();
-    //   this.longitude = location?.lng();
-    //   const latLng = {
-    //     lat: parseFloat(this.latitude.toString()),
-    //     lng: parseFloat(this.longitude.toString())
-    //   }
+    this.map.googleMap.addListener('click', (event) => {
+      var location = event.latLng;
+      this.latitude = location?.lat();
+      this.longitude = location?.lng();
+      const latLng = {
+        lat: parseFloat(this.latitude.toString()),
+        lng: parseFloat(this.longitude.toString())
+      }
 
-    //   this.geocoder.geocode({ location: latLng }).then(response => {
-    //     if (response.results[0]) {
-    //       const address = response.results[0].formatted_address;
-    //       console.log(address);
-    //       this.setLocation(address);
+      this.geocoder.geocode({ location: latLng }).then(response => {
+        if (response.results[0]) {
+          const address = response.results[0].formatted_address;
+          console.log(address);
+          this.setLocation(address);
 
-    //     }
-    //   })
-    // });
+        }
+      })
+    });
   }
   setLocation(title: string = null) {
     this.center = {
@@ -217,6 +217,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   saveData() {
     if (this.frmCreateWork.valid) {
       const model: WorkModel = Object.assign({}, this.frmCreateWork.value);
+      model.googleLocation = new GoogleMapLocation();
       const currentDate = new Date();
       const diffTime = Math.abs(Number(model.startDate) - Number(currentDate));
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -232,11 +233,27 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       dialogRef.afterClosed().subscribe(async result => {
         if (result) {
           // Save work
-
           this.workModel = model;
+          console.log(this.workModel)
+          const latLng = {
+            lat: parseFloat(this.latitude.toString()),
+            lng: parseFloat(this.longitude.toString())
+          }
+          try {
+            await this.geocoder.geocode({ location: latLng }).then( async response => {
+              if (response.results[0]) {
+                this.workModel.googleLocation.address = response.results[0].formatted_address;
+                this.workModel.googleLocation.latitude = this.latitude;
+                this.workModel.googleLocation.longitude = this.longitude;
+              }
+            })
+          } catch(error) {
+            console.log("Request limited!!!");
+          }
+          
           if (!this.workModel?.workId) {
             model.workId = 0;
-            model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
+            model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
           }
           if (this.createBy) {
             model.createdById = this.createBy?.user?.id;
@@ -250,7 +267,6 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
             var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel.createdBy.email, inputAmount: amount, workId: this.workModel.workId }));
             if (respCreatePayment.result) window.location.href = respCreatePayment.result;
           }
-
         }
       });
     }

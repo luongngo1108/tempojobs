@@ -82,10 +82,11 @@ export class ProfileDetail {
 }
 
 export class GoogleMapLocation {
+  _id: string;
   @prop()
-  latitude: number;
+  latitude: number | null;
   @prop()
-  longitude: number;
+  longitude: number | null;
   @prop()
-  address: string;
+  address: string | null;
 }

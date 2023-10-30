@@ -29,7 +29,6 @@ export class EditProfileComponent implements OnInit {
   ngOnInit(): void {
     this.frm = this.frmBuilder.formGroup(ProfileDetail, this.profileDetail);
     this.userFrm = this.frmBuilder.formGroup(User, this.user);
-    console.log(this.frm);
   }
 
   saveProfilDetail() {  

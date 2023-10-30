@@ -61,6 +61,10 @@ const Work = new Schema ({
     deleted: {
         type: Boolean,
     },
+    workType: {
+        type: Schema.Types.Object,
+        ref: 'Work',
+    },
     paymentToken: {
         type: String,
         default: null
@@ -68,7 +72,12 @@ const Work = new Schema ({
     taskers: [{
         type: Schema.Types.ObjectId,
         ref: 'User',
-    }]
+    }],
+    googleLocation: {
+        type: Schema.Types.Object,
+        ref: 'GoogleMapLocation',
+        default: null
+    }
 }, {
     timestamps: true,
 });
