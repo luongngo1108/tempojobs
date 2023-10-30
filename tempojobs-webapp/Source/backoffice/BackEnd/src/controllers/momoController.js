@@ -126,6 +126,22 @@ class momoController {
         }
         return res.status(200).json(result);
     }
+    async getPaymentHistoryByUserId(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            let userId = req.params.userId;
+            let paymentHistories;
+            if(userId) paymentHistories = await PaymentHistory.find({payerId: userId});
+            if(paymentHistories) {
+                result.result = paymentHistories;
+            }    
+        }
+        catch {
+            console.log(error);
+            next(error);
+        }
+        return res.status(200).json(result);
+    }
 }
 
 export default new momoController;

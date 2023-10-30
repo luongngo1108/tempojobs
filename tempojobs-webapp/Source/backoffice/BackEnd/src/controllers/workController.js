@@ -3,6 +3,7 @@ import Counter from '../models/counterModel.js';
 import { FilterMapping, Page, PagedData } from '../models/pageModel.js';
 import Work from '../models/workModel.js';
 import DataState from '../models/dataStateModel.js';
+import GoogleMapLocation from '../models/googleMapLocationModel.js';
 import { getLastCounterValue } from '../utils/counterUtil.js';
 
 class WorkController {
@@ -119,6 +120,8 @@ class WorkController {
                 var nextWorkId = await getLastCounterValue('workId') + 1;
                 workToSave.workId = nextWorkId;
                 workToSave.deleted = false;
+                let ggmap;
+                if(workToSave.googleMapLocation) ggmap = await GoogleMapLocation.create(workToSave.googleMapLocation);
                 const work = await Work.create(workToSave);
                 const counterUpdated = await Counter.findOneAndUpdate({field: 'workId'}, {lastValue: nextWorkId});
                 if (work) {
@@ -129,6 +132,7 @@ class WorkController {
                 }
             } else {
                 const updateWork = await Work.updateOne({workId: workBody.workId}, workBody);
+                const updateGgMap = await GoogleMapLocation.findByIdAndUpdate(workBody.googleMapLocation._id, workBody.googleMapLocation);
                 if (updateWork) {
                     res.status(200).json({result: updateWork, message: message});
                 } else {

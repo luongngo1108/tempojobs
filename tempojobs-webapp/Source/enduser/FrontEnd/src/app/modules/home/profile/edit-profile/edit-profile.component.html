@@ -1,12 +1,12 @@
 <div class="tab-pane" id="settings">
     <form (ngSubmit)="saveProfilDetail()" [formGroup]="frm">
         <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
-            Personal Info</h5>
+            Thông tin cá nhân</h5>
 
         <div class="row">
             <div class="col-md-6">
                 <div class="form-control-group">
-                    <label class="fw-bold" for="firstname">First Name</label>
+                    <label class="fw-bold" for="firstname">Họ</label>
                     <input formControlName="firstName" type="text" class="form-control" id="firstname"
                         placeholder="Enter first name">
                     <small class="form-text text-danger"
@@ -16,7 +16,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-control-group">
-                    <label class="fw-bold" for="lastname">Last Name</label>
+                    <label class="fw-bold" for="lastname">Tên và tên đệm</label>
                     <input formControlName="lastName" type="text" class="form-control" id="lastname"
                         placeholder="Enter last name">
                     <small class="form-text text-danger"
@@ -29,7 +29,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="fw-bold" for="phone">Phone</label>
+                    <label class="fw-bold" for="phone">Số điện thoại</label>
                     <input formControlName="phone" type="text" class="form-control" id="phone"
                         placeholder="Enter phone number">
                     <small class="form-text text-danger"
@@ -39,8 +39,8 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="fw-bold" for="email">Your email account</label>
-                    <input formControlName="email" type="text" class="form-control" id="email"
+                    <label class="fw-bold" for="email">Tài khoản email</label>
+                    <input nbInput [disabled]="false" formControlName="email" type="text" class="form-control" id="email"
                         placeholder="Your email account" readonly>
                 </div>
             </div> <!-- end col -->
@@ -49,7 +49,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="fw-bold" for="password">Password</label>
+                    <label class="fw-bold" for="password">Mật khẩu</label>
                     <input formControlName="password" type="password" class="form-control" id="password"
                         placeholder="Enter new password">
                     <small class="form-text text-danger"
@@ -59,11 +59,11 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label class="fw-bold" for="confirmPassword">Confirm password</label>
+                    <label class="fw-bold" for="confirmPassword">Xác nhận mật khẩu</label>
                     <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword"
                         placeholder="Confirm password">
                     <p class="caption status-danger" *ngIf="frm.controls.password.value != frm.controls.confirmPassword.value">
-                        Confirm password does not match the password.
+                        Mật khẩu không giống với mật khẩu đã nhập.
                     </p>
                 </div>
             </div> <!-- end col -->
@@ -72,7 +72,7 @@
         <div class="row" style="margin-bottom: 10px;">
             <div class="col-12">
                 <div class="form-group">
-                    <label class="fw-bold" for="userbio">Description</label>
+                    <label class="fw-bold" for="userbio">Mô tả bản thân</label>
                     <textarea formControlName="description" class="form-control" id="userbio" rows="4"
                         placeholder="Write something..."></textarea>
                     <small class="form-text text-danger"
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth mr-1"></i> Social</h5>
+        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-earth mr-1"></i> Mạng xã hội</h5>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
@@ -119,7 +119,7 @@
                 <a href="javascript: void(0);">click</a> here.</small></span> -->
         <div class="text-right" style="margin-top: 10px;">
             <button [disabled]="submitted || !frm.valid" type="submit"
-                class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Save</button>
+                class="btn btn-success waves-effect waves-light mt-2"><i class="mdi mdi-content-save"></i> Lưu</button>
         </div>
     </form>
 </div>

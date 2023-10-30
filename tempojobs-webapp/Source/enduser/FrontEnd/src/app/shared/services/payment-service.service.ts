@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { ReturnResult } from '../models/return-result';
 import { Observable } from 'rxjs';
+import { PaymentHistory } from '../models/payment-history.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,9 @@ export class PaymentServiceService {
 
   momoPayementSuccess(obj: any): Observable<ReturnResult<boolean>> {
     return this.http.post<ReturnResult<boolean>>(`${this.baseUrl}/momoPayementSuccess`, obj);
+  }
+
+  getPaymentHistoryByUserId(userId: string): Observable<ReturnResult<PaymentHistory[]>> {
+    return this.http.get<ReturnResult<PaymentHistory[]>>(`${this.baseUrl}/getPaymentHistoryByUserId/${userId}`);
   }
 }

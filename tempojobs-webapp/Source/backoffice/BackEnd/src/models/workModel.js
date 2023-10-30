@@ -60,8 +60,17 @@ const Work = new Schema ({
     deleted: {
         type: Boolean,
     },
+    workType: {
+        type: Schema.Types.Object,
+        ref: 'Work',
+    },
     paymentToken: {
         type: String,
+        default: null
+    },
+    googleLocation: {
+        type: Schema.Types.Object,
+        ref: 'GoogleMapLocation',
         default: null
     }
 }, {
