@@ -5,6 +5,7 @@ import Work from '../models/workModel.js';
 import DataState from '../models/dataStateModel.js';
 import GoogleMapLocation from '../models/googleMapLocationModel.js';
 import { getLastCounterValue } from '../utils/counterUtil.js';
+import WorkApply from '../models/workApplyModel.js';
 
 class WorkController {
     async getWorkAll(req, res, next) {
@@ -194,6 +195,38 @@ class WorkController {
                 result.result = work;
                 work.workType = await DataState.findOne({dataStateId: work.workTypeId});
             } 
+        }
+        catch(error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }  
+
+    async applyForWork(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const workApply = req.body;
+            if(workApply) {
+                const findApplied = await WorkApply.findOne({userId: workApply.userId, workId: workApply.workId});
+                if(findApplied) {
+                    console.log(findApplied);
+                    await Work.findOneAndUpdate({workId: workApply.workId}, {$pull: {workApply: findApplied._id}});
+                    await WorkApply.deleteOne(findApplied);
+                    const createdWorkApply = await WorkApply.create(workApply);
+                    const updatedWork = await Work.findOneAndUpdate(  {workId: workApply.workId}, 
+                                                                        {$push: {workApply: createdWorkApply._id}},
+                                                                        {returnOriginal: false},
+                                                                    );
+                    if(updatedWork) result.result = updatedWork;
+                } else {
+                    const createdWorkApply = await WorkApply.create(workApply);
+                    const updatedWork = await Work.findOneAndUpdate(  {workId: workApply.workId}, 
+                                                                        {$push: {workApply: createdWorkApply._id}},
+                                                                        {returnOriginal: false},
+                                                                    );
+                    if(updatedWork) result.result = updatedWork;
+                }
+            }
         }
         catch(error) {
             next(error);

@@ -8,6 +8,8 @@ import { lastValueFrom } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
+import { AppyWorkComponent } from './appy-work/appy-work.component';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'app-work-detail',
@@ -22,6 +24,7 @@ export class WorkDetailComponent implements OnInit  {
     private route: ActivatedRoute,
     private userService: UserManagementService,
     public dialog: MatDialog,
+    public nbToast: NbToastrService
   ) {
     
   }
@@ -33,7 +36,6 @@ export class WorkDetailComponent implements OnInit  {
       this.workModel = res.result; 
       var detailRes = await lastValueFrom(this.userService.getUserDetailByUserId(this.workModel.createdBy.id));
       if(detailRes.result) this.userDetailModel = detailRes.result;
-      console.log(this.userDetailModel);
     }
   }
 
@@ -47,5 +49,23 @@ export class WorkDetailComponent implements OnInit  {
         userId: userId
       },
     });
+  }
+
+  openApplyForWorkDialog() {
+    const dialogRef = this.dialog.open(AppyWorkComponent, {
+      height: 'auto',
+      width: '600px',
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        workModel: this.workModel
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if(res) {
+        this.nbToast.success("Bạn đăng đăng ký thành công! Vui lòng kiểm tra trong phần quản lý công việc đã đăng ký!", "Thành công", {duration: 30000});
+      }
+    })
   }
 }

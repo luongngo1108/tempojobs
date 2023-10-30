@@ -1,0 +1,18 @@
+<div class="d-flex flex-wrap" mat-dialog-title style="margin: unset; padding: 10px 10px 1px 28px">
+    <button mat-icon-button aria-label="Close the dialog" (click)="closeDialog()" class="ml-auto">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <h2>Điền thêm thông tin để người cần thuê chú ý tới bạn hơn</h2>
+    <p><span style="font-weight: 600;">Tên công việc:</span> {{workModel?.workName}}</p>
+    <p><span style="font-weight: 600;">Số tiền trả:</span> {{workModel?.workProfit}}</p>
+    <form (ngSubmit)="register()" *ngIf="form" [formGroup]="form" aria-labelledby="title">
+        <quill-editor [styles]="{height: '200px'}"  placeholder="Mô tả" formControlName="content" (onContentChanged)="inputChange($event)">
+        </quill-editor>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions style="margin: 10px 10px 5px auto; justify-content: flex-end;">
+    <button (click)="closeDialog()" mat-button>Thoát</button>
+    <button (click)="onApplyForWork()" style="background-color: #3f51b5;" mat-raised-button color="primary" cdkFocusInitial>Đăng ký</button>
+</mat-dialog-actions>
