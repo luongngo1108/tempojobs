@@ -14,6 +14,7 @@ import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/c
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentServiceService } from 'src/app/shared/services/payment-service.service';
 import { Location } from '@angular/common';
+import { UserManagementService } from '../../profile/user-management.service';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -53,7 +54,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private paymentService: PaymentServiceService,
-    private _location: Location
+    private _location: Location,
+    private userService: UserManagementService,
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$)).subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
@@ -134,6 +136,17 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         break;
       case 2:
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
+        this.listWorkShow.map(work => {
+          if (work.taskers && work.taskers.length > 0) {
+            work.listTaskers = [];
+            work.taskers.map(async tasker => {
+              var resp = await lastValueFrom(this.userService.getUserDetailByUserId(tasker));
+              if(resp.result) {
+                work.listTaskers.push(resp.result);
+              }
+            })
+          }
+        })
         break;
       case 3:
         break;

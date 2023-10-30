@@ -147,13 +147,18 @@
 </ng-template>
 
 <ng-template #templateTab2 let-row="row">
-  <button mat-button [matMenuTriggerFor]="matMenuTab2">
+  <button mat-button [matMenuTriggerFor]="matMenuTab2" style="background-color: #f58025;">
     Danh sách ứng viên
   </button>
   <mat-menu #matMenuTab2="matMenu">
-    <button mat-menu-item (click)="editWork(row)">
-      <mat-icon style="color: #3366ff;">edit</mat-icon>
-      <span>Chỉnh sửa công việc</span>
-    </button>
+    <ng-container *ngIf="row?.listTaskers?.length > 0; else notTasker">
+      <button mat-menu-item *ngFor="let tasker of row?.listTaskers" (click)="openMinimizedProfile(tasker)">
+        <span>{{tasker?.firstName}} {{tasker?.lastName}}</span>
+      </button>
+    </ng-container>
   </mat-menu>
+</ng-template>
+
+<ng-template #notTasker>
+  <span>Chưa có ứng viên</span>
 </ng-template>
