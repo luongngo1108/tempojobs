@@ -13740,10 +13740,19 @@ nb-card {
 }
 
 .limit-work-description {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    /* number of lines to show */
-    line-clamp: 5;
-    -webkit-box-orient: vertical;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  /* number of lines to show */
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+
+.custom-backdrop {
+  background-color: rgba(113, 113, 113, 0.44);
+  backdrop-filter: blur(4px);
+}
+
+.ml-auto {
+  margin-left: auto;
 }

@@ -6,6 +6,8 @@ import { GoogleMapLocation, ProfileDetail, User } from '../../profile/user.model
 import { UserManagementService } from '../../profile/user-management.service';
 import { lastValueFrom } from 'rxjs';
 import { DatePipe } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { UserProfileComponent } from '../../user-profile/user-profile.component';
 
 @Component({
   selector: 'app-work-detail',
@@ -15,11 +17,11 @@ import { DatePipe } from '@angular/common';
 export class WorkDetailComponent implements OnInit  {
   workModel: WorkModel;
   userDetailModel: ProfileDetail;
-  googleMapLocation: GoogleMapLocation
   constructor(
     private workService: WorkManagementService,
     private route: ActivatedRoute,
     private userService: UserManagementService,
+    public dialog: MatDialog,
   ) {
     
   }
@@ -35,5 +37,15 @@ export class WorkDetailComponent implements OnInit  {
     }
   }
 
-  
+  openUserDetailDialog(userId: string = "") {
+    const dialogRef = this.dialog.open(UserProfileComponent, {
+      height: 'auto',
+      width: '600px',
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        userId: userId
+      },
+    });
+  }
 }

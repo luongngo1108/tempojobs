@@ -5,10 +5,6 @@ import authController from "../controllers/authController.js";
 import {validateToken, checkUserRole} from "../middlewares/validateTokenHandler.js";
 import userController from "../controllers/userController.js";
 
-// ------------------- Validate token ----------------------
-router.use(validateToken, checkUserRole);
-
-// ------------------- User APIs ---------------------------
 router.route('/get').get( userController.get);
 router.route('/getUserDetailByUserId').get(userController.getUserDetailByUserId)
 router.route('/saveUserDetail').post(userController.saveUserDetail)
