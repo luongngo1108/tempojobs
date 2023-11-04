@@ -35,7 +35,7 @@ import { DatePipePipe } from './shared/pipes/date-pipe.pipe';
     NbToastrModule.forRoot(),
     QuillModule.forRoot(),
     NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyBIc-pRp0fEh49vJDQFlFh5FoTBeBNx0s4',
+      messageGoogleMapKey: 'AIzaSyDPOyzngYDXtIRdJTDFwSV02xNIDLEXgHI',
     }),
     NbLayoutModule,
     NbEvaIconsModule,

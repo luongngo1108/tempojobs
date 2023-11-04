@@ -72,7 +72,7 @@ const Work = new Schema ({
     workApply: [{
         type: Schema.Types.ObjectId,
         ref: 'WorkApply',
-        default: []
+        default: undefined
     }],
     googleLocation: {
         type: Schema.Types.Object,

@@ -206,10 +206,10 @@ class WorkController {
         var result = new ReturnResult();
         try {
             const workApply = req.body;
+            const userId = req.query.id;
             if(workApply) {
-                const findApplied = await WorkApply.findOne({userId: workApply.userId, workId: workApply.workId});
+                const findApplied = await WorkApply.findOne({userId: userId, workId: workApply.workId});
                 if(findApplied) {
-                    console.log(findApplied);
                     await Work.findOneAndUpdate({workId: workApply.workId}, {$pull: {workApply: findApplied._id}});
                     await WorkApply.deleteOne(findApplied);
                     const createdWorkApply = await WorkApply.create(workApply);
