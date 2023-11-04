@@ -67,7 +67,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
       this.userDetail = res.result;
     }      
     // Set user marker on google map
-    if(this.userDetail?.googleLocation.latitude && this.userDetail?.googleLocation.longitude) {
+    if(this.userDetail?.googleLocation?.latitude && this.userDetail?.googleLocation?.longitude) {
       this.latitude = this.userDetail.googleLocation.latitude;
       this.longitude = this.userDetail.googleLocation.longitude;
       this.center = {
@@ -104,13 +104,13 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
           return;
         }
 
-        console.log({ place }, place.geometry.location?.lat(), place.geometry.location?.lng());
-
         //set latitude, longitude and zoom
         this.latitude = place.geometry.location?.lat();
         this.longitude = place.geometry.location?.lng();
         
         this.setLocation(place.name);
+        this.userDetail.googleLocation.address = place.formatted_address;
+        this.cdref.detectChanges()
       });
     });
 
@@ -126,9 +126,9 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
       this.geocoder.geocode({ location: latLng }).then(response => {
         if (response.results[0]) {
           const address = response.results[0].formatted_address;
-          console.log(address);
+          this.userDetail.googleLocation.address = address;
+          this.cdref.detectChanges()
           this.setLocation(address);
-          
         }
       })
     });
