@@ -15,6 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { PaymentServiceService } from 'src/app/shared/services/payment-service.service';
 import { Location } from '@angular/common';
 import { UserManagementService } from '../../profile/user-management.service';
+import { ProfileDetail } from '../../profile/user.model';
+import { ApproveTaskerDialogComponent } from './approve-tasker-dialog/approve-tasker-dialog.component';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -22,7 +24,7 @@ import { UserManagementService } from '../../profile/user-management.service';
 })
 export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumnsTab1: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
-  displayedColumnsTab2: string[] = ['workName', 'candidate'];
+  displayedColumnsTab2: string[] = ['workName', 'candidate', 'confirm'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -33,6 +35,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   approvingId: number;
   approvedId: number;
   refuseApprovalId: number;
+  processingId: number;
   currentUser;
   countTab1: number;
   countTab2: number;
@@ -89,6 +92,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.approvingId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang duyệt').dataStateId;
       this.approvedId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đã duyệt').dataStateId;
       this.refuseApprovalId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt').dataStateId;
+      this.processingId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang thực hiện').dataStateId;
     }
     var resultType = await this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).toPromise();
     if (resultType.result) {
@@ -137,18 +141,22 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       case 2:
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
         this.listWorkShow.map(work => {
-          if (work.taskers && work.taskers.length > 0) {
+          if (work.workApply && work.workApply.length > 0) {
             work.listTaskers = [];
-            work.taskers.map(async tasker => {
-              var resp = await lastValueFrom(this.userService.getUserDetailByUserId(tasker));
-              if(resp.result) {
-                work.listTaskers.push(resp.result);
+            work.workApply.map(async workApplyId => {
+              var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
+              if (respWorkApply.result) {
+                var resp = await lastValueFrom(this.userService.getUserDetailByUserId(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskers.push(resp.result);
+                }
               }
             })
           }
         })
         break;
       case 3:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.processingId);
         break;
       case 4:
         break;
@@ -228,5 +236,45 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         }
       }
     });
+  }
+
+  changeStatusToProcessing(work: WorkModel) {
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      data: {
+        message: "Xác nhận duyệt người làm việc hoàn thành?"
+      }
+    });
+  
+    dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        if (work) {
+          work.workStatusId = this.processingId;
+          this.workService.saveWork(work).subscribe(resp => {
+            if (resp.result) {
+              this.toast.success("Xác nhận thành công!");
+            } else {
+              this.toast.danger("Xác nhận thất bại!");
+            }
+          }).add(() => this.refreshData())
+        }
+      }
+    });
+  }
+
+  openMinimizedProfile(profile: ProfileDetail) {
+    let dialogRef = this.dialog.open(ApproveTaskerDialogComponent, {
+      disableClose: true,
+      width: '600px',
+      autoFocus: false,
+      data: {
+        profile: profile
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        
+      }
+    })
   }
 }

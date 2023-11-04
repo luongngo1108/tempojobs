@@ -39,7 +39,7 @@ export class WorkModel {
     @prop()
     createdAt: Date | string | null;
     @prop()
-    taskers: string[] | null;
+    workApply: string[] | null;
 
     listTaskers: ProfileDetail[] | null;
 

@@ -63,6 +63,33 @@ class DataStateController {
             next(error);
         }
     }
+
+    async getDataStateByTypeAndName(req, res, next) {
+        try {
+            var result = null;
+            var message = null;
+            const type = req.query.type;
+            const name = req.query.name;
+            if (!type || !name) {
+                message = "Data is required";
+                res.status(400).json({result: result, message: message});
+                return;
+            }
+            const dataState = await DataState.findOne({
+                type: type,
+                dataStateName: name
+            });
+            if (dataState) {
+                result = dataState;
+                res.status(200).json({result: result, message: message});
+            } else {
+                message = "Error get DataState by type: " + type;
+                res.status(400).json({result: result, message: message});
+            }
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new DataStateController;

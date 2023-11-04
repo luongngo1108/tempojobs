@@ -43,4 +43,8 @@ export class WorkManagementService {
   applyForWork(workApplyModel: WorkApply): Observable<ReturnResult<WorkModel>> {
     return this.http.post<ReturnResult<WorkModel>>(`${this.baseUrl}/applyForWork`, workApplyModel);
   }
+
+  getWorkApplyById(id: string): Observable<ReturnResult<WorkApply>> {
+    return this.http.get<ReturnResult<WorkApply>>(`${this.baseUrl}/getWorkApplyById?id=${id}`);
+  }
 }

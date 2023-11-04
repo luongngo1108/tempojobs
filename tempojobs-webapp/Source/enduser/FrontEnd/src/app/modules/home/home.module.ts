@@ -14,6 +14,7 @@ import { CreatedManageComponent } from './work-management/created-manage/created
 import { AddEditWorkComponent } from './work-management/add-edit-work/add-edit-work.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AppyWorkComponent } from './work-management/work-detail/appy-work/appy-work.component';
+import { ApproveTaskerDialogComponent } from './work-management/created-manage/approve-tasker-dialog/approve-tasker-dialog.component';
 
 
 
@@ -29,7 +30,8 @@ import { AppyWorkComponent } from './work-management/work-detail/appy-work/appy-
     CreatedManageComponent,
     AddEditWorkComponent,
     UserProfileComponent,
-    AppyWorkComponent
+    AppyWorkComponent,
+    ApproveTaskerDialogComponent
   ],
   imports: [
     CommonModule,

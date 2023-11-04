@@ -232,7 +232,28 @@ class WorkController {
             next(error);
         }
         res.status(200).json(result);
-    }  
+    } 
+    
+    async getWorkApplyById(req, res, next) {
+        try {
+            var result = new ReturnResult();
+            const id = req.query.id;
+            if (!id) {
+                result.message = "Id is required";
+                res.status(200).json(result);
+                return;
+            }
+            const resp = await WorkApply.find({ _id: id, });
+            if (resp) {
+                result.result = resp;
+            } else {
+                result.message = "Error get Work by id: " + id;
+            }
+        } catch (error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
 };
 
 export default new WorkController;

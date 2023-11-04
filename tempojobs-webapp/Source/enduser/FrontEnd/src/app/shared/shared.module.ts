@@ -39,6 +39,7 @@ import { HtmlSafetyPipe } from './pipes/safety-html.pipe';
 import { DatePipePipe } from './pipes/date-pipe.pipe';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
+import { MatListModule } from '@angular/material/list';
 
 const materialModules = [
   MatFormFieldModule,
@@ -61,6 +62,7 @@ const materialModules = [
   MatDialogModule,
   QuillModule,
   MatDialogModule,
+  MatListModule,
 ];
 
 const nebularModules = [

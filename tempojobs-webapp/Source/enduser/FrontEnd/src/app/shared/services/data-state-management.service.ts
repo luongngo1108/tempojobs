@@ -20,4 +20,8 @@ export class DataStateManagementService {
   getDataStateByType(type: string = null) {
     return this.http.get<ReturnResult<DataStateModel[]>>( !type ? `${this.baseUrl}/getDataStateByType` : `${this.baseUrl}/getDataStateByType?type=${type}` );
   }
+
+  getDataStateByTypeAndName(type: string = null, name: string = null) {
+    return this.http.get<ReturnResult<DataStateModel>>(`${this.baseUrl}/getDataStateByType?type=${type}&name=${name}` );
+  }
 }
