@@ -111,7 +111,7 @@
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8">
                         <p (click)="openUserDetailDialog(workModel?.createdBy?.id)" style="margin-left: 5px; color: #0088CC; cursor: pointer;">{{workModel?.createdBy?.displayName }}</p>
-                        <i style="margin-left: 5px;;">{{workModel?.createdBy?.email }}</i>
+                        <p style="margin-left: 5px;;">{{workModel?.createdBy?.email }}</p>
                     </div>
                     <div class="col-12" style="margin-top: 10px;">
                         <dl>
@@ -120,7 +120,16 @@
                         </dl>
                     </div>
                 </div>
-                <button (click)="openApplyForWorkDialog()" status="success" style="width: 100%; margin-top: 10px;" nbButton>Đăng ký nhận việc</button>
+                <button *ngIf="user.user.id !== workModel?.createdBy?.id" (click)="openApplyForWorkDialog()" status="success" style="width: 100%; margin-top: 10px;" nbButton>
+                    Đăng ký nhận việc</button>
+                <ng-container  *ngIf="user.user.id === workModel?.createdBy?.id">
+                    <div class="row" style="display: flex; justify-content: center; align-items: center;">
+                        <nb-icon class="col-2" icon="alert-triangle-outline"></nb-icon>
+                        <i class="col-10" style="color: #6e2828;">Đây là công việc của bạn, bạn chỉ có thể chỉnh sửa!</i>
+                    </div>   
+                    <button  (click)="openEditWork()" status="info" style="width: 100%; margin-top: 10px;" nbButton>Chỉnh sửa công việc</button>
+                    <button  (click)="openAppliedForWork()" status="primary" style="width: 100%; margin-top: 10px;" nbButton>Kiểm tra số lượng đăng ký</button>
+                </ng-container>
             </div>
         </div>
     </div>

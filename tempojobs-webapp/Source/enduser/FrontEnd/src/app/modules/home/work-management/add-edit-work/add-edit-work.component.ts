@@ -132,12 +132,24 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-    this.latitude = 10.8483685;
-    this.longitude = 106.7730437;
-    this.center = {
-      lat: this.latitude,
-      lng: this.longitude,
-    };
+     // Set user marker on google map
+     if(this.workModel?.googleLocation.latitude && this.workModel?.googleLocation.longitude) {
+      this.latitude = this.workModel.googleLocation.latitude;
+      this.longitude = this.workModel.googleLocation.longitude;
+      this.center = {
+        lat: this.latitude,
+        lng: this.longitude,
+      };
+
+      this.setLocation(this.workModel.googleLocation.address);
+    } else {
+      this.latitude = 10.8483685;
+      this.longitude = 106.7730437;
+      this.center = {
+        lat: this.latitude,
+        lng: this.longitude,
+      };
+    }  
     // Binding autocomplete to search input control
     let autocomplete = new google.maps.places.Autocomplete(
       this.searchElementRef.nativeElement
