@@ -124,7 +124,8 @@
             </quill-editor>
           </div>
           <div style="margin-bottom: 10px;">
-            <mat-label style="color: #666666;">Vui lòng tìm kiếm địa chỉ hoặc chọn địa chỉ trên bản đồ</mat-label>
+            <p class="text-muted mb-1 font-13"><strong>Vị trí đã chọn: </strong> <span class="ml-2">{{workModel?.googleLocation?.address || ''}}</span></p>
+            <mat-label style="color: #666666; font-size: 12px;"><i>Vui lòng tìm kiếm địa chỉ hoặc chọn địa chỉ trên bản đồ</i></mat-label>
             <input nbInput
             type="text"
             style="width: 100%; margin-top: 10px;"

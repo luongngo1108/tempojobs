@@ -1,5 +1,5 @@
 import { RxFormBuilder, email } from '@rxweb/reactive-form-validators';
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef, AfterViewInit, NgZone, ChangeDetectorRef } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm } from '@angular/forms';
 import { WorkModel } from 'src/app/shared/models/work.model';
 import { WorkManagementService } from 'src/app/shared/services/work-management.service';
@@ -70,7 +70,8 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: NbAuthService,
     private ngZone: NgZone,
     public dialog: MatDialog,
-    private paymentService: PaymentServiceService
+    private paymentService: PaymentServiceService,
+    private cdref: ChangeDetectorRef
   ) {
     this.workModel = window?.history?.state?.work ?? new WorkModel();
     this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
@@ -132,8 +133,8 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngAfterViewInit(): Promise<void> {
-     // Set user marker on google map
-     if(this.workModel?.googleLocation.latitude && this.workModel?.googleLocation.longitude) {
+    // Set user marker on google map
+    if (this.workModel?.googleLocation?.latitude && this.workModel?.googleLocation?.longitude) {
       this.latitude = this.workModel.googleLocation.latitude;
       this.longitude = this.workModel.googleLocation.longitude;
       this.center = {
@@ -149,7 +150,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
         lat: this.latitude,
         lng: this.longitude,
       };
-    }  
+    }
     // Binding autocomplete to search input control
     let autocomplete = new google.maps.places.Autocomplete(
       this.searchElementRef.nativeElement
@@ -176,6 +177,9 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
         this.longitude = place.geometry.location?.lng();
 
         this.setLocation(place.name);
+        if (!this.workModel.googleLocation) this.workModel.googleLocation = new GoogleMapLocation();
+        this.workModel.googleLocation.address = place.formatted_address;
+        this.cdref.detectChanges();
       });
     });
 
@@ -191,9 +195,10 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       this.geocoder.geocode({ location: latLng }).then(response => {
         if (response.results[0]) {
           const address = response.results[0].formatted_address;
-          console.log(address);
+          if (!this.workModel.googleLocation) this.workModel.googleLocation = new GoogleMapLocation();
+          this.workModel.googleLocation.address = address;
+          this.cdref.detectChanges();
           this.setLocation(address);
-
         }
       })
     });
@@ -252,17 +257,17 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
             lng: parseFloat(this.longitude?.toString())
           }
           try {
-            await this.geocoder.geocode({ location: latLng }).then( async response => {
+            await this.geocoder.geocode({ location: latLng }).then(async response => {
               if (response.results[0]) {
                 this.workModel.googleLocation.address = response.results[0].formatted_address;
                 this.workModel.googleLocation.latitude = this.latitude;
                 this.workModel.googleLocation.longitude = this.longitude;
               }
             })
-          } catch(error) {
+          } catch (error) {
             console.log("Request limited!!!");
           }
-          
+
           if (!this.workModel?.workId) {
             model.workId = 0;
             model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
@@ -280,7 +285,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
             // create momo payment
             var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel.createdBy.email, inputAmount: amount, workId: this.workModel.workId }));
             if (respCreatePayment.result) window.location.href = respCreatePayment.result;
-            this.router.navigateByUrl('/created-manage'); 
+            this.router.navigateByUrl('/created-manage');
           }
         }
       });

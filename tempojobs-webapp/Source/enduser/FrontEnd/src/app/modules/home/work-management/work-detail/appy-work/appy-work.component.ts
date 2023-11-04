@@ -44,13 +44,13 @@ export class AppyWorkComponent implements OnInit, OnDestroy {
     this.workApplyModel = new WorkApply();
     this.workApplyModel.userId = this.workModel.createdBy.id;
     this.workApplyModel.workId = this.workModel.workId;
-    this.workApplyModel.status = 1;
+    this.workApplyModel.status = 7;
     this.form = this.formBuilder.formGroup(WorkApply, this.workApplyModel);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy$.complete(); 
   }
 
   closeDialog() {
