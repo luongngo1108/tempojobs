@@ -5,6 +5,7 @@ import { WorkManagementService } from 'src/app/shared/services/work-management.s
 import { Router } from '@angular/router';
 import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
 import { NbToastrService } from '@nebular/theme';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-home-page',
@@ -22,7 +23,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private workService: WorkManagementService,
     private router: Router,
     private dataStateService: DataStateManagementService,
-    private nbToast: NbToastrService
+    private messageService: MessageService
   ) {
 
   }
@@ -68,7 +69,9 @@ export class HomePageComponent implements OnInit, OnDestroy {
 
   openWorkDetail(work: WorkModel = null) {
     if(!work) {
-      this.nbToast.warning("Có lỗi xảy ra, xin vui lòng chọn công việc các", "Lỗi")
+      this.messageService.clear();
+      this.messageService.add({key: 'toast1', severity: 'error', summary: 'Lỗi', 
+              detail: `Có lỗi xảy ra, xin vui lòng chọn công việc khác!`, life: 20000  });
     } else {
       this.router.navigateByUrl(`/work/${work.workId}`);
     }

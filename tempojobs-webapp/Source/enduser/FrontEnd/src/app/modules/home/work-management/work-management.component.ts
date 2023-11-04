@@ -10,6 +10,7 @@ import { WorkManagementService } from 'src/app/shared/services/work-management.s
 import { PageEvent } from '@angular/material/paginator';
 import { FilterMapping } from 'src/app/shared/models/filter-mapping';
 import { NbToastrService } from '@nebular/theme';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-work-management',
@@ -37,7 +38,7 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     private workService: WorkManagementService,
     private router: Router,
     private dataStateService: DataStateManagementService,
-    private nbToast: NbToastrService
+    private messageService: MessageService
   ) {
     this.paging.filter = [];
     this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
@@ -125,7 +126,7 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     var dateCreateWork = new Date(startDate);
     dateCreateWork.setDate(dateCreateWork.getDate() + 10);
     var toDay = new Date();
-    var timeLine = Math.ceil((dateCreateWork.getTime() - toDay.getTime()) / (60*60*1000));
+    var timeLine = Math.ceil((dateCreateWork.getTime() - toDay.getTime()) / (60 * 60 * 1000));
     var timeLineDate = Math.floor(timeLine / 24);
     var timeLineHours = timeLine - timeLineDate * 24;
     if (timeLineDate < 0) return 'Hết hạn';
@@ -146,8 +147,12 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
   }
 
   openWorkDetail(work: WorkModel = null) {
-    if(!work) {
-      this.nbToast.warning("Có lỗi xảy ra, xin vui lòng chọn công việc các", "Lỗi")
+    if (!work) {
+      this.messageService.clear();
+      this.messageService.add({
+        key: 'toast1', severity: 'warn', summary: 'Lỗi',
+        detail: 'Có lỗi xảy ra, xin vui lòng chọn công việc khác.', life: 20000
+      });
     } else {
       this.router.navigateByUrl(`/work/${work.workId}`);
     }

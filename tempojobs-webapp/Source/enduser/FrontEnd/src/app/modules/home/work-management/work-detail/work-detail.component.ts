@@ -11,6 +11,7 @@ import { UserProfileComponent } from '../../user-profile/user-profile.component'
 import { AppyWorkComponent } from './appy-work/appy-work.component';
 import { NbToastrService } from '@nebular/theme';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-work-detail',
@@ -27,7 +28,7 @@ export class WorkDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private userService: UserManagementService,
     public dialog: MatDialog,
-    public nbToast: NbToastrService,
+    private messageService: MessageService,
     private authService: NbAuthService,
     private router: Router
   ) {
@@ -74,7 +75,11 @@ export class WorkDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        this.nbToast.success("Bạn đăng đăng ký thành công! Vui lòng kiểm tra trong phần quản lý công việc đã đăng ký!", "Thành công", { duration: 30000 });
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'success', summary: 'Thành công',
+          detail: `Bạn đăng đăng ký thành công. Vui lòng kiểm tra trong phần quản lý công việc đã đăng ký!`, life: 30000
+        });
       }
     })
   }

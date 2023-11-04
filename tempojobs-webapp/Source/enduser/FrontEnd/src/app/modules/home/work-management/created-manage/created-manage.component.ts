@@ -17,6 +17,7 @@ import { Location } from '@angular/common';
 import { UserManagementService } from '../../profile/user-management.service';
 import { ProfileDetail } from '../../profile/user.model';
 import { ApproveTaskerDialogComponent } from './approve-tasker-dialog/approve-tasker-dialog.component';
+import { MessageService } from 'primeng/api';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -54,19 +55,19 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     private dataStateService: DataStateManagementService,
     private authService: NbAuthService,
     private router: Router,
-    private toast: NbToastrService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private paymentService: PaymentServiceService,
     private _location: Location,
     private userService: UserManagementService,
+    private messageService: MessageService
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$)).subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
         this.currentUser = token.getPayload();
       }
     });
-    
+
     this.route.queryParams.subscribe(params => {
       this.paymentToken = params['paymentToken'];
       this.paymentMessage = params['message'];
@@ -81,7 +82,11 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     await this.refreshData();
     if (this.paymentToken && this.paymentMessage.includes("Successful.") && this.userId) {
       this.paymentService.momoPayementSuccess({ paymentToken: this.paymentToken, amount: this.amount, userId: this.userId }).subscribe(res => {
-        if (res.result) this.toast.success("Bạn đã thanh toán thành công!!", "Thanh toán thành công", { duration: 30000 });
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'success', summary: 'Thành công',
+          detail: `Bạn đã thanh toán thành công với số tiền là ${this.amount}`, life: 20000
+        });
       })
     }
   }
@@ -152,7 +157,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserDetailByUserId(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskers.push(resp.result);
                 }
               }
@@ -215,28 +220,36 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     }
   }
-  
+
   editWork(work: WorkModel) {
     if (work) {
-      this.router.navigate(['add-edit-work'], { state: {work: work}});
+      this.router.navigate(['add-edit-work'], { state: { work: work } });
     }
   }
-  
+
   deleteWork(work: WorkModel) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       data: {
         message: "Bạn chắc chắn muốn xóa công việc này?"
       }
     });
-  
+
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (work) {
           this.workService.deleteWork(work.workId).subscribe(resp => {
             if (resp.result) {
-              this.toast.success("Xóa công việc thành công!");
+              this.messageService.clear();
+              this.messageService.add({
+                key: 'toast1', severity: 'success', summary: 'Thành công',
+                detail: `Xóa công việc thành công.`, life: 20000
+              });
             } else {
-              this.toast.danger("Bạn không thể xóa công việc này!");
+              this.messageService.clear();
+              this.messageService.add({
+                key: 'toast1', severity: 'error', summary: 'Lỗi',
+                detail: `Bạn không thể xóa công việc này`, life: 20000
+              });
             }
           }).add(() => this.refreshData())
         }
@@ -250,16 +263,24 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         message: "Xác nhận duyệt người làm việc hoàn thành?"
       }
     });
-  
+
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (work) {
           work.workStatusId = this.processingId;
           this.workService.saveWork(work).subscribe(resp => {
             if (resp.result) {
-              this.toast.success("Xác nhận thành công!");
+              this.messageService.clear();
+              this.messageService.add({
+                key: 'toast1', severity: 'success', summary: 'Thành công',
+                detail: `Xác nhận thành công!`, life: 2000
+              });
             } else {
-              this.toast.danger("Xác nhận thất bại!");
+              this.messageService.clear();
+              this.messageService.add({
+                key: 'toast1', severity: 'error', summary: 'Thấy bại',
+                detail: `Xác nhận thất bại!`, life: 2000
+              });
             }
           }).add(() => this.refreshData())
         }
@@ -279,7 +300,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
 
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        
+
       }
     })
   }

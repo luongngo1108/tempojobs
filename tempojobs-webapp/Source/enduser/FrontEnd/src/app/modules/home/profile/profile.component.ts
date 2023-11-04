@@ -5,6 +5,7 @@ import { ProfileDetail } from './user.model';
 import { UserManagementService } from './user-management.service';
 import { GoogleMap } from '@angular/google-maps';
 import { NbToast, NbToastrService } from '@nebular/theme';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-profile',
@@ -46,8 +47,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     private authService: NbAuthService,
     private userService: UserManagementService,
     private ngZone: NgZone,
-    private nbToast: NbToastrService,
-    private cdref: ChangeDetectorRef
+    private cdref: ChangeDetectorRef,
+    private messageService: MessageService
   ) {
   }
   isEditProfile: boolean = false;
@@ -184,8 +185,17 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
         this.userDetail.googleLocation.latitude = this.latitude;
         this.userDetail.googleLocation.longitude = this.longitude;
         this.userService.saveGoogleMapLocation(this.userDetail.googleLocation).subscribe(res => {
-          if(res.result) this.nbToast.success(`Your new address: ${res.result.address}`,"Saved successfully!");
-          else this.nbToast.danger("Some error happened");
+          if(res.result) {
+            this.messageService.clear();
+            this.messageService.add({key: 'toast1', severity: 'success', summary: 'Thành công', 
+              detail: `Đã thay đổi địa chỉ thành: ${res.result.address}.`, life: 20000  });
+            // this.nbToast.success(`Your new address: ${res.result.address}`,"Saved successfully!");
+          }
+          else {
+            this.messageService.clear();
+            this.messageService.add({key: 'toast1', severity: 'error', summary: 'Lỗi', 
+              detail: `Có lỗi xảy ra.`, life: 10000  });
+          };
         });
       }
     })

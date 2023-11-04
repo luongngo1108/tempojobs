@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NbAuthModule } from '@nebular/auth';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule, NbTabsetModule } from '@nebular/theme';
+import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule, NbSpinnerModule, NbTabsetModule } from '@nebular/theme';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
@@ -38,8 +38,10 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
 import { HtmlSafetyPipe } from './pipes/safety-html.pipe';
 import { DatePipePipe } from './pipes/date-pipe.pipe';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
-import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatListModule } from '@angular/material/list';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 const materialModules = [
   MatFormFieldModule,
@@ -61,7 +63,6 @@ const materialModules = [
   MatTableModule,
   MatDialogModule,
   QuillModule,
-  MatDialogModule,
   MatListModule,
 ];
 
@@ -75,6 +76,7 @@ const nebularModules = [
   NbSearchModule,
   NbAlertModule,
   NbTabsetModule,
+  NbSpinnerModule,
 ];
 
 const angularModules = [
@@ -106,6 +108,7 @@ const angularModules = [
     RxReactiveFormsModule,
     NgxDatatableModule,
     GoogleMapsModule,
+    ToastModule,
     [...materialModules],
     [...nebularModules],
   ],
@@ -125,6 +128,7 @@ const angularModules = [
     NgxMatTimepickerModule,
     GoogleMapsModule,
     HtmlSafetyPipe,
+    ToastModule,
     [...materialModules],
     [...nebularModules],
     [...angularModules],
@@ -132,7 +136,14 @@ const angularModules = [
     DatePipePipe
   ],
   providers: [
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    {
+      provide: MatDialogRef,
+      useValue: {}
+    },
+    {
+      provide: MessageService
+    }
   ]
 })
 export class SharedModule { }
