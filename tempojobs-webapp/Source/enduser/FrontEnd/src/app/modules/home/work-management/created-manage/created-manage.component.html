@@ -165,7 +165,7 @@
       </button>
     </ng-container>
   </mat-menu> -->
-  <ng-container>
+  <ng-container *ngIf="row?.listTaskers?.length > 0; else notTasker">
     <mat-list role="list" *ngFor="let tasker of row?.listTaskers" style="max-height: 120px; overflow: auto; margin-bottom: 30px;">
       <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker)" style="cursor: pointer;">{{tasker?.firstName}} {{tasker?.lastName}}</mat-list-item>
     </mat-list>

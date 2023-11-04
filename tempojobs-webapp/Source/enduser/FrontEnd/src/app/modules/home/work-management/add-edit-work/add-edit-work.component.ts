@@ -248,8 +248,8 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
           this.workModel = model;
           console.log(this.workModel)
           const latLng = {
-            lat: parseFloat(this.latitude.toString()),
-            lng: parseFloat(this.longitude.toString())
+            lat: parseFloat(this.latitude?.toString()),
+            lng: parseFloat(this.longitude?.toString())
           }
           try {
             await this.geocoder.geocode({ location: latLng }).then( async response => {
@@ -271,13 +271,16 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
             model.createdById = this.createBy?.user?.id;
             model.createdBy = this.createBy?.user;
           }
+          if (!model.workApply) {
+            model.workApply = [];
+          }
           var respSaveWork = await lastValueFrom(this.workService.saveWork(model));
           if (respSaveWork.result) {
             this.workModel = respSaveWork.result;
-            // this.router.navigateByUrl('/created-manage'); 
             // create momo payment
             var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel.createdBy.email, inputAmount: amount, workId: this.workModel.workId }));
             if (respCreatePayment.result) window.location.href = respCreatePayment.result;
+            this.router.navigateByUrl('/created-manage'); 
           }
         }
       });

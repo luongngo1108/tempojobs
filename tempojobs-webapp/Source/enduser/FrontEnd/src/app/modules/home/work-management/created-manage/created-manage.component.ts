@@ -45,6 +45,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   paymentMessage = null;
   amount = null;
   userId = null;
+  waitingApplyId: number;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -98,6 +99,10 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     if (resultType.result) {
       this.listWorkType = resultType.result;
     }
+    var resultApply = await this.dataStateService.getDataStateByType("WORK_APPLY_STATUS").pipe(takeUntil(this.destroy$)).toPromise();
+    if (resultApply.result) {
+      this.waitingApplyId = resultApply.result?.find(item => item.dataStateName === 'Đang đăng ký')?.dataStateId;
+    }
   }
 
   async getListWorksDefaults() {
@@ -145,7 +150,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
             work.listTaskers = [];
             work.workApply.map(async workApplyId => {
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
-              if (respWorkApply.result) {
+              if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserDetailByUserId(respWorkApply?.result?.userId));
                 if(resp.result) {
                   work.listTaskers.push(resp.result);
@@ -174,6 +179,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     }));
     if (respCreatePayment.result) window.location.href = respCreatePayment.result;
   }
+
   handleDisplayStatus(state: number, isDisplayColor: boolean = false): string {
     if (this.listWorkStatus?.length <= 0) {
       return isDisplayColor ? '#0000' : '';
@@ -263,8 +269,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
 
   openMinimizedProfile(profile: ProfileDetail) {
     let dialogRef = this.dialog.open(ApproveTaskerDialogComponent, {
-      disableClose: true,
-      width: '600px',
+      disableClose: false,
+      width: '500px',
       autoFocus: false,
       data: {
         profile: profile

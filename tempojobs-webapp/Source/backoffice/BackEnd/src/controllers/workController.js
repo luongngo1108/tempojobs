@@ -119,6 +119,7 @@ class WorkController {
                 workToSave.deleted = false;
                 let ggmap;
                 if(workToSave.googleMapLocation) ggmap = await GoogleMapLocation.create(workToSave.googleMapLocation);
+                console.log(workToSave);
                 const work = await Work.create(workToSave);
                 const counterUpdated = await Counter.findOneAndUpdate({field: 'workId'}, {lastValue: nextWorkId});
                 if (work) {
@@ -243,7 +244,7 @@ class WorkController {
                 res.status(200).json(result);
                 return;
             }
-            const resp = await WorkApply.find({ _id: id, });
+            const resp = await WorkApply.findOne({ _id: id, });
             if (resp) {
                 result.result = resp;
             } else {
