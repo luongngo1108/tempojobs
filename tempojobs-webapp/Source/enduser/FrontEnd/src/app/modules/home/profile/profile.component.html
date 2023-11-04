@@ -5,6 +5,7 @@
     integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
 <div class="container">
     <div class="row">
+        <p-toast position="bottom-right" key="toast1"></p-toast>
         <div class="col-lg-4 col-xl-4">
             <div class="card-box text-center">
                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
@@ -55,7 +56,9 @@
                         type="text"
                         #search
                         />
-                        <button (click)="saveLocation()" type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Save</button>
+                        <button (click)="saveLocation()" type="button" [matTooltip]="'Lưu vị trí mới'"
+                        class="btn btn-success btn-xs waves-effect mb-2 waves-light">
+                            Lưu</button>
                     </div>
                     
                     <google-map

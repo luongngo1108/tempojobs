@@ -15,8 +15,7 @@ import { AddEditWorkComponent } from './work-management/add-edit-work/add-edit-w
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AppyWorkComponent } from './work-management/work-detail/appy-work/appy-work.component';
 import { ApproveTaskerDialogComponent } from './work-management/created-manage/approve-tasker-dialog/approve-tasker-dialog.component';
-
-
+import { ReportComponent } from './report/report.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +30,8 @@ import { ApproveTaskerDialogComponent } from './work-management/created-manage/a
     AddEditWorkComponent,
     UserProfileComponent,
     AppyWorkComponent,
-    ApproveTaskerDialogComponent
+    ApproveTaskerDialogComponent,
+    ReportComponent
   ],
   imports: [
     CommonModule,

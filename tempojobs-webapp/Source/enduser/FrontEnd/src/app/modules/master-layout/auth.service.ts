@@ -9,8 +9,8 @@ import { ReturnResult } from "src/app/shared/models/return-result";
     providedIn: 'root'
 })
 export class AuthService {
-    constructor(private httpclient: HttpClient) {}
     baseUrl = environment.apiAuth;
+    constructor(private httpclient: HttpClient) {}
 
     sendEmailChangePassword(email: string): Observable<ReturnResult<string>> {
         return this.httpclient.post<ReturnResult<string>>(`${this.baseUrl}/sendEmailResetPassword`, {email: email});
