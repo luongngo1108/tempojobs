@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { WorkModel } from 'src/app/shared/models/work.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -7,25 +7,36 @@ import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 import { WorkManagementService } from 'src/app/shared/services/work-management.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
+import { Subject, takeUntil } from 'rxjs';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'app-appy-work',
   templateUrl: './appy-work.component.html',
   styleUrls: ['./appy-work.component.scss']
 })
-export class AppyWorkComponent {
+export class AppyWorkComponent implements OnInit, OnDestroy {
   workModel: WorkModel;
   form: FormGroup;
   workApplyModel: WorkApply;
   isEdited: boolean = false;
+  user: any = {};
+  destroy$: Subject<void> = new Subject<void>();
+  
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: {workModel: WorkModel},
     public dialogRef: MatDialogRef<AppyWorkComponent>,
     private formBuilder: RxFormBuilder,
     private workService: WorkManagementService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: NbAuthService
   ) {
-
+    this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
+    .subscribe(async (token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+      }
+    });
   };
 
   ngOnInit(): void {
@@ -35,6 +46,11 @@ export class AppyWorkComponent {
     this.workApplyModel.workId = this.workModel.workId;
     this.workApplyModel.status = 1;
     this.form = this.formBuilder.formGroup(WorkApply, this.workApplyModel);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   closeDialog() {
@@ -58,7 +74,7 @@ export class AppyWorkComponent {
   }
 
   onApplyForWork() {
-    this.workService.applyForWork(this.workApplyModel).subscribe(res => {
+    this.workService.applyForWork(this.workApplyModel, this.user.user.id).subscribe(res => {
       if(res.result) this.dialogRef.close(true);
     })
   }

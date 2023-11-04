@@ -305,4 +305,6 @@ dd {
     /* number of lines to show */
     line-clamp: 3;
     -webkit-box-orient: vertical;
+    width: 80%;
+    word-wrap: break-word;
 }
