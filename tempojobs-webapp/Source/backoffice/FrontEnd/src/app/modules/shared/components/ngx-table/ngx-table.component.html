@@ -1,9 +1,8 @@
-<div class="table-responsive material" >
-    <ngx-datatable class="material" [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="50" [scrollbarV]="false"
-        [scrollbarH]="true"
-        [footerHeight]="50" rowHeight="auto" [reorderable]="false" [selected]="selected" (select)="onSelect($event)"
-         [selectionType]="SelectionType.checkbox">
-       
+<div class="table-responsive material">
+    <ngx-datatable class="material" [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="60"
+        [scrollbarV]="false" [scrollbarH]="true" [footerHeight]="50" rowHeight="auto" [reorderable]="false"
+        [selected]="selected" (select)="onSelect($event)" [selectionType]="SelectionType.checkbox" [limit]="20">
+
     </ngx-datatable>
 </div>
 
@@ -18,34 +17,13 @@
             <mat-icon color="primary">edit</mat-icon>
             <span>Edit item</span>
         </button>
-
-        
-        <div>
-            <ng-container *ngIf="customAction" [ngTemplateOutlet]="customAction"
-                [ngTemplateOutletContext]="{row:row, rowIndex:rowIndex}">
-            </ng-container>
-        </div>
-        <div>
-            <ng-container *ngIf="customAction2" [ngTemplateOutlet]="customAction2"
-                [ngTemplateOutletContext]="{row:row, rowIndex:rowIndex}">
-            </ng-container>
-        </div>
         <button mat-menu-item (click)="onClickDelete(row,rowIndex)">
             <mat-icon style="color: red;">delete</mat-icon>
             <span>Delete item</span>
         </button>
-        <div>
-            <ng-container *ngIf="customAction3" [ngTemplateOutlet]="customAction3"
-                [ngTemplateOutletContext]="{row:row, rowIndex:rowIndex}">
-            </ng-container>
-        </div>
     </mat-menu>
-    <!-- <div style="margin-top: -8px;">
-      <button mat-icon-button class="mr-2" color="primary" (click)="onClickEdit(row,rowIndex)">
-        <mat-icon>edit</mat-icon>
-      </button>
-      <button mat-icon-button style="color: red;" (click)="onClickDelete(row,rowIndex)">
-        <mat-icon>delete</mat-icon>
-      </button>
-    </div> -->
+</ng-template>
+
+<ng-template #headerFilter let-column="column">
+    <input style="width:100%;" nbInput type="text" [placeholder]="column.name" (keyup)="updateFilter($event, column)" />
 </ng-template>

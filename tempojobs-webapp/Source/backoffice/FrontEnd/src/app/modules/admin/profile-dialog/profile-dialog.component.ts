@@ -22,6 +22,7 @@ export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit 
   isChange: boolean = false;
   user: any = {};
   destroy$: Subject<void> = new Subject<void>();
+  action: string;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<ProfileDialogComponent>,
@@ -40,7 +41,9 @@ export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngOnInit(): void {
-    if (this.data.model) this.profileDetail = this.data.model;
+    this.action = this.data.action;
+    if (this.data.model && this.action === "Edit") this.profileDetail = this.data.model;
+    if (!this.data.model && this.action === "Add") this.profileDetail = new ProfileDetail();
     this.form = this.formBuilder.formGroup(ProfileDetail, this.profileDetail);
     this.userFrm = this.formBuilder.formGroup(User, this.user);
     this.dialogRef.updatePosition({ right: '0' })
@@ -52,7 +55,7 @@ export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   closeDialog() {
-    if(this.isChange) {
+    if (this.isChange) {
       const dialogRef = this.dialog.open(ConfirmModalComponent, {
         backdropClass: 'custom-backdrop',
         hasBackdrop: true,
@@ -60,9 +63,9 @@ export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit 
           message: "Bạn có chắc muốn thoát? Tất cả nội dung sẽ mất."
         }
       });
-  
+
       dialogRef.afterClosed().subscribe(res => {
-        if(res) {
+        if (res) {
           this.dialogRef.close(false);
         }
       })
@@ -84,19 +87,23 @@ export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit 
     this.userService.saveProfileDetail(this.form.value).subscribe(res => {
       this.submitted = false;
       if (res.result) {
-        // this.messageService.clear();
-        // this.messageService.add({
-        //   key: 'toast1', severity: 'success', summary: 'Thành công',
-        //   detail: `Thay đổi thông tin cá nhân thành công!`, life: 20000
-        // });
         this.dialogRef.close(true);
       }
       else {
-        this.messageService.clear();
-        this.messageService.add({
-          key: 'toast1', severity: 'warn', summary: 'Lỗi',
-          detail: `Có lỗi xảy ra!`, life: 20000
-        });
+        if (!res.message) {
+          this.messageService.clear();
+          this.messageService.add({
+            key: 'toast1', severity: 'warn', summary: 'Lỗi',
+            detail: `Có lỗi xảy ra!`, life: 20000
+          });
+        }
+        else {
+          this.messageService.clear();
+          this.messageService.add({
+            key: 'toast1', severity: 'warn', summary: 'Lỗi',
+            detail: `${res.message}`, life: 20000
+          });
+        }
       }
     })
   }

@@ -36,6 +36,10 @@ export class UserManagementService {
         return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/get`,);
     }
 
+    getAllUserDetail() {
+        return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserDetail`,);
+    }
+
     getCurrentUser(): Observable<any> {
        return this._currentUser.asObservable();
     }
@@ -50,5 +54,9 @@ export class UserManagementService {
 
     saveGoogleMapLocation(googleLocation: GoogleMapLocation): Observable<ReturnResult<GoogleMapLocation>> {
         return this.httpclient.post<ReturnResult<GoogleMapLocation>>(`${this.locationUrl}/saveGoogleMapLocation`, googleLocation)
+    }
+
+    onDeletes(emails: any = []): Observable<ReturnResult<GoogleMapLocation>> {
+        return this.httpclient.post<ReturnResult<GoogleMapLocation>>(`${this.baseUrl}/onDeletes`, emails)
     }
 }

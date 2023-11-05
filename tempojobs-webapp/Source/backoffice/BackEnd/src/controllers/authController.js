@@ -17,8 +17,7 @@ class authController {
             res.status(400);
             throw new Error("All fields are madatory");
         }
-        const userAvailable = await User.findOne({ email, role });
-        console.log(userAvailable, role);
+        const userAvailable = await User.findOne({ email });
         if (userAvailable) {
             res.status(400).json("Email has been registered, please try another one");
             return;

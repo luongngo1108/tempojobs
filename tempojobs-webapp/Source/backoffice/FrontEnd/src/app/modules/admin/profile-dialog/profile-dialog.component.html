@@ -50,8 +50,10 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="label" for="email">Tài khoản email</label>
-                    <input nbInput  [disabled]="false" formControlName="email" type="text" class="form-control" id="email"
-                        placeholder="Nhập email" readonly>
+                    <input *ngIf="action == 'Edit'" nbInput [disabled]="false" formControlName="email" type="text"
+                        class="form-control" id="email" placeholder="Nhập email" readonly>
+                    <input *ngIf="action == 'Add'" nbInput [disabled]="false" formControlName="email" type="text"
+                        class="form-control" id="email" placeholder="Nhập email">
                 </div>
             </div> <!-- end col -->
         </div> <!-- end row -->
@@ -70,9 +72,10 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="label" for="confirmPassword">Xác nhận mật khẩu</label>
-                    <input nbInput formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword"
-                        placeholder="Xác nhận mật khẩu">
-                    <small class="caption text-danger" *ngIf="form.controls.password.value != form.controls.confirmPassword.value">
+                    <input nbInput formControlName="confirmPassword" type="password" class="form-control"
+                        id="confirmPassword" placeholder="Xác nhận mật khẩu">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.password.value != form.controls.confirmPassword.value">
                         Mật khẩu không giống với mật khẩu đã nhập.
                     </small>
                 </div>
