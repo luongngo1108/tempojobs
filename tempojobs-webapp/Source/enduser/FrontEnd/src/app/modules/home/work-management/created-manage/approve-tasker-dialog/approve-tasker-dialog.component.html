@@ -11,7 +11,7 @@
 
       <div class="col-12" style="margin-top: 30px;">
         <p class="text-muted font-13 mb-3">
-          Content
+          {{ workApply?.content }}
         </p>
       </div>
 
@@ -42,7 +42,7 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Đóng</button>
+  <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Đóng</button>
   <button mat-button color="warn" (click)="saveWorkApplyStatus(refuseId)">Từ chối</button>
   <button mat-button color="primary" (click)="saveWorkApplyStatus(acceptedId)">Chấp nhận</button>
 </mat-dialog-actions>

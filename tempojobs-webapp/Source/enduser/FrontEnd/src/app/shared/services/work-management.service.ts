@@ -47,4 +47,12 @@ export class WorkManagementService {
   getWorkApplyById(id: string): Observable<ReturnResult<WorkApply>> {
     return this.http.get<ReturnResult<WorkApply>>(`${this.baseUrl}/getWorkApplyById?id=${id}`);
   }
+
+  getWorkApplyByWorkIdAndUserId(workId: number, userId: string): Observable<ReturnResult<WorkApply>> {
+    return this.http.get<ReturnResult<WorkApply>>(`${this.baseUrl}/getWorkApplyByWorkIdAndUserId?workId=${workId}&userId=${userId}`);
+  }
+
+  changeStatusWorkApply(model: WorkApply): Observable<ReturnResult<WorkApply>> {
+    return this.http.post<ReturnResult<WorkApply>>(`${this.baseUrl}/changeStatusWorkApply`, model);
+  }
 }

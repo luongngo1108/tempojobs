@@ -41,7 +41,8 @@ export class WorkModel {
     @prop()
     workApply: string[] | null;
 
-    listTaskers: ProfileDetail[] | null;
+    listTaskerWaitings: User[] | null;
+    listTaskerAccepted: User[] | null;
 
     googleLocation: GoogleMapLocation = null; 
 

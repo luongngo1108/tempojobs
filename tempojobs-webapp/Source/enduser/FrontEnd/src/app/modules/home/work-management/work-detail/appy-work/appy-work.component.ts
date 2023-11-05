@@ -42,7 +42,7 @@ export class AppyWorkComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if(this.data.workModel) this.workModel = this.data.workModel;
     this.workApplyModel = new WorkApply();
-    this.workApplyModel.userId = this.workModel.createdBy.id;
+    this.workApplyModel.userId = this.workModel.createdBy._id;
     this.workApplyModel.workId = this.workModel.workId;
     this.workApplyModel.status = 1;
     this.form = this.formBuilder.formGroup(WorkApply, this.workApplyModel);

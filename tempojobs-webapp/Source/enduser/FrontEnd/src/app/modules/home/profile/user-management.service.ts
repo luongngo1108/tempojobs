@@ -51,4 +51,8 @@ export class UserManagementService {
     saveGoogleMapLocation(googleLocation: GoogleMapLocation): Observable<ReturnResult<GoogleMapLocation>> {
         return this.httpclient.post<ReturnResult<GoogleMapLocation>>(`${this.locationUrl}/saveGoogleMapLocation`, googleLocation)
     }
+
+    getUserById(id: string): Observable<ReturnResult<User>> {
+        return this.httpclient.get<ReturnResult<User>>(`${this.baseUrl}/getUserById?id=${id}`);
+    }
 }
