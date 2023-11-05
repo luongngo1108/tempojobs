@@ -2,10 +2,10 @@ import { email, maxLength, minLength, password, prop, propObject, required } fro
 
 export class User {
   @prop()
-  id: string;
+  _id: string;
 
   @prop()
-  displayname: string;
+  displayName: string;
 
   @prop()
   email: string;

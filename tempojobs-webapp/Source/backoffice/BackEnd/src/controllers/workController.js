@@ -255,6 +255,47 @@ class WorkController {
         }
         res.status(200).json(result);
     }
+
+    async getWorkApplyByWorkIdAndUserId(req, res, next) {
+        try {
+            var result = new ReturnResult();
+            const workId = req.query.workId;
+            const userId = req.query.userId;
+            if (!workId && !userId) {
+                result.message = "Data is required";
+                res.status(200).json(result);
+                return;
+            }
+            const resp = await WorkApply.findOne({ workId: workId, userId: userId });
+            if (resp) {
+                result.result = resp;
+            } else {
+                result.message = "Work apply with workId and userId doesn't exist: " + workId + userId;
+            }
+        } catch (error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
+    async changeStatusWorkApply(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const workApply = req.body;
+            if(workApply) {
+                const saveApplied = await WorkApply.updateOne({ _id: workApply._id }, workApply);
+                if(saveApplied) {
+                    result.result = saveApplied;
+                } else {
+                    result.message = "Work applied doesn't exist";
+                }
+            }
+        }
+        catch(error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
 };
 
 export default new WorkController;

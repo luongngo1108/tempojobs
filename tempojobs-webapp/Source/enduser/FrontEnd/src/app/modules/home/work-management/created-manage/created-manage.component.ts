@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PaymentServiceService } from 'src/app/shared/services/payment-service.service';
 import { Location } from '@angular/common';
 import { UserManagementService } from '../../profile/user-management.service';
-import { ProfileDetail } from '../../profile/user.model';
+import { ProfileDetail, User } from '../../profile/user.model';
 import { ApproveTaskerDialogComponent } from './approve-tasker-dialog/approve-tasker-dialog.component';
 import { MessageService } from 'primeng/api';
 @Component({
@@ -25,7 +25,7 @@ import { MessageService } from 'primeng/api';
 })
 export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumnsTab1: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
-  displayedColumnsTab2: string[] = ['workName', 'candidate', 'confirm'];
+  displayedColumnsTab2: string[] = ['workName', 'candidate', 'candidateApproval', 'confirm'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -33,6 +33,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   listWorkShow: WorkModel[] = [];
   listWorkType: DataStateModel[] = [];
   listWorkStatus: DataStateModel[] = [];
+  listWorkApplyStatus: DataStateModel[] = [];
   approvingId: number;
   approvedId: number;
   refuseApprovalId: number;
@@ -47,6 +48,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   amount = null;
   userId = null;
   waitingApplyId: number;
+  acceptApplyId: number;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -106,7 +108,9 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     }
     var resultApply = await this.dataStateService.getDataStateByType("WORK_APPLY_STATUS").pipe(takeUntil(this.destroy$)).toPromise();
     if (resultApply.result) {
-      this.waitingApplyId = resultApply.result?.find(item => item.dataStateName === 'Đang đăng ký')?.dataStateId;
+      this.listWorkApplyStatus = resultApply.result;
+      this.waitingApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Đang đăng ký').dataStateId;
+      this.acceptApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Được nhận').dataStateId;
     }
   }
 
@@ -152,18 +156,62 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
         this.listWorkShow.map(work => {
           if (work.workApply && work.workApply.length > 0) {
-            work.listTaskers = [];
+            work.listTaskerWaitings = [];
+            work.listTaskerAccepted = [];
             work.workApply.map(async workApplyId => {
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
-                var resp = await lastValueFrom(this.userService.getUserDetailByUserId(respWorkApply?.result?.userId));
-                if (resp.result) {
-                  work.listTaskers.push(resp.result);
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerWaitings.push(resp.result);
+                }
+              }
+              if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerAccepted.push(resp.result);
                 }
               }
             })
           }
-        })
+        });
+        break;
+      case 3:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.processingId);
+        break;
+      case 4:
+        break;
+    }
+  }
+
+  changeTabWithNumber(data: number) {
+    switch (data) {
+      case 1:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+        break;
+      case 2:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
+        this.listWorkShow.map(work => {
+          if (work.workApply && work.workApply.length > 0) {
+            work.listTaskerWaitings = [];
+            work.listTaskerAccepted = [];
+            work.workApply.map(async workApplyId => {
+              var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
+              if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerWaitings.push(resp.result);
+                }
+              }
+              if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerAccepted.push(resp.result);
+                }
+              }
+            })
+          }
+        });
         break;
       case 3:
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.processingId);
@@ -251,7 +299,10 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
                 detail: `Bạn không thể xóa công việc này`, life: 20000
               });
             }
-          }).add(() => this.refreshData())
+          }).add(async () => {
+            await this.refreshData();
+            this.changeTabWithNumber(1);
+          })
         }
       }
     });
@@ -282,25 +333,30 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
                 detail: `Xác nhận thất bại!`, life: 2000
               });
             }
-          }).add(() => this.refreshData())
+          }).add(async () => {
+            await this.refreshData();
+            this.changeTabWithNumber(2);
+          })
         }
       }
     });
   }
 
-  openMinimizedProfile(profile: ProfileDetail) {
+  openMinimizedProfile(user: User, work: WorkModel) {
     let dialogRef = this.dialog.open(ApproveTaskerDialogComponent, {
       disableClose: false,
       width: '500px',
       autoFocus: false,
       data: {
-        profile: profile
+        user: user,
+        work: work
       }
     });
 
-    dialogRef.afterClosed().subscribe(res => {
+    dialogRef.afterClosed().subscribe(async res => {
       if (res) {
-
+        await this.refreshData();
+        this.changeTabWithNumber(2);
       }
     })
   }
