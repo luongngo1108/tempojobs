@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { NbAuthComponent, NbLoginComponent } from '@nebular/auth';
+import { NbAuthComponent, NbLoginComponent, NbRegisterComponent } from '@nebular/auth';
 import { AuthComponent } from './auth/auth.component';
+import { RegisterComponent } from './register/register.component';
+import { RequestPasswordComponent } from './request-password/request-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -11,11 +14,23 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: NbLoginComponent,
+        component: LoginComponent,
       },
       {
         path: 'login',
-        component: NbLoginComponent,
+        component: LoginComponent,
+      },
+      // {
+      //   path: 'register',
+      //   component: RegisterComponent,
+      // },
+      {
+        path: 'request-password',
+        component: RequestPasswordComponent,
+      },
+      {
+        path: 'reset-password/:userId/:token',
+        component: ResetPasswordComponent,
       },
     ]
   },

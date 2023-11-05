@@ -1,0 +1,84 @@
+<div class="d-flex flex-wrap" mat-dialog-title
+    style="margin: unset; padding: 1px 10px 1px 28px; justify-content: center; align-items: center;">
+    <button nbButton status="success" (click)="saveData()" [disabled]="!form.valid" style="margin: 10px 0px 5px 0px;">
+        <nb-icon icon="save-outline"></nb-icon>Lưu
+    </button>
+    <button nbButton ghost (click)="closeDialog()" class="ml-auto">
+        <nb-icon icon="close-outline"></nb-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<p-toast position="bottom-right" key="toast1"></p-toast>
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
+            Thông tin cá nhân</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-control-group">
+                    <label class="label" for="firstname">Họ</label>
+                    <input nbInput formControlName="firstName" type="text" class="form-control" id="firstname"
+                        placeholder="Nhập họ">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.firstName.errors && (form.controls.firstName.dirty || form.controls.firstName.touched)">
+                        {{form.controls.firstName['errorMessage']}}</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-control-group">
+                    <label class="label" for="lastname">Tên và tên đệm</label>
+                    <input nbInput formControlName="lastName" type="text" class="form-control" id="lastname"
+                        placeholder="Nhập tên đệm và tên">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.lastName.errors && (form.controls.lastName.dirty || form.controls.lastName.touched)">
+                        {{form.controls.lastName['errorMessage']}}</small>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="label" for="phone">Số điện thoại</label>
+                    <input nbInput formControlName="phone" type="text" class="form-control" id="phone"
+                        placeholder="Nhập số điện thoại">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.phone.errors && (form.controls.phone.dirty || form.controls.phone.touched)">
+                        {{form.controls.phone['errorMessage']}}</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="label" for="email">Tài khoản email</label>
+                    <input nbInput  [disabled]="false" formControlName="email" type="text" class="form-control" id="email"
+                        placeholder="Nhập email" readonly>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="label" for="password">Mật khẩu</label>
+                    <input nbInput formControlName="password" type="password" class="form-control" id="password"
+                        placeholder="Nhập mật khẩu mới">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.password.errors && (form.controls.password.dirty || form.controls.password.touched)">
+                        {{form.controls.password['errorMessage']}}</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="label" for="confirmPassword">Xác nhận mật khẩu</label>
+                    <input nbInput formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword"
+                        placeholder="Xác nhận mật khẩu">
+                    <small class="caption text-danger" *ngIf="form.controls.password.value != form.controls.confirmPassword.value">
+                        Mật khẩu không giống với mật khẩu đã nhập.
+                    </small>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+        <!-- <span class="form-text text-muted"><small>If you want to change password please
+                <a href="javascript: void(0);">click</a> here.</small></span> -->
+    </form>
+</mat-dialog-content>

@@ -6,12 +6,14 @@ import { AdminComponent } from './admin.component';
 import { SharedModule } from '../shared/shared.module';
 import { ThemeModule } from 'src/app/@theme/theme.module';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { ProfileDialogComponent } from './profile-dialog/profile-dialog.component';
 
 
 @NgModule({
   declarations: [
     AdminComponent,
-    UserManagementComponent
+    UserManagementComponent,
+    ProfileDialogComponent
   ],
   imports: [
     ThemeModule,

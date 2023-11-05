@@ -9,8 +9,7 @@ const User = new Schema ({
     },
     email: { 
         type: String, 
-        required: [true, "Please add the email!"], 
-        unique:  [true, "Email address has already been taken!"] ,
+        required: [true, "Please add the email!"]
     },
     password: { 
         type: String, 

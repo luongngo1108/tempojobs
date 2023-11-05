@@ -30,11 +30,25 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
+              "@angular/material/prebuilt-themes/pink-bluegrey.css",
+              "src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/app/@theme/styles/styles.scss",
-              "src/styles.scss"
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "node_modules/quill-emoji/dist/quill-emoji.css",
+              "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "primeicons/primeicons.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/popper.js/dist/umd/popper.min.js",
+              "node_modules/@popperjs/core/dist/umd/popper.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+              "node_modules/quill/dist/quill.min.js"
+            ]
           },
           "configurations": {
             "production": {

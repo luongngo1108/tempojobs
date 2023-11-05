@@ -16,15 +16,26 @@ import { environment } from 'src/enviroments/enviroment';
           name: 'email',
           baseEndpoint: environment.apiAuth,
           login: {
-            endpoint: '/login',
+            endpoint: '/login/Admin',
             requireValidToken: true,
             redirect: {
               success: '/',
-              failure: '/auth',
+              failure: '/auth/login',
+            },
+          },
+          register: {
+            endpoint: '/register',
+            redirect: {
+              success: '/',
+              failure: '/auth/register',
             },
           },
           requestPass: {
             endpoint: '/reset',
+            redirect: {
+              success: '/auth/reset-password',
+              failure: '/auth/request-password'
+            }
           },
           token: {
             class: NbAuthJWTToken,

@@ -12,13 +12,13 @@ import googleMapLocationModel from "../models/googleMapLocationModel.js";
 class authController {
     // [POST] /register
     async register(req, res, next) {
-        const { firstName, lastName, email, password } = req.body;
+        const { firstName, lastName, email, password, role } = req.body;
         if (!firstName || !email || !password) {
             res.status(400);
             throw new Error("All fields are madatory");
         }
-
-        const userAvailable = await User.findOne({ email });
+        const userAvailable = await User.findOne({ email, role });
+        console.log(userAvailable, role);
         if (userAvailable) {
             res.status(400).json("Email has been registered, please try another one");
             return;
@@ -38,7 +38,8 @@ class authController {
             displayName: firstName + " " + lastName,
             email,
             password: hashedPassword,
-            userDetail: userDetail
+            userDetail: userDetail,
+            role
         });
 
         if (user) {
@@ -59,14 +60,13 @@ class authController {
     // [GET] /login
     async login(req, res, next) {
         const { email, password } = req.body;
-        console.log(email, password);
+        let role = req.params.role;
         if (!email || !password) {
             res.status(400).json("All fields are madatory");
             return;
         }
 
-        const user = await User.findOne({ email });
-
+        const user = await User.findOne({ email, role });
         //compare password with hashedpassword
         if (user && (await compare(password, user.password))) {
 

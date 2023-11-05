@@ -1,0 +1,12 @@
+// .table-height {
+//     height: calc(100vh - 50px);
+// }
+
+::ng-deep .text-center.remove-padding {
+    padding: 0 10px 0 0 !important;
+}
+
+.text-center {
+    align-items: center;
+    justify-self: center;
+}

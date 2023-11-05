@@ -19,8 +19,8 @@ export class UserManagementComponent implements OnInit {
   ngOnInit(): void {
     this.columns = [
       {
-        name: 'username',
-        prop: 'username' 
+        name: 'displayName',
+        prop: 'displayName' 
       }, 
       { 
         name: 'email',
@@ -39,7 +39,8 @@ export class UserManagementComponent implements OnInit {
     if(reset) {
 
     }
-    this.userService.getAllUser2().subscribe(e => {
+    this.userService.getAllUser().subscribe(e => {
+      console.log(e);
       this.ngxTable.setData(e);
     })
   }
