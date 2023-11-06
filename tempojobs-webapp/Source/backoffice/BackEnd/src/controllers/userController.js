@@ -18,7 +18,8 @@ class userController {
     }
 
     async getAllUserDetail(req, res, next) {
-        const data = await UserDetail.find({});
+        const email = req.query.email;
+        const data = await UserDetail.find({email : {$ne: email}});
         for (var detail of data) {
             const user = await User.findOne({ email: detail.email });
             detail.role = user.role;
@@ -38,14 +39,16 @@ class userController {
         var result = new ReturnResult();
         try {
             const userId = req.query.id;
-            const user = await User.findById(userId, '-_id userDetail').lean().exec();
-            const userDetail = await UserDetail.findById(user.userDetail);
-            const googleLocation = await GoogleMapLocation.findById(userDetail.googleLocation);
-            if (googleLocation) userDetail.googleLocation = googleLocation
-            if (userDetail) {
-                result.result = userDetail;
-            } else {
-                result.message = "No user detail found";
+            if(userId) {
+                const user = await User.findById(userId, '-_id userDetail').lean().exec();
+                const userDetail = await UserDetail.findById(user.userDetail);
+                const googleLocation = await GoogleMapLocation.findById(userDetail.googleLocation);
+                if (googleLocation) userDetail.googleLocation = googleLocation
+                if (userDetail) {
+                    result.result = userDetail;
+                } else {
+                    result.message = "No user detail found";
+                }
             }
         }
         catch (ex) {
@@ -88,16 +91,34 @@ class userController {
                 else {
                     const user = await User.findOneAndUpdate({ userDetail: updatedUserDetail }, { displayName: displayNameUser });
                 }
+
+                if(userDetail.role) {
+                    const user = await User.findOneAndUpdate({ userDetail: updatedUserDetail }, { role: updatedUserDetail.role });
+                }
+                if(userDetail.address) {
+                    var userDetailFind = await UserDetail.findById(userDetail._id)
+                    const ggMap = await GoogleMapLocation.findByIdAndUpdate(userDetailFind.googleLocation, {address: userDetail.address})
+                }
             } else {
                 const userAvailable = await User.findOne({ email: userDetail.email });
                 if (!userAvailable && userDetail.password) {
                     //Hash password
                     const hashedPassword = await hash(userDetail.password, 10);
                     const googleLocation = await GoogleMapLocation.create({});
+                    console.log(googleLocation);
+                    const ggMap = await GoogleMapLocation.findByIdAndUpdate(googleLocation._id, {address: userDetail.address})
+                    console.log(ggMap)
                     const userDetailCreated = await UserDetail.create({
                         firstName: userDetail.firstName,
                         lastName: userDetail.lastName,
-                        googleLocation,
+                        description: userDetail.description,
+                        phone: userDetail.phone,
+                        sex: userDetail.sex,
+                        role: userDetail.role,
+                        birth: userDetail.birth,
+                        facebook: userDetail.facebook,
+                        instagram: userDetail.instagram,
+                        googleLocation: ggMap,
                         email: userDetail.email
                     })
 
@@ -106,7 +127,7 @@ class userController {
                         email:  userDetail.email,
                         password: hashedPassword,
                         userDetail: userDetailCreated,
-                        role: 'User'
+                        role: userDetail.role
                     });
 
                     if(user && userDetail) result.result = userDetail;

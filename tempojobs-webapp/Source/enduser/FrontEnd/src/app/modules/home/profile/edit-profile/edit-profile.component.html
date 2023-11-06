@@ -42,7 +42,30 @@
                 <div class="form-group">
                     <label class="fw-bold" for="email">Tài khoản email</label>
                     <input nbInput [disabled]="false" formControlName="email" type="text" class="form-control" id="email"
-                        placeholder="Your email account" readonly>
+                        placeholder="Your email account" readonly style="width: 100%;">
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="label" for="phone">Giới tính</label>
+                    <nb-radio-group class="inline-radio" formControlName="sex" name="ng-model-group">
+                        <nb-radio value="Nam">Nam</nb-radio>
+                        <nb-radio value="Nữ">Nữ</nb-radio>
+                        <nb-radio value="Khác">Khác</nb-radio>
+                      </nb-radio-group>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="label" for="birth">Ngày sinh</label>
+                    <input class="form-control" formControlName="birth" [nbDatepicker]="datepicker" placeholder="Chọn ngày sinh"/>
+                    <nb-datepicker #datepicker></nb-datepicker>
+                    <small class="caption text-danger"
+                        *ngIf="frm.controls.birth.errors && (frm.controls.birth.dirty || frm.controls.birth.touched)">
+                        {{form.controls.birth['errorMessage']}}</small>
                 </div>
             </div> <!-- end col -->
         </div> <!-- end row -->

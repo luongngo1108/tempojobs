@@ -37,6 +37,14 @@ const UserDetail = new Schema ({
         type: String,
         default: ""
     },
+    sex: {
+        type: String,
+        default: "Khác  "
+    },
+    birth: {
+        type: Date,
+        default: null
+    },
     role: {
         type: String,
     }

@@ -4,7 +4,7 @@
             <mat-icon>add</mat-icon>New
         </button>
         <button type="button" color="warn" mat-button (click)="onClickDeletes()"
-            [hidden]="(selectedCout || selectedCout != 0)">
+            [hidden]="(selectedCout==0)">
             <mat-icon class="mr">delete</mat-icon>Delete Selected
         </button>
         <button class="ml-auto" type="button" mat-icon-button title="Clear Filter" debouncedClick

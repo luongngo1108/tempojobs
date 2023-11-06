@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-toolbar',
@@ -10,9 +11,9 @@ export class ToolbarComponent implements OnInit{
   @Input() tableResource;
   @Output() onRefresh = new EventEmitter<any>();
   @Input() addEditComponent: any;
-  @Output() onDelete = new EventEmitter<any>();
+  @Output() onDeletes = new EventEmitter<any>();
   @Output() addEvent: EventEmitter<any> = new EventEmitter<any>();
-  selectedCout: number = 0;
+  @Input() selectedCout: number = 0;
   constructor(
     private dialog: MatDialog
   ) {
@@ -44,7 +45,16 @@ export class ToolbarComponent implements OnInit{
     });
   }
   onClickDeletes() {
-
+    const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      data: {
+        message: `Do you wish to delete ${this.selectedCout} item(s)?`
+      }
+    });
+    dialogRef.afterClosed().subscribe(response => {
+      if (response) {
+        this.onDeletes.emit();
+      }
+    });
   }
 
   configClearFilter() {

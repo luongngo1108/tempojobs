@@ -1,22 +1,34 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UserManagementService } from './user-management.service';
 import { NgxTableComponent } from '../../shared/components/ngx-table/ngx-table.component';
 import { ProfileDialogComponent } from '../profile-dialog/profile-dialog.component';
 import { MessageService } from 'primeng/api';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.scss']
 })
-export class UserManagementComponent implements OnInit {
+export class UserManagementComponent implements OnInit, OnDestroy{
   columns = [];
   @ViewChild('ngxTableUser', { static: true }) ngxTable: NgxTableComponent;
   addEditComponent = ProfileDialogComponent;
+  private destroy$: Subject<void> = new Subject<void>();
+  user: any = {};
   constructor(
     private userService: UserManagementService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: NbAuthService
   ) {
+    this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
+    .subscribe(async (token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+
+      }
+    });
 
   }
 
@@ -29,6 +41,14 @@ export class UserManagementComponent implements OnInit {
       {
         name: 'lastName',
         prop: 'lastName'
+      },
+      {
+        name: 'Gender',
+        prop: 'sex'
+      },
+      {
+        name: 'birthday',
+        prop: 'birth'
       },
       {
         name: 'email',
@@ -64,7 +84,7 @@ export class UserManagementComponent implements OnInit {
   }
 
   refreshData(reset: boolean = false): void {
-    this.userService.getAllUserDetail().subscribe(e => {
+    this.userService.getAllUserDetail(this.user.user.email).subscribe(e => {
       this.ngxTable.setData(e);
     })
   }
@@ -107,5 +127,31 @@ export class UserManagementComponent implements OnInit {
         });
       }
     })
+  }
+
+  onClickDeletes(event: any) {
+    var deteleItem = this.ngxTable.selected;
+    var deleteEmails = deteleItem.map(x => x.email);
+    this.userService.onDeletes(deleteEmails).subscribe(res => {
+      if (res.result) {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'success', summary: 'Thành công',
+          detail: `Xoá ${this.ngxTable.selected.length} user thành công!`, life: 2000
+        });
+        this.refreshData();
+      } else {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'warn', summary: 'Lỗi',
+          detail: `Xoá user không thành công!`, life: 2000
+        });
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

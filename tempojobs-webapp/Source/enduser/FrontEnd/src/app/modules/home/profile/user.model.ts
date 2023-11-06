@@ -79,6 +79,11 @@ export class ProfileDetail {
   password: string = null;
   @prop()
   confirmPassword;
+  @prop()
+  sex: string;
+  @prop()
+  @required()
+  birth: Date;
 }
 
 export class GoogleMapLocation {

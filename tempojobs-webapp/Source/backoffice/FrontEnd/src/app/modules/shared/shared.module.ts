@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NbAuthModule } from '@nebular/auth';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule, NbSpinnerModule, NbTabsetModule } from '@nebular/theme';
+import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbDatepickerModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule, NbSelectModule, NbSpinnerModule, NbTabsetModule } from '@nebular/theme';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
@@ -79,6 +79,9 @@ const nebularModules = [
   NbAlertModule,
   NbTabsetModule,
   NbSpinnerModule,
+  NbDatepickerModule,
+  NbSelectModule,
+  NbFormFieldModule
 ];
 
 const angularModules = [

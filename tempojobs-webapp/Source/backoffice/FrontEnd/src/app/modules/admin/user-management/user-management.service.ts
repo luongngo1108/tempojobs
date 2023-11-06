@@ -36,8 +36,8 @@ export class UserManagementService {
         return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/get`,);
     }
 
-    getAllUserDetail() {
-        return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserDetail`,);
+    getAllUserDetail(email: string) {
+        return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserDetail?email=${email}`,);
     }
 
     getCurrentUser(): Observable<any> {

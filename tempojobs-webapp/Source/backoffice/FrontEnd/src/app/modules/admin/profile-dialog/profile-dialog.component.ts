@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
@@ -15,6 +15,7 @@ import { UserManagementService } from '../user-management/user-management.servic
   styleUrls: ['./profile-dialog.component.scss']
 })
 export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit {
+  isOwnProfile: boolean = false;
   profileDetail: ProfileDetail;
   form: FormGroup;
   userFrm: FormGroup;
@@ -44,6 +45,7 @@ export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit 
     this.action = this.data.action;
     if (this.data.model && this.action === "Edit") this.profileDetail = this.data.model;
     if (!this.data.model && this.action === "Add") this.profileDetail = new ProfileDetail();
+    if (this.data.isOwnProfile) this.isOwnProfile = this.data.isOwnProfile;
     this.form = this.formBuilder.formGroup(ProfileDetail, this.profileDetail);
     this.userFrm = this.formBuilder.formGroup(User, this.user);
     this.dialogRef.updatePosition({ right: '0' })

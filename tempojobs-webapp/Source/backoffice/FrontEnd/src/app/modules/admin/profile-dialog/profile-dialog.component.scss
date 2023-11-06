@@ -19,3 +19,17 @@
     font-weight: 600;
     color: black;
 }
+
+.inline-radio {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+nb-select.size-medium:not(.full-width) {
+    width: 100%;
+    max-width: 100%;
+}
+
+.mat-mdc-dialog-content {
+    max-height: calc(100vh - 57px);
+}

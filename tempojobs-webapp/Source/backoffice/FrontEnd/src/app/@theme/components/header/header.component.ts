@@ -103,6 +103,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
           backdropClass: 'custom-backdrop',
           hasBackdrop: true,
           data: {
+            isOwnProfile: true,
+            action: 'Edit',
             model: this.userDetail
           },
         });

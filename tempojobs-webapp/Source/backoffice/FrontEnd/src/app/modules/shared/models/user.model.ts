@@ -80,9 +80,16 @@ export class ProfileDetail {
   @prop()
   confirmPassword;
   @prop()
+  @required()
   role: string;
   @prop()
   address: string;
+  @prop()
+  @required()
+  sex: string;
+  @prop()
+  @required()
+  birth: Date;
 }
 
 export class GoogleMapLocation {
