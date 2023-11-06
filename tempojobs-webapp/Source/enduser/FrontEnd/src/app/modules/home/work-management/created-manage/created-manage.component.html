@@ -77,31 +77,29 @@
                           <nb-icon icon="unlock-outline"></nb-icon>
                         </div>
                       </div>
-                      <p>Chưa tìm được người làm việc</p>
                     </div>
                   </nb-card-body>
                 </nb-card>
               </td>
             </ng-container>
             <ng-container matColumnDef="candidate" stickyEnd>
-              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Ứng viên </th>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Ứng viên chờ duyệt </th>
               <td mat-cell *matCellDef="let element">
-                <ng-container *ngTemplateOutlet="templateTab2; context: {row: element}"></ng-container>
+                <ng-container *ngTemplateOutlet="templateTab2Candidate; context: {row: element, tab: 2}"></ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="candidateApproval" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Ứng viên đã duyệt </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab2CandidateApproval; context: {row: element, tab: 2}"></ng-container>
               </td>
             </ng-container>
             <ng-container matColumnDef="confirm" stickyEnd>
               <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Xác nhận </th>
               <td mat-cell *matCellDef="let element">
-                <button mat-button style="background-color: #14e530;" (click)="changeStatusToProcessing(element)">
+                <button mat-button style="background-color: #14e530;" (click)="changeWorkStatus(element, processingId, 2)">
                   Hoàn thành duyệt
                 </button>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef> Hành động </th>
-              <td mat-cell *matCellDef="let element">
-                <button *ngIf="element.workStatusId === 1" nbButton status="success">Hủy</button>
-                <button (click)="createPayment(element)" *ngIf="element.workStatusId === 6" nbButton status="success">Thanh toán</button>
               </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumnsTab2"></tr>
@@ -114,10 +112,94 @@
         </div>
       </nb-tab>
       <nb-tab tabTitle="3. Giao việc" badgeText="{{countTab3}}" badgeStatus="success" tabId="3">
-        <p>List of <strong>transactions</strong>.</p>
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                        <div style="color: white; ">
+                          {{handleDisplayStatus(element.workStatusId)}}
+                          <nb-icon icon="unlock-outline"></nb-icon>
+                        </div>
+                      </div>
+                      <p>Công việc này đang được thực hiện</p>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="candidateApproval" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Ứng viên thực hiện công việc </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab2CandidateApproval; context: {row: element, tab: 3}"></ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="confirm" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Xác nhận công việc hoàn thành </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-button style="background-color: #14e530;" (click)="changeWorkStatus(element, evaluationId, 3)">
+                  Hoàn thành công việc
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab3"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab3;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
       </nb-tab>
       <nb-tab tabTitle="4. Đánh giá" badgeText="{{countTab4}}" badgeStatus="success" tabId="4">
-        <p>List of <strong>notifications</strong>.</p>
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                        <div style="color: white; ">
+                          {{handleDisplayStatus(element.workStatusId)}}
+                          <nb-icon icon="unlock-outline"></nb-icon>
+                        </div>
+                      </div>
+                      <p>Công việc này đang chờ đánh giá ứng viên</p>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="candidateApproval" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Đánh giá ứng viên thực hiện công việc </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab2CandidateApproval; context: {row: element, tab: 4}"></ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="confirm" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Xác nhận đánh giá hoàn tất </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-button style="background-color: #14e530;" (click)="changeWorkStatus(element, doneId, 4)">
+                  Hoàn thành công việc
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab3"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab3;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
       </nb-tab>
     </nb-tabset>
 
@@ -155,20 +237,20 @@
   </mat-menu>
 </ng-template>
 
-<ng-template #templateTab2 let-row="row">
-  <!-- <button mat-button [matMenuTriggerFor]="matMenuTab2" style="background-color: #f58025;">
-    Danh sách ứng viên
-  </button>
-  <mat-menu #matMenuTab2="matMenu">
-    <ng-container *ngIf="row?.listTaskers?.length > 0; else notTasker">
-      <button mat-menu-item *ngFor="let tasker of row?.listTaskers" (click)="openMinimizedProfile(tasker)">
-        <span>{{tasker?.firstName}} {{tasker?.lastName}}</span>
-      </button>
-    </ng-container>
-  </mat-menu> -->
-  <ng-container *ngIf="row?.listTaskers?.length > 0; else notTasker">
-    <mat-list role="list" *ngFor="let tasker of row?.listTaskers" style="max-height: 120px; overflow: auto; margin-bottom: 30px;">
-      <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker)" style="cursor: pointer;">{{tasker?.firstName}} {{tasker?.lastName}}</mat-list-item>
+<ng-template #templateTab2Candidate let-row="row" let-tab="tab">
+  <ng-container *ngIf="row?.listTaskerWaitings?.length > 0; else notTasker">
+    <mat-list role="list" *ngFor="let tasker of row?.listTaskerWaitings" 
+      style="max-height: 120px; overflow: auto; margin-bottom: 30px;"
+      [ngClass]="{disabledNoOfCasesDiv: row?.listTaskerAccepted?.length >= row.quantity}">
+      <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker, row, tab)" style="cursor: pointer;">{{ tasker?.displayName }}</mat-list-item>
+    </mat-list>
+  </ng-container>
+</ng-template>
+
+<ng-template #templateTab2CandidateApproval let-row="row" let-tab="tab">
+  <ng-container *ngIf="row?.listTaskerAccepted?.length > 0; else notTasker">
+    <mat-list role="list" *ngFor="let tasker of row?.listTaskerAccepted" style="max-height: 120px; overflow: auto; margin-bottom: 30px;">
+      <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker, row, tab)" style="cursor: pointer;">{{ tasker?.displayName }}</mat-list-item>
     </mat-list>
   </ng-container>
 </ng-template>

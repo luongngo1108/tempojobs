@@ -10,5 +10,6 @@ router.route('/getAllUserDetail').get( userController.getAllUserDetail);
 router.route('/getUserDetailByUserId').get(userController.getUserDetailByUserId);
 router.route('/saveUserDetail').post(userController.saveUserDetail);
 router.route('/onDeletes').post(userController.onDeletes);
+router.route('/getUserById').get(userController.getUserById);
 
 export default router;

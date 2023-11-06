@@ -55,6 +55,24 @@ class userController {
         res.status(200).json(result);
     }
 
+    async getUserById(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const userId = req.query.id;
+            const user = await User.findOne({ _id: userId });
+            if(user) {
+                result.result = user;
+            } else {
+                result.message = "No user found";
+            }
+        }
+        catch(ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
     async saveUserDetail(req, res, next) {
         var result = new ReturnResult();
         try {

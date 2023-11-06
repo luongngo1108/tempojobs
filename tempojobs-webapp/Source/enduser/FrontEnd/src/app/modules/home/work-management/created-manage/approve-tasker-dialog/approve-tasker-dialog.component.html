@@ -8,41 +8,61 @@
                     class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
         <h4 style="margin-top: 35px; margin-right: 50px;">{{profile?.firstName + " " + profile?.lastName}}</h4>
       </div>
-
-      <div class="col-12" style="margin-top: 30px;">
+      <div class="col-12" style="text-align: center; align-items: center;">
         <p class="text-muted font-13 mb-3">
-          Content
+          Xem chi tiết thông tin
         </p>
       </div>
-
-      <div class="col-12" style="margin-top: 30px;">
-        <p class="text-muted font-13 mb-3">
-          <strong>Mô tả: </strong>
-          {{profile?.description || "No description"}}
-        </p>
-      </div>
-      <div class="col-12" style="height: fit-content">
-        <p class="text-muted mb-2 font-13"><strong>Số điện thoại: </strong><span class="ml-2">{{profile?.phone || "Không có"}}</span></p>
-      </div>
-      <div class="col-12" style="height: fit-content">
-        <ul class="social-list list-inline mt-3 mb-0">
-          <li class="list-inline-item">
-              <a target="_blank" [href]="profile?.facebook || 'javascript: void(0);'" [matTooltip]="profile?.facebook || 'No facebook account'"
-              class="social-list-item border-purple text-purple">
-              <i class="fab fa-facebook"></i></a>
-          </li>
-          <li class="list-inline-item">
-              <a target="_blank" [href]="profile?.instagram || 'javascript: void(0);'" [matTooltip]="profile?.instagram || 'No instagram account'" 
-              class="social-list-item border-danger text-danger">
-              <i class="fab fa-instagram"></i></a>
-          </li>
-      </ul>
-      </div>
+      <ng-container *ngIf="forTab === 2">
+        <div class="col-12" style="margin-top: 30px;">
+          <p class="text-muted font-13 mb-3">
+            {{ workApply?.content }}
+          </p>
+        </div>
+        <div class="col-12" style="margin-top: 30px;">
+          <p class="text-muted font-13 mb-3">
+            <strong>Mô tả: </strong>
+            {{profile?.description || "No description"}}
+          </p>
+        </div>
+        <div class="col-12" style="height: fit-content">
+          <p class="text-muted mb-2 font-13"><strong>Số điện thoại: </strong><span class="ml-2">{{profile?.phone || "Không có"}}</span></p>
+        </div>
+        <div class="col-12" style="height: fit-content">
+          <ul class="social-list list-inline mt-3 mb-0">
+            <li class="list-inline-item">
+                <a target="_blank" [href]="profile?.facebook || 'javascript: void(0);'" [matTooltip]="profile?.facebook || 'No facebook account'"
+                class="social-list-item border-purple text-purple">
+                <i class="fab fa-facebook"></i></a>
+            </li>
+            <li class="list-inline-item">
+                <a target="_blank" [href]="profile?.instagram || 'javascript: void(0);'" [matTooltip]="profile?.instagram || 'No instagram account'" 
+                class="social-list-item border-danger text-danger">
+                <i class="fab fa-instagram"></i></a>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="forTab === 4">
+        <div class="col-12" style="margin-top: 30px;">
+          <div [formGroup]="form" aria-labelledby="title">
+            <strong>Số sao: </strong>
+            <mat-slider [max]="5" [min]="0" [step]="0.5" [discrete]="true">
+              <input matSliderThumb [(ngModel)]="valueStar" formControlName="star">
+            </mat-slider>
+          </div>
+        </div>
+      </ng-container>
     </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Đóng</button>
-  <button mat-button color="warn" (click)="saveWorkApplyStatus(refuseId)">Từ chối</button>
-  <button mat-button color="primary" (click)="saveWorkApplyStatus(acceptedId)">Chấp nhận</button>
+  <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Đóng</button>
+  <ng-container *ngIf="forTab === 2">
+    <button mat-button color="warn" (click)="saveWorkApplyStatus(refuseId)">Từ chối</button>
+    <button mat-button color="primary" (click)="saveWorkApplyStatus(acceptedId)">Chấp nhận</button>
+  </ng-container>
+  <ng-container *ngIf="forTab === 4">
+    <button mat-button color="primary" (click)="saveWorkApplyStar()">Đánh giá</button>
+  </ng-container>
 </mat-dialog-actions>

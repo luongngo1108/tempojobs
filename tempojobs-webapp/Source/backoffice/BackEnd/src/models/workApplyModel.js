@@ -18,6 +18,9 @@ const WorkApply = new Schema({
     content: {
         type: String,
         default: null
+    },
+    star: {
+        type: Number,
     }
 });
 

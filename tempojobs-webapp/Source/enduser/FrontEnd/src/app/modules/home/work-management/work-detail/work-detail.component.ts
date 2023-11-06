@@ -45,7 +45,7 @@ export class WorkDetailComponent implements OnInit {
     var res = await lastValueFrom(this.workService.getWorkByWorkId(workId));
     if (res.result) {
       this.workModel = res.result;
-      var detailRes = await lastValueFrom(this.userService.getUserDetailByUserId(this.workModel.createdBy.id));
+      var detailRes = await lastValueFrom(this.userService.getUserDetailByUserId(this.workModel.createdBy._id));
       if (detailRes.result) this.userDetailModel = detailRes.result;
     }
   }

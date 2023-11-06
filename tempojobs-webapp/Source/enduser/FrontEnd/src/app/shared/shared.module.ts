@@ -42,6 +42,7 @@ import { MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule, MatDialogRef } from '@angu
 import { MatListModule } from '@angular/material/list';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { MatSliderModule } from '@angular/material/slider';
 
 const materialModules = [
   MatFormFieldModule,
@@ -64,6 +65,7 @@ const materialModules = [
   MatDialogModule,
   QuillModule,
   MatListModule,
+  MatSliderModule,
 ];
 
 const nebularModules = [
