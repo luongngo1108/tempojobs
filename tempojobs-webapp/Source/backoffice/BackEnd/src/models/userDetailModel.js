@@ -36,7 +36,18 @@ const UserDetail = new Schema ({
     instagram: {
         type: String,
         default: ""
-    } 
+    },
+    sex: {
+        type: String,
+        default: "Khác  "
+    },
+    birth: {
+        type: Date,
+        default: null
+    },
+    role: {
+        type: String,
+    }
 }, {
     timestamps: true,
 });

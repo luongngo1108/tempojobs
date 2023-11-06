@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
           name: 'email',
           baseEndpoint: environment.apiAuth,
           login: {
-            endpoint: '/login',
+            endpoint: '/login/User',
             requireValidToken: true,
             redirect: {
               success: '/',

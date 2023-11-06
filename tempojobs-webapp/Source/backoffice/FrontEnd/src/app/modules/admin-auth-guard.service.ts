@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, RouterStateSnapshot, Router } from '@angular/router';
-import { NbAuthService } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { NbToastrService } from '@nebular/theme'
-import { tap } from 'rxjs';
+import { tap, takeLast } from 'rxjs';
 
 export const AdminAuthGuardService: CanActivateFn = (
     route: ActivatedRouteSnapshot,
@@ -20,7 +20,7 @@ export const AdminAuthGuardService: CanActivateFn = (
                     }).then(() => {
                         toast.warning("You need to login!", "Warning");
                     });
-                } 
+                }
                 return;
             })
         );

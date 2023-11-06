@@ -18,6 +18,7 @@ export const AuthAuthGuardService: CanActivateFn = (
         .pipe(
             map(authenticated => {
                 if (authenticated) {
+                    console.log('heree')
                     router.navigate([``], {
                         // queryParams: { returnUrl: state.url }
                     }).then(() => {
