@@ -74,6 +74,7 @@ export class AppyWorkComponent implements OnInit, OnDestroy {
   }
 
   onApplyForWork() {
+    this.workApplyModel.userId = this.user.user.id;
     this.workService.applyForWork(this.workApplyModel, this.user.user.id).subscribe(res => {
       if(res.result) this.dialogRef.close(true);
     })

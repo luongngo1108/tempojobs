@@ -26,6 +26,7 @@ import { MessageService } from 'primeng/api';
 export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumnsTab1: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
   displayedColumnsTab2: string[] = ['workName', 'candidate', 'candidateApproval', 'confirm'];
+  displayedColumnsTab3: string[] = ['workName', 'candidateApproval', 'confirm'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -38,6 +39,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   approvedId: number;
   refuseApprovalId: number;
   processingId: number;
+  evaluationId: number;
+  doneId: number;
   currentUser;
   countTab1: number;
   countTab2: number;
@@ -101,6 +104,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.approvedId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đã duyệt').dataStateId;
       this.refuseApprovalId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt').dataStateId;
       this.processingId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang thực hiện')?.dataStateId;
+      this.evaluationId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Chờ đánh giá')?.dataStateId;
+      this.doneId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Hoàn thành')?.dataStateId;
     }
     var resultType = await this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).toPromise();
     if (resultType.result) {
@@ -126,10 +131,26 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     const filterTab1 = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
     if (filterTab1.length > 0) {
       this.countTab1 = filterTab1.length;
+    } else {
+      this.countTab1 = null;
     }
     const filterTab2 = this.listWork.filter(work => work.workStatusId === this.approvedId);
     if (filterTab2.length > 0) {
       this.countTab2 = filterTab2.length;
+    } else {
+      this.countTab2 = null;
+    }
+    const filterTab3 = this.listWork.filter(work => work.workStatusId === this.processingId);
+    if (filterTab3.length > 0) {
+      this.countTab3 = filterTab3.length;
+    } else {
+      this.countTab3 = null;
+    }
+    const filterTab4 = this.listWork.filter(work => work.workStatusId === this.evaluationId);
+    if (filterTab4.length > 0) {
+      this.countTab4 = filterTab4.length;
+    } else {
+      this.countTab4 = null;
     }
   }
 
@@ -178,8 +199,37 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         break;
       case 3:
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.processingId);
+        this.listWorkShow.map(work => {
+          if (work.workApply && work.workApply.length > 0) {
+            work.listTaskerAccepted = [];
+            work.workApply.map(async workApplyId => {
+              var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
+              if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerAccepted.push(resp.result);
+                }
+              }
+            })
+          }
+        });
         break;
       case 4:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.evaluationId);
+        this.listWorkShow.map(work => {
+          if (work.workApply && work.workApply.length > 0) {
+            work.listTaskerAccepted = [];
+            work.workApply.map(async workApplyId => {
+              var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
+              if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerAccepted.push(resp.result);
+                }
+              }
+            })
+          }
+        });
         break;
     }
   }
@@ -215,8 +265,37 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         break;
       case 3:
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.processingId);
+        this.listWorkShow.map(work => {
+          if (work.workApply && work.workApply.length > 0) {
+            work.listTaskerAccepted = [];
+            work.workApply.map(async workApplyId => {
+              var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
+              if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerAccepted.push(resp.result);
+                }
+              }
+            })
+          }
+        });
         break;
       case 4:
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.evaluationId);
+        this.listWorkShow.map(work => {
+          if (work.workApply && work.workApply.length > 0) {
+            work.listTaskerAccepted = [];
+            work.workApply.map(async workApplyId => {
+              var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
+              if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerAccepted.push(resp.result);
+                }
+              }
+            })
+          }
+        });
         break;
     }
   }
@@ -308,17 +387,17 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     });
   }
 
-  changeStatusToProcessing(work: WorkModel) {
+  changeWorkStatus(work: WorkModel, status: number, tab: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
       data: {
-        message: "Xác nhận duyệt người làm việc hoàn thành?"
+        message: "Xác nhận công việc đã hoàn thành?"
       }
     });
 
     dialogRef.afterClosed().subscribe(response => {
       if (response) {
         if (work) {
-          work.workStatusId = this.processingId;
+          work.workStatusId = status;
           this.workService.saveWork(work).subscribe(resp => {
             if (resp.result) {
               this.messageService.clear();
@@ -335,21 +414,22 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
             }
           }).add(async () => {
             await this.refreshData();
-            this.changeTabWithNumber(2);
+            this.changeTabWithNumber(tab);
           })
         }
       }
     });
   }
 
-  openMinimizedProfile(user: User, work: WorkModel) {
+  openMinimizedProfile(user: User, work: WorkModel, tab: number) {
     let dialogRef = this.dialog.open(ApproveTaskerDialogComponent, {
       disableClose: false,
       width: '500px',
       autoFocus: false,
       data: {
         user: user,
-        work: work
+        work: work,
+        tab: tab
       }
     });
 

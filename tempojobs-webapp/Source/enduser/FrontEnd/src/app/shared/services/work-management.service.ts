@@ -52,7 +52,7 @@ export class WorkManagementService {
     return this.http.get<ReturnResult<WorkApply>>(`${this.baseUrl}/getWorkApplyByWorkIdAndUserId?workId=${workId}&userId=${userId}`);
   }
 
-  changeStatusWorkApply(model: WorkApply): Observable<ReturnResult<WorkApply>> {
-    return this.http.post<ReturnResult<WorkApply>>(`${this.baseUrl}/changeStatusWorkApply`, model);
+  saveWorkApply(model: WorkApply): Observable<ReturnResult<WorkApply>> {
+    return this.http.post<ReturnResult<WorkApply>>(`${this.baseUrl}/saveWorkApply`, model);
   }
 }

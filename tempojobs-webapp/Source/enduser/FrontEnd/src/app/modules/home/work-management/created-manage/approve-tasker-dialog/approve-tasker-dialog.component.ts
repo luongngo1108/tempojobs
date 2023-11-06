@@ -7,6 +7,8 @@ import { WorkModel } from 'src/app/shared/models/work.model';
 import { WorkApply } from '../../work-detail/appy-work/work-appy.model';
 import { UserManagementService } from '../../../profile/user-management.service';
 import { NbToastrService } from '@nebular/theme';
+import { FormControl, FormGroup } from '@angular/forms';
+import { RxFormBuilder } from '@rxweb/reactive-form-validators';
 
 @Component({
   selector: 'app-approve-tasker-dialog',
@@ -17,10 +19,14 @@ export class ApproveTaskerDialogComponent implements OnInit {
 
   user: User;
   profile: ProfileDetail;
+  forTab: number;
   work: WorkModel;
   workApply: WorkApply;
   acceptedId: number;
   refuseId: number;
+  evaluatedId: number;
+  form: FormGroup;
+  valueStar = 0;
 
   constructor(
     private dataStateService: DataStateManagementService,
@@ -29,11 +35,16 @@ export class ApproveTaskerDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef : MatDialogRef<ApproveTaskerDialogComponent>,
     private toast: NbToastrService,
+    private formBuilder: RxFormBuilder,
   ) {
     this.user = data.user ?? new User();
     this.work = data.work ?? new WorkModel();
+    this.forTab = data.tab ?? 0;
   }
   async ngOnInit() {
+    this.form = new FormGroup({
+      star: new FormControl()
+    })
     var respProfile = await this.userService.getUserDetailByUserId(this.user._id).toPromise();
     if (respProfile.result) {
       this.profile = respProfile.result;
@@ -50,6 +61,10 @@ export class ApproveTaskerDialogComponent implements OnInit {
     if (respRefuse.result) {
       this.refuseId = respRefuse.result.dataStateId;
     }
+    var respEvaluated = await this.dataStateService.getDataStateByTypeAndName('WORK_APPLY_STATUS', 'Đã đánh giá').toPromise();
+    if (respEvaluated.result) {
+      this.evaluatedId = respEvaluated.result.dataStateId;
+    }
   }
 
   closeDialog(data: boolean = false) {
@@ -58,7 +73,21 @@ export class ApproveTaskerDialogComponent implements OnInit {
 
   saveWorkApplyStatus(status: number) {
     this.workApply.status = status;
-    this.workService.changeStatusWorkApply(this.workApply).subscribe(resp => {
+    this.workService.saveWorkApply(this.workApply).subscribe(resp => {
+      if (resp.result) {
+        this.toast.success(`Xác nhận thành công`);
+        this.closeDialog(true);
+      } else {
+        this.toast.success(`Xác nhận thất bại`);
+        this.closeDialog();
+      }
+    });
+  }
+
+  saveWorkApplyStar() {
+    this.workApply.star = this.form.get('star').value;
+    this.workApply.status = this.evaluatedId;
+    this.workService.saveWorkApply(this.workApply).subscribe(resp => {
       if (resp.result) {
         this.toast.success(`Xác nhận thành công`);
         this.closeDialog(true);

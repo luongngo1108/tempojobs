@@ -42,3 +42,8 @@
     text-align: center;
     font-weight: bold;
 }
+
+.disabledNoOfCasesDiv { 
+    pointer-events: none; 
+    opacity: 2.0;
+}

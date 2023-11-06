@@ -278,7 +278,7 @@ class WorkController {
         res.status(200).json(result);
     }
 
-    async changeStatusWorkApply(req, res, next) {
+    async saveWorkApply(req, res, next) {
         var result = new ReturnResult();
         try {
             const workApply = req.body;

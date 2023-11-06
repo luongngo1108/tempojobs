@@ -7,4 +7,6 @@ export class WorkApply{
     status: number;
     @prop()
     content: string;
+    @prop()
+    star: number;
 }
