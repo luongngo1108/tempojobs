@@ -1,0 +1,7 @@
+<div class="base-container">
+    <app-toolbar (onRefresh)="refreshData($event)" (onDeletes)="onClickDeletes($event)" [selectedCout]="ngxTable?.selected.length"
+    [addEditComponent]="addEditComponent" (addEvent)="successEventAdd($event)"></app-toolbar>
+    <mat-divider></mat-divider>
+    <app-ngx-table #ngxTableUser [columnsTable]="columns" (onRefresh)="refreshData($event)"
+    [addEditComponent]="addEditComponent" (editEvent)="successEventEdit($event)" (onDelete)="onClickDelete($event)"></app-ngx-table>
+</div>

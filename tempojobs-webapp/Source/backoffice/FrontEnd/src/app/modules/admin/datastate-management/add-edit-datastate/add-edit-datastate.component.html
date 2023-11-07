@@ -1,0 +1,55 @@
+<div class="d-flex flex-wrap" mat-dialog-title
+    style="margin: unset; padding: 1px 10px 1px 28px; justify-content: center; align-items: center;">
+    <button nbButton status="success" (click)="saveData()" [disabled]="!form.valid" style="margin: 10px 0px 5px 0px;">
+        <nb-icon icon="save-outline"></nb-icon>Lưu
+    </button>
+    <button nbButton ghost (click)="closeDialog()" class="ml-auto">
+        <nb-icon icon="close-outline"></nb-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<p-toast position="bottom-right" key="toast1"></p-toast>
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
+            Data States</h5>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-control-group">
+                    <label class="label" for="dataStateName">Name</label>
+                    <input style="width: 100% !important; max-width: 100% !important;" nbInput formControlName="dataStateName" type="text" class="form-control" id="dataStateName"
+                        placeholder="Enter Name">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.dataStateName.errors && (form.controls.dataStateName.dirty || form.controls.dataStateName.touched)">
+                        {{form.controls.dataStateName['errorMessage']}}</small>
+                </div>
+            </div>
+        </div> <!-- end row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="form-control-group">
+                    <label class="label" for="type">Type</label>
+                    <input style="width: 100% !important; max-width: 100% !important;" nbInput formControlName="type" type="text" class="form-control" id="type"
+                        placeholder="Enter Type">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.type.errors && (form.controls.type.dirty || form.controls.type.touched)">
+                        {{form.controls.type['errorMessage']}}</small>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-12">
+                <label class="label" for="colorCode">Color code</label>
+                    <input [(colorPicker)]="form.value.colorCode" [style.background]="form.value.colorCode" style="width: 100% !important; max-width: 100% !important;color: transparent"
+                     nbInput (colorPickerChange)="form.value.colorCode=$event"  type="text" class="form-control" id="colorCode">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.colorCode.errors && (form.controls.colorCode.dirty || form.controls.colorCode.touched)">
+                        {{form.controls.colorCode['errorMessage']}}</small>
+                
+            </div>
+        </div> <!-- end row -->
+
+        
+    </form>
+</mat-dialog-content>

@@ -17,5 +17,9 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/admin/user',
     home: true,
   },
-  
+  {
+    title: 'DataState',
+    icon: 'bookmark-outline',
+    link: '/admin/datastate',
+  },
 ];

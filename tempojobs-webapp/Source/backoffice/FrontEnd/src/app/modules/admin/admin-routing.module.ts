@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
+import { DatastateManagementComponent } from './datastate-management/datastate-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
 
 const routes: Routes = [{
@@ -10,6 +11,10 @@ const routes: Routes = [{
     {
       path: 'user',
       component: UserManagementComponent,
+    },
+    {
+      path: 'datastate',
+      component: DatastateManagementComponent,
     },
     {
       path: '',

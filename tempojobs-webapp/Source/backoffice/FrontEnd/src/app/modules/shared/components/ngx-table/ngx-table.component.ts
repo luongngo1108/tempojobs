@@ -14,6 +14,8 @@ import { Filter } from './filter.model';
 export class NgxTableComponent implements OnInit {
   @ViewChild('columnAction', { static: true }) columnAction: TemplateRef<any>;
   @ViewChild('headerFilter', { static: true }) headerFilter: TemplateRef<any>;
+  @ViewChild('dateCell', { static: true }) dateCell: TemplateRef<any>;
+  @ViewChild('colorCodeCell', { static: true }) colorCodeCell: TemplateRef<any>;
   @ViewChild(DatatableComponent) table: DatatableComponent;
   @Input() actionWidth = 70;
   @Output() onRefresh = new EventEmitter<any>();
@@ -53,7 +55,7 @@ export class NgxTableComponent implements OnInit {
     this.actionColumn.push({
       maxWidth: this.actionWidth,
       name: '',
-      prop: 'actionNgxTable', // old name = 'id' => change to new name actionNgxTable
+      prop: 'id',
       sortable: false,
       cellTemplate: this.columnAction,
       headerClass: 'text-center remove-padding',
@@ -61,10 +63,18 @@ export class NgxTableComponent implements OnInit {
       frozenLeft: true,
     });
     this.columns = this.columns.concat(this.actionColumn);
+    var lstDatePipe = ['birth', 'createdAt','updatedAt'];
     if (this.columnsTable && this.columnsTable.length > 0) {
       this.columnsTable.forEach((column: any, index) => {
         if (!column.headerTemplate) {
           column.headerTemplate = this.headerFilter;
+        }
+        if(lstDatePipe.includes(column.prop)) {
+          column.cellTemplate = this.dateCell;
+        }
+        if(column.prop === 'colorCode') {
+          column.cellTemplate = this.colorCodeCell;
+          column.cellClass = 'text-center remove-padding';
         }
       })
     }
@@ -83,16 +93,16 @@ export class NgxTableComponent implements OnInit {
       this.rows = result.data;
       this.rawData = result.data;
       this.listFilter = [];
-      if (!result.data) this.table.offset = Number.POSITIVE_INFINITY;
-      setTimeout(() => {
-        if (this.selected && this.selected.length > 0) {
-          const compareEqual = this.rows.filter(x => this.selected.map(y => JSON.stringify(y)).includes(JSON.stringify(x)));
-          if (compareEqual && compareEqual.length > 0) {
-            const compareDifferent = this.selected.filter(x => !compareEqual.map(y => JSON.stringify(y)).includes(JSON.stringify(x)));
-            this.selected = [...compareEqual, ...compareDifferent];
-          }
-        }
-      }, 1);
+      // if (!result.data) this.table.offset = Number.POSITIVE_INFINITY;
+      // setTimeout(() => {
+      //   if (this.selected && this.selected.length > 0) {
+      //     const compareEqual = this.rows.filter(x => this.selected.map(y => JSON.stringify(y)).includes(JSON.stringify(x)));
+      //     if (compareEqual && compareEqual.length > 0) {
+      //       const compareDifferent = this.selected.filter(x => !compareEqual.map(y => JSON.stringify(y)).includes(JSON.stringify(x)));
+      //       this.selected = [...compareEqual, ...compareDifferent];
+      //     }
+      //   }
+      // }, 1);
     }
   }
   onClickEdit(row, rowIndex) {

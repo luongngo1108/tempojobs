@@ -9,7 +9,7 @@ const Counter = new Schema({
     },
     lastValue: {
         type: Number,
-        required: true,
+        default: 0
     }
 });
 

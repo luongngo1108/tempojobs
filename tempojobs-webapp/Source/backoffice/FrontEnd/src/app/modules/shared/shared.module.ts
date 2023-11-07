@@ -43,6 +43,7 @@ import { ConfirmModalComponent } from './components/confirm-modal/confirm-modal.
 import { NgxTableComponent } from './components/ngx-table/ngx-table.component';
 import { MatTableComponent } from './components/mat-table/mat-table.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { ColorPickerModule } from 'ngx-color-picker';
 
 const materialModules = [
   MatFormFieldModule,
@@ -90,6 +91,7 @@ const angularModules = [
   RxReactiveFormsModule,
   HttpClientModule,
   FlexLayoutModule,
+  ColorPickerModule
 ];
 
 @NgModule({
@@ -141,7 +143,7 @@ const angularModules = [
     DatePipePipe,
     NgxTableComponent,
     MatTableComponent,
-    ToolbarComponent
+    ToolbarComponent,
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
