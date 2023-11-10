@@ -12,4 +12,13 @@ export const environment = {
     apiDataStateManagement: apiUrl + '/dataState',
     apiPayment: apiUrl + '/payment',
     apiReport: apiUrl + '/report',
+    firebaseConfig: {
+        apiKey: "AIzaSyAXH_vK2MTTNdigQsi1PvhPyl5pu5-Y9Ek",
+        authDomain: "tempojob2nd.firebaseapp.com",
+        projectId: "tempojob2nd",
+        storageBucket: "tempojob2nd.appspot.com",
+        messagingSenderId: "696657954225",
+        appId: "1:696657954225:web:0c37a1fe57566b088ea990",
+        measurementId: "G-PGL3CLZ03G"
+    }
 }

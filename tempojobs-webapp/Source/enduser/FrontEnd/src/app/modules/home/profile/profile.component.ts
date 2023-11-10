@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, ViewChild, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, ViewChild, ElementRef, NgZone, inject } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
-import { Subject, takeUntil, lastValueFrom } from 'rxjs';
+import { Subject, takeUntil, lastValueFrom, Observable } from 'rxjs';
 import { ProfileDetail } from './user.model';
 import { UserManagementService } from './user-management.service';
 import { GoogleMap } from '@angular/google-maps';
 import { NbToast, NbToastrService } from '@nebular/theme';
 import { MessageService } from 'primeng/api';
+import { Storage, getDownloadURL, uploadBytesResumable, uploadString } from "@angular/fire/storage";
+import { ref, uploadBytes } from 'firebase/storage';
 
 @Component({
   selector: 'app-profile',
@@ -17,6 +19,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$: Subject<void> = new Subject<void>();
   user: any = {};
   userDetail: ProfileDetail;
+  title = "cloudsSorage";
+  selectedFile: File = null;
 
   // Google map start
   @ViewChild('search')
@@ -48,7 +52,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     private userService: UserManagementService,
     private ngZone: NgZone,
     private cdref: ChangeDetectorRef,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private storage: Storage = inject(Storage)
   ) {
   }
   isEditProfile: boolean = false;
@@ -204,5 +209,38 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   updateProfileDetail(newProfileDetail: ProfileDetail) {
     this.userDetail = newProfileDetail;
     this.userService._currentUserDetail.next(this.userDetail);
+  }
+
+  async updateImage(event) {
+    const file = event.target.files[0];
+    if(file) {
+      var n = Date.now();
+      const filePath = `UserImages/${file.name}`;
+      var storageRef = ref(this.storage,filePath )
+      const uploadTask = await uploadBytesResumable(storageRef, file);
+      const downloadURL = await getDownloadURL(uploadTask.ref);
+      this.userDetail.avatarUrl = downloadURL;
+      this.userService.saveProfileDetail(this.userDetail).subscribe(res => {
+        if (res.result) {
+          this.messageService.clear();
+          this.messageService.add({
+            key: 'toast1', severity: 'success', summary: 'Thành công',
+            detail: `Đổi ảnh đại diện thành công!`, life: 2000
+          });
+        }
+        else {
+          this.messageService.clear();
+          this.messageService.add({
+            key: 'toast1', severity: 'warn', summary: 'Lỗi',
+            detail: `Có lỗi xảy ra!`, life: 2000
+          });
+        }
+      })
+    }
+    else {
+      this.messageService.clear();
+            this.messageService.add({key: 'toast1', severity: 'error', summary: 'Lỗi', 
+              detail: `Ảnh không hợp lệ.`, life: 2000  });
+    }
   }
 }

@@ -146,7 +146,7 @@ const angularModules = [
     },
     {
       provide: MessageService
-    }
+    },
   ]
 })
 export class SharedModule { }
