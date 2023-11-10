@@ -84,6 +84,9 @@ export class ProfileDetail {
   @prop()
   @required()
   birth: Date;
+
+  @prop()
+  avatarUrl: String;
 }
 
 export class GoogleMapLocation {

@@ -47,6 +47,9 @@ const UserDetail = new Schema ({
     },
     role: {
         type: String,
+    },
+    avatarUrl: {
+        type: String,
     }
 }, {
     timestamps: true,

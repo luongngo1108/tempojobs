@@ -131,7 +131,7 @@
       <nb-actions size="small">
         <nb-action class="user-action">
           <nb-user size="medium" [name]="userDetail?.firstName + ' ' + userDetail?.lastName" 
-          [onlyPicture]="userPictureOnly" [nbContextMenu]="userMenu"></nb-user>
+          [onlyPicture]="userPictureOnly" [nbContextMenu]="userMenu"  [picture]="userDetail?.avatarUrl"></nb-user>
         </nb-action>
       </nb-actions>
     </div>

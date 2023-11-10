@@ -8,8 +8,10 @@
         <p-toast position="bottom-right" key="toast1"></p-toast>
         <div class="col-lg-4 col-xl-4">
             <div class="card-box text-center">
-                <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
+                <img style="cursor: pointer;" [src]="userDetail?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"  (click)="selectImage.click()"
+                    class="rounded-circle avatar-xl img-thumbnail" alt="profile-image" matTooltip="Nhấn vào đây để sửa ảnh đại diện">
+
+                <input type="file" (change)="updateImage($event)" accept='image/*' style="display: none" #selectImage />
 
                 <h4 class="mb-0" style="margin-bottom: 10px !important;">{{userDetail?.firstName + " " +
                     userDetail?.lastName}}</h4>
@@ -19,6 +21,7 @@
                 <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light m-l-button">Message</button> -->
 
                 <div class="text-left mt-3">
+
                     <h4 class="font-13 text-uppercase">Mô tả : </h4>
                     <p class="text-muted font-13 mb-3">
                         {{userDetail?.description || "No description"}}

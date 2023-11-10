@@ -27,3 +27,12 @@
 <ng-template #headerFilter let-column="column">
     <input style="width:100%;" nbInput type="text" [placeholder]="column.name" (keyup)="updateFilter($event, column)" />
 </ng-template>
+
+<ng-template #dateCell let-column="column" let-row="row">
+    <p>{{row[column.prop] | datePipe}}</p>
+</ng-template>
+
+<ng-template #colorCodeCell let-column="column" let-row="row">
+    <input [(colorPicker)]="row[column.prop]" [style.background]="row[column.prop]"
+        style="width: 80% !important; max-width: 80% !important;color: transparent" nbInput>
+</ng-template>
