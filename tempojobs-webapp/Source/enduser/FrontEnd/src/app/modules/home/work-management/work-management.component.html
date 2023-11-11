@@ -65,7 +65,11 @@
           <nb-card class="cardContext">
             <nb-card-header class="work-header">
               <div class="row">
-                <span (click)="openWorkDetail(work)" style="color: rgb(0, 102, 255); cursor: pointer;">{{work?.workName}}</span>
+                <span (click)="openWorkDetail(work)" style="color: rgb(0, 102, 255); cursor: pointer;">
+                  {{work?.workName}}
+                </span>
+                <nb-icon icon="bookmark-outline" style="color: black; margin-left: 360px; cursor: pointer;" 
+                    (click)="saveWorkInToStore(work)"></nb-icon>
                 <span>
                   <nb-icon icon="star-outline"></nb-icon>
                   <nb-icon icon="star-outline"></nb-icon>

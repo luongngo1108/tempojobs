@@ -36,7 +36,7 @@ export class WorkManagementService {
     return this.http.delete<ReturnResult<boolean>>(`${this.baseUrl}/${id}`);
   }
 
-  getWorkByWorkId(workId: string): Observable<ReturnResult<WorkModel>> {
+  getWorkByWorkId(workId: number): Observable<ReturnResult<WorkModel>> {
     return this.http.get<ReturnResult<WorkModel>>(`${this.baseUrl}/getWorkByWorkId/${workId}`);
   }
 
@@ -54,5 +54,13 @@ export class WorkManagementService {
 
   saveWorkApply(model: WorkApply): Observable<ReturnResult<WorkApply>> {
     return this.http.post<ReturnResult<WorkApply>>(`${this.baseUrl}/saveWorkApply`, model);
+  }
+
+  deleteWorkApply(model: WorkApply): Observable<ReturnResult<WorkApply>> {
+    return this.http.post<ReturnResult<WorkApply>>(`${this.baseUrl}/deleteWorkApply`, model);
+  }
+
+  getAllWorkApplyByUserId(userId: string): Observable<ReturnResult<WorkApply[]>> {
+    return this.http.get<ReturnResult<WorkApply[]>>(`${this.baseUrl}/getAllWorkApplyByUserId/${userId}`);
   }
 }

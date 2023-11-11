@@ -1,0 +1,239 @@
+<p-toast position="bottom-right" key="toast1"></p-toast>
+<nb-card class="custom-card">
+  <nb-card-body>
+    <nb-button-group size="large" class="custom-button-group">
+      <button nbButtonToggle pressed>Việc nhận làm</button>
+    </nb-button-group>
+    <nb-tabset fullWidth class="custom-tabset" (changeTab)="changeTab($event)">
+      <nb-tab tabTitle="1. Việc đã lưu" badgeText="{{countTab1}}" badgeStatus="success" tabId="1">
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element?.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element?.workId}}] {{element?.workName}}</strong></p>
+                      <p>Khách hàng: <span style="color: #1996d7;">{{element?.createdBy?.displayName}}</span></p>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="totalProfile">
+              <th mat-header-cell *matHeaderCellDef> Tổng hồ sơ </th>
+              <td mat-cell *matCellDef="let element"> {{element?.workApply?.length}}/{{element?.quantity}} </td>
+            </ng-container>
+            <ng-container matColumnDef="timeLine">
+              <th mat-header-cell *matHeaderCellDef> Hạn nhận hồ sơ </th>
+              <td mat-cell *matCellDef="let element"> {{element?.timeLine}} </td>
+            </ng-container>
+            <ng-container matColumnDef="workStatusName">
+              <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+              <td mat-cell *matCellDef="let element"> {{handleDisplayStatus(element?.workStatusId)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="moreAction" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab1; context: {row: element}"></ng-container>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab1"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab1;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="2. Gửi hồ sơ" badgeText="{{countTab2}}" badgeStatus="success" tabId="2">
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                        <div style="color: white; ">
+                          {{handleDisplayStatus(element.workStatusId)}}
+                          <nb-icon icon="unlock-outline"></nb-icon>
+                        </div>
+                      </div>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="workApplyStatus">
+              <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+              <td mat-cell *matCellDef="let element"> {{handleDisplayStatusApply(element)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="moreAction" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-button style="background-color: #d30000;" (click)="unSaveWork(element, true)">
+                  Hủy nhận công việc
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab2"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab2;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="3. Nhận việc" badgeText="{{countTab3}}" badgeStatus="success" tabId="3">
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                        <div style="color: white; ">
+                          {{handleDisplayStatus(element.workStatusId)}}
+                          <nb-icon icon="unlock-outline"></nb-icon>
+                        </div>
+                      </div>
+                      <p>Công việc này đang được thực hiện</p>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="workTime" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Thời gian làm việc </th>
+              <td mat-cell *matCellDef="let element"> {{element?.startDate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="candidateApproval" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Ứng viên thực hiện công việc </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab2CandidateApproval; context: {row: element, tab: 3}"></ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="workProfit" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Số tiền nhận </th>
+              <td mat-cell *matCellDef="let element"> {{element?.workProfit}} </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab3"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab3;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="4. Đánh giá" badgeText="{{countTab4}}" badgeStatus="success" tabId="4">
+        <div class="mat-elevation-z8" *ngIf="listWorkShow.length > 0; else skeleton">
+          <table mat-table [dataSource]="listWorkShow" class="mat-elevation-z8 demo-table">
+            <ng-container matColumnDef="workName">
+              <th mat-header-cell *matHeaderCellDef> Tên việc </th>
+              <td mat-cell *matCellDef="let element">
+                <nb-card accent="{{handleDisplayStatus(element.workStatusId, true)}}" style="max-width: 500px;">
+                  <nb-card-body>
+                    <div class="row">
+                      <p><strong>[{{element.workId}}] {{element.workName}}</strong></p>
+                      <div class="badge badge-pill" [style.background-color]="handleDisplayStatus(element.workStatusId, true)" style="max-width: 200px; text-align: center;">
+                        <div style="color: white; ">
+                          {{handleDisplayStatus(element.workStatusId)}}
+                          <nb-icon icon="unlock-outline"></nb-icon>
+                        </div>
+                      </div>
+                      <p>Công việc này đang chờ đánh giá ứng viên</p>
+                    </div>
+                  </nb-card-body>
+                </nb-card>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="candidateApproval" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Đánh giá ứng viên thực hiện công việc </th>
+              <td mat-cell *matCellDef="let element">
+                <ng-container *ngTemplateOutlet="templateTab2CandidateApproval; context: {row: element, tab: 4}"></ng-container>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="confirm" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Xác nhận đánh giá hoàn tất </th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-button style="background-color: #14e530;" (click)="changeWorkStatus(element, doneId, 4)">
+                  Hoàn thành công việc
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsTab3"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsTab3;"></tr>
+          </table>
+          <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                         showFirstLastButtons
+                         aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </nb-tab>
+    </nb-tabset>
+
+  </nb-card-body>
+</nb-card>
+
+<ng-template #skeleton>
+  <div class="container px-5">
+    <div class="row gx-5 justify-content-center">
+      <div class="col-xxl-8">
+        <div class="text-center my-5">
+          <h2 class="display-5"><span>Chưa có việc nào được lưu</span></h2>
+          <p>Có hàng trăm công việc mới mỗi ngày.</p>
+          <p>Được khách hàng đăng lên và chờ bạn ứng tuyển.</p>
+          <a class="btn" style="background-color: #1996d7 ; color: white;" href="work-list" role="button">Tìm việc ngay thôi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateTab1 let-row="row">
+  <button mat-button [matMenuTriggerFor]="matMenuTab1" aria-label="Example icon-button with a menu">
+    Gửi hồ sơ
+  </button>
+  <mat-menu #matMenuTab1="matMenu">
+    <button mat-menu-item (click)="openApplyForWorkDialog(row)">
+      <mat-icon style="color: #3366ff;">send</mat-icon>
+      <span>Gửi hồ sơ ứng tuyển</span>
+    </button>
+    <button mat-menu-item (click)="unSaveWork(row)">
+      <mat-icon style="color: red;">bookmark</mat-icon>
+      <span>Bỏ lưu</span>
+    </button>
+  </mat-menu>
+</ng-template>
+
+<ng-template #templateTab2Candidate let-row="row" let-tab="tab">
+  <ng-container *ngIf="row?.listTaskerWaitings?.length > 0; else notTasker">
+    <mat-list role="list" *ngFor="let tasker of row?.listTaskerWaitings" 
+      style="max-height: 120px; overflow: auto; margin-bottom: 30px;"
+      [ngClass]="{disabledNoOfCasesDiv: row?.listTaskerAccepted?.length >= row.quantity}">
+      <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker, row, tab)" style="cursor: pointer;">{{ tasker?.displayName }}</mat-list-item>
+    </mat-list>
+  </ng-container>
+</ng-template>
+
+<ng-template #templateTab2CandidateApproval let-row="row" let-tab="tab">
+  <ng-container *ngIf="row?.listTaskerAccepted?.length > 0; else notTasker">
+    <mat-list role="list" *ngFor="let tasker of row?.listTaskerAccepted" style="max-height: 120px; overflow: auto; margin-bottom: 30px;">
+      <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker, row, tab)" style="cursor: pointer;">{{ tasker?.displayName }}</mat-list-item>
+    </mat-list>
+  </ng-container>
+</ng-template>
+
+<ng-template #notTasker>
+  <span>Chưa có ứng viên</span>
+</ng-template>

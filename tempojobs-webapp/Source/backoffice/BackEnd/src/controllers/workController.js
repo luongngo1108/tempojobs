@@ -188,6 +188,7 @@ class WorkController {
         }
         res.status(200).json(result);
     }
+
     async getWorkByWorkId(req, res, next) {
         var result = new ReturnResult();
         try {
@@ -292,6 +293,51 @@ class WorkController {
             }
         }
         catch(error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
+    async deleteWorkApply(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const workApply = req.body;
+            if(workApply) {
+                const deleteApplied = await WorkApply.deleteOne({ _id: workApply._id });
+                const deleteWorkApplyInWork = await Work.updateOne(
+                    { workId: workApply.workId },
+                    { $pull: { workApply: workApply._id } }
+                );
+                if(deleteApplied.deletedCount > 0) {
+                    result.result = true;
+                } else {
+                    result.message = "Work applied doesn't exist";
+                }
+            }
+        }
+        catch(error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
+    async getAllWorkApplyByUserId(req, res, next) {
+        try {
+            var result = new ReturnResult();
+            const userId = req.params.userId;
+            if (!userId) {
+                result.message = "userId is required";
+                return;
+            }
+            const listWork = await WorkApply.find({
+                userId: userId
+            });
+            if (listWork) {
+                result.result = listWork;
+            } else {
+                result.message = "Error get WorkApply by userId: " + userId;
+            }
+        } catch (error) {
             next(error);
         }
         res.status(200).json(result);

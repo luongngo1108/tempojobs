@@ -7,6 +7,7 @@ import { WorkManagementComponent } from './work-management/work-management.compo
 import { CreatedManageComponent } from './work-management/created-manage/created-manage.component';
 import { AddEditWorkComponent } from './work-management/add-edit-work/add-edit-work.component';
 import { WorkDetailComponent } from './work-management/work-detail/work-detail.component';
+import { TaskerManageComponent } from './work-management/tasker-manage/tasker-manage.component';
 export const routes: Routes = [
   {
     path: '',
@@ -36,7 +37,11 @@ export const routes: Routes = [
       {
         path: 'work/:workId',
         component: WorkDetailComponent
-      }
+      },
+      {
+        path: 'tasker-manage',
+        component: TaskerManageComponent
+      },
     ]
   },
 ];

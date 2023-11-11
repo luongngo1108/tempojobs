@@ -11,6 +11,8 @@ import { PageEvent } from '@angular/material/paginator';
 import { FilterMapping } from 'src/app/shared/models/filter-mapping';
 import { NbToastrService } from '@nebular/theme';
 import { MessageService } from 'primeng/api';
+import { WorkApply } from './work-detail/appy-work/work-appy.model';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'app-work-management',
@@ -18,11 +20,13 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./work-management.component.scss']
 })
 export class WorkManagementComponent implements OnInit, OnDestroy {
+
   listWork: WorkModel[] = [];
   listWorkShow: WorkModel[] = [];
   listColors: string[] = [];
   listProvince: any[] = [];
   listWorkType: DataStateModel[] = [];
+  listWorkApply: DataStateModel[] = [];
   isCustomizing: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -33,13 +37,24 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
   pageSizeOptions = [5, 10, 25];
   searchData: string;
 
+  currentUser: any = {};
+
+  savingApplyId: number;
+
   constructor(
     private formBuilder: RxFormBuilder,
     private workService: WorkManagementService,
     private router: Router,
     private dataStateService: DataStateManagementService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private authService: NbAuthService,
   ) {
+    this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
+    .subscribe(async (token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.currentUser = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+      }
+    });
     this.paging.filter = [];
     this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
       if (resp) {
@@ -48,26 +63,29 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit(): void {
-    this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).subscribe(resp => {
-      if (resp.result) {
-        this.listWorkType = resp.result;
-      }
-    });
-    this.getPagingWork();
+  async ngOnInit() {
+    var respWorkType = await this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).toPromise();
+    if (respWorkType.result) {
+      this.listWorkType = respWorkType.result;
+    }
+    var respWorkApply = await this.dataStateService.getDataStateByType("WORK_APPLY_STATUS").pipe(takeUntil(this.destroy$)).toPromise();
+    if (respWorkApply.result) {
+      this.listWorkApply = respWorkApply.result;
+      this.savingApplyId = this.listWorkApply.find(item => item.dataStateName === 'Đang lưu').dataStateId;
+    }
+    await this.getPagingWork();
   }
 
-  getPagingWork() {
-    this.workService.getWorkPaging(this.paging).pipe(takeUntil(this.destroy$)).subscribe(resp => {
-      if (resp.result) {
-        this.listWork = resp.result.data;
-        this.paging = resp.result.page;
-        this.listWork.map((work) => {
-          work.workProvinceName = this.listProvince.find(item => item.codename === work.workProvince)?.name;
-          work.timeLine = this.getTimeLine(work?.createdAt);
-        });
-      }
-    });
+  async getPagingWork() {
+    var resp = await this.workService.getWorkPaging(this.paging).pipe(takeUntil(this.destroy$)).toPromise()
+    if (resp.result) {
+      this.listWork = resp.result.data;
+      this.paging = resp.result.page;
+      this.listWork.map((work) => {
+        work.workProvinceName = this.listProvince.find(item => item.codename === work.workProvince)?.name;
+        work.timeLine = this.getTimeLine(work?.createdAt);
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -156,5 +174,21 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigateByUrl(`/work/${work.workId}`);
     }
+  }
+
+  saveWorkInToStore(work: WorkModel) {
+    var workApplyModel = new WorkApply();
+    workApplyModel.userId = this.currentUser.user.id;
+    workApplyModel.workId = work.workId;
+    workApplyModel.status = this.savingApplyId;
+    this.workService.applyForWork(workApplyModel, this.currentUser.user.id).subscribe(res => {
+      if(res.result) {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'success', summary: 'Lưu thành công',
+          detail: `Kiểm tra công việc đã lưu trong phần quản lý công việc đã đăng ký!`, life: 30000
+        });
+      }
+    })
   }
 }

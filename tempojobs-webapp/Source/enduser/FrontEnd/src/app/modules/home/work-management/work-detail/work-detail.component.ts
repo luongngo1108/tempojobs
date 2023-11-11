@@ -42,7 +42,7 @@ export class WorkDetailComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     var workId = this.route.snapshot.paramMap.get('workId');
-    var res = await lastValueFrom(this.workService.getWorkByWorkId(workId));
+    var res = await lastValueFrom(this.workService.getWorkByWorkId(Number(workId)));
     if (res.result) {
       this.workModel = res.result;
       var detailRes = await lastValueFrom(this.userService.getUserDetailByUserId(this.workModel.createdBy._id));
