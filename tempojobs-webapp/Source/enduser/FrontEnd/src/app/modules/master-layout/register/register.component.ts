@@ -49,6 +49,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = new UserRegister();
+    this.user.role = "User";
     this.registerFormGroup = this.formBuilder.formGroup(this.user);
   }
 

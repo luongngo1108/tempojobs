@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, importProvidersFrom } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,10 @@ import { TokenInterceptor } from './TokenInterceptor';
 import { QuillModule } from 'ngx-quill'
 import { DatePipe } from '@angular/common';
 import { DatePipePipe } from './shared/pipes/date-pipe.pipe';
+import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { environment } from "src/environments/environment";
+import {StorageModule} from '@angular/fire/storage'
 
 @NgModule({
   declarations: [
@@ -41,6 +45,9 @@ import { DatePipePipe } from './shared/pipes/date-pipe.pipe';
     NbEvaIconsModule,
     NbCardModule,
     FontAwesomeModule,
+    provideFirebaseApp(() => initializeApp( environment.firebaseConfig)),
+    provideFirestore(() => getFirestore()),
+    StorageModule
   ],
   providers: [
     {
@@ -49,7 +56,11 @@ import { DatePipePipe } from './shared/pipes/date-pipe.pipe';
       multi: true
     },
     DatePipe,
-    DatePipePipe
+    DatePipePipe,
+    importProvidersFrom([
+      provideFirebaseApp(() => initializeApp( environment.firebaseConfig)),
+      provideFirestore(() => getFirestore()),
+    ])
   ],
   bootstrap: [AppComponent]
 })

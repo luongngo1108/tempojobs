@@ -1,6 +1,38 @@
 <div class="table-responsive material">
-    <ngx-datatable class="material" [rows]="rows" [columns]="columns"
-        [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" rowHeight="auto"
-        [reorderable]="false">
+    <ngx-datatable class="material" [rows]="rows" [columns]="columns" [columnMode]="'force'" [headerHeight]="60"
+        [scrollbarV]="false" [scrollbarH]="true" [footerHeight]="50" rowHeight="auto" [reorderable]="false"
+        [selected]="selected" (select)="onSelect($event)" [selectionType]="SelectionType.checkbox" [limit]="20">
+
     </ngx-datatable>
 </div>
+
+<ng-template #columnAction let-row="row" let-value="value" let-rowIndex="rowIndex">
+    <button [ngStyle]="{'width.px':actionWidth}" type="button" mat-icon-button title="Action"
+        [matMenuTriggerFor]="menuAction">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menuAction="matMenu">
+        <button mat-menu-item (click)="onClickEdit(row,rowIndex)">
+            <mat-icon color="primary">edit</mat-icon>
+            <span>Edit item</span>
+        </button>
+        <button mat-menu-item (click)="onClickDelete(row,rowIndex)">
+            <mat-icon style="color: red;">delete</mat-icon>
+            <span>Delete item</span>
+        </button>
+    </mat-menu>
+</ng-template>
+
+<ng-template #headerFilter let-column="column">
+    <input style="width:100%;" nbInput type="text" [placeholder]="column.name" (keyup)="updateFilter($event, column)" />
+</ng-template>
+
+<ng-template #dateCell let-column="column" let-row="row">
+    <p>{{row[column.prop] | datePipe}}</p>
+</ng-template>
+
+<ng-template #colorCodeCell let-column="column" let-row="row">
+    <input [(colorPicker)]="row[column.prop]" [style.background]="row[column.prop]"
+        style="width: 80% !important; max-width: 80% !important;color: transparent" nbInput>
+</ng-template>

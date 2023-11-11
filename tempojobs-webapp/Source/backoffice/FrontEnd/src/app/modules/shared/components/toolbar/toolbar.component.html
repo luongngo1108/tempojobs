@@ -1,0 +1,15 @@
+<mat-toolbar fxLayout="row" fxLayoutAlign="space-between center" style="background-color: white;">
+    <span fxLayout="row" fxLayoutAlign="start center">
+        <button mat-raised-button color="primary" (click)="onClickAddNew()">
+            <mat-icon>add</mat-icon>New
+        </button>
+        <button type="button" color="warn" mat-button (click)="onClickDeletes()"
+            [hidden]="(selectedCout==0)">
+            <mat-icon class="mr">delete</mat-icon>Delete Selected
+        </button>
+        <button class="ml-auto" type="button" mat-icon-button title="Clear Filter" debouncedClick
+            throttleTime="1000" (click)="configClearFilter()">
+            <mat-icon>autorenew</mat-icon>
+        </button>
+    </span>
+</mat-toolbar>

@@ -8,24 +8,35 @@
         <p-toast position="bottom-right" key="toast1"></p-toast>
         <div class="col-lg-4 col-xl-4">
             <div class="card-box text-center">
-                <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
+                <img style="cursor: pointer;" [src]="userDetail?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"  (click)="selectImage.click()"
+                    class="rounded-circle avatar-xl img-thumbnail" alt="profile-image" matTooltip="Nhấn vào đây để sửa ảnh đại diện">
 
-                <h4 class="mb-0" style="margin-bottom: 10px !important;">{{userDetail?.firstName + " " + userDetail?.lastName}}</h4>
-               
+                <input type="file" (change)="updateImage($event)" accept='image/*' style="display: none" #selectImage />
+
+                <h4 class="mb-0" style="margin-bottom: 10px !important;">{{userDetail?.firstName + " " +
+                    userDetail?.lastName}}</h4>
+
 
                 <!-- <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Follow</button>
                 <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light m-l-button">Message</button> -->
 
                 <div class="text-left mt-3">
+
                     <h4 class="font-13 text-uppercase">Mô tả : </h4>
                     <p class="text-muted font-13 mb-3">
                         {{userDetail?.description || "No description"}}
                     </p>
                     <p class="text-muted mb-2 font-13"><strong>Họ và tên: </strong> <span class="ml-2">
-                        {{userDetail?.firstName + " " + userDetail?.lastName}}</span></p>
+                            {{userDetail?.firstName + " " + userDetail?.lastName}}</span></p>
 
-                    <p class="text-muted mb-2 font-13"><strong>Số điện thoại: </strong><span class="ml-2">{{userDetail?.phone || "Không có"}}</span></p>
+                    <p class="text-muted mb-2 font-13"><strong>Giới tính: </strong> <span
+                            class="ml-2 ">{{userDetail?.sex}}</span></p>
+
+                    <p class="text-muted mb-2 font-13"><strong>Ngày sinh: </strong> <span
+                            class="ml-2 ">{{userDetail?.birth| datePipe }}</span></p>
+
+                    <p class="text-muted mb-2 font-13"><strong>Số điện thoại: </strong><span
+                            class="ml-2">{{userDetail?.phone || "Không có"}}</span></p>
 
                     <p class="text-muted mb-2 font-13"><strong>Email: </strong> <span
                             class="ml-2 ">{{userDetail?.email}}</span></p>
@@ -34,42 +45,31 @@
 
                 <ul class="social-list list-inline mt-3 mb-0">
                     <li class="list-inline-item">
-                        <a target="_blank" [href]="userDetail?.facebook || 'javascript: void(0);'" [matTooltip]="userDetail?.facebook || 'No facebook account'"
-                        class="social-list-item border-purple text-purple"><i
-                                class="fab fa-facebook"></i></a>
+                        <a target="_blank" [href]="userDetail?.facebook || 'javascript: void(0);'"
+                            [matTooltip]="userDetail?.facebook || 'No facebook account'"
+                            class="social-list-item border-purple text-purple"><i class="fab fa-facebook"></i></a>
                     </li>
                     <li class="list-inline-item">
-                        <a target="_blank" [href]="userDetail?.instagram || 'javascript: void(0);'" [matTooltip]="userDetail?.instagram || 'No instagram account'" 
-                        class="social-list-item border-danger text-danger"><i
-                                class="fab fa-instagram"></i></a>
+                        <a target="_blank" [href]="userDetail?.instagram || 'javascript: void(0);'"
+                            [matTooltip]="userDetail?.instagram || 'No instagram account'"
+                            class="social-list-item border-danger text-danger"><i class="fab fa-instagram"></i></a>
                     </li>
                 </ul>
-                <div class="text-left mt-3" >
-                    <p class="text-muted mb-1 font-13"><strong>Vị trí hiện tại: </strong> <span class="ml-2">{{userDetail?.googleLocation?.address || 'No address'}}</span></p>
+                <div class="text-left mt-3">
+                    <p class="text-muted mb-1 font-13"><strong>Vị trí hiện tại: </strong> <span
+                            class="ml-2">{{userDetail?.googleLocation?.address || 'No address'}}</span></p>
                     <!-- app.component.html -->
                     <div>
-                        <input nbInput
-                        type="text"
-                        class="my-search-box"
-                        (keydown.enter)="$event.preventDefault()"
-                        placeholder="Search Location"
-                        type="text"
-                        #search
-                        />
+                        <input nbInput type="text" class="my-search-box" (keydown.enter)="$event.preventDefault()"
+                            placeholder="Search Location" type="text" #search />
                         <button (click)="saveLocation()" type="button" [matTooltip]="'Lưu vị trí mới'"
-                        class="btn btn-success btn-xs waves-effect mb-2 waves-light">
+                            class="btn btn-success btn-xs waves-effect mb-2 waves-light">
                             Lưu</button>
                     </div>
-                    
-                    <google-map
-                        #myGoogleMap
-                        height="400px"
-                        width="100%"
-                        [zoom]="zoom"
-                        [center]="center"
-                        [options]="options"
-                    ></google-map>
-                   
+
+                    <google-map #myGoogleMap height="400px" width="100%" [zoom]="zoom" [center]="center"
+                        [options]="options"></google-map>
+
                 </div>
             </div> <!-- end card-box -->
 
@@ -135,7 +135,8 @@
             <div class="card-box">
                 <ul class="nav nav-pills navtab-bg">
                     <button nbButton hero status="success" (click)="changeTab('about-me')">Thông tin chung</button>
-                    <button style="margin-left: 20px;" (click)="changeTab('edit-profile')" nbButton>Sửa thông tin cá nhân</button>
+                    <button style="margin-left: 20px;" (click)="changeTab('edit-profile')" nbButton>Sửa thông tin cá
+                        nhân</button>
                 </ul>
                 <div class="tab-content">
                     <div *ngIf="isEditProfile; then editProfile else aboutMe"></div>
@@ -143,10 +144,11 @@
                         <app-profile-activity></app-profile-activity>
                     </ng-template>
                     <ng-template #editProfile>
-                        <app-edit-profile [profileDetail]="userDetail" [user]="user" (updatedProfileDetail)="updateProfileDetail($event)"></app-edit-profile>
+                        <app-edit-profile [profileDetail]="userDetail" [user]="user"
+                            (updatedProfileDetail)="updateProfileDetail($event)"></app-edit-profile>
                     </ng-template>
-                </div> 
-            </div> 
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,0 +1,10 @@
+<mat-dialog-content fxLayout="column">
+    <p [style.margin-bottom]="externalTemplate ? 0 :''" [innerHtml]='message | safeHtml'></p>
+    <ng-container [ngTemplateOutlet]="externalTemplate? externalTemplate : ''"></ng-container>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+    <button mat-button mat-dialog-close>{{falseTitle}}</button>
+    <button *ngIf="alternateTitle!= null" mat-button [mat-dialog-close]="alternateReturnData" [disabled]="isDisabled"
+        cdkFocusInitial>{{alternateTitle}}</button>
+    <button mat-button *ngIf="yesTitle != 'DISABLED'" [mat-dialog-close]="true" [disabled]="isDisabled" cdkFocusInitial>{{yesTitle}}</button>
+</mat-dialog-actions>
