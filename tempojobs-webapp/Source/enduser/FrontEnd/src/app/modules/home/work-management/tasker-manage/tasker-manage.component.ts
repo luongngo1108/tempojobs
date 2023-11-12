@@ -30,6 +30,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumnsTab1: string[] = ['workName', 'totalProfile', 'timeLine', 'workStatusName', 'moreAction'];
   displayedColumnsTab2: string[] = ['workName', 'workApplyStatus', 'moreAction'];
   displayedColumnsTab3: string[] = ['workName', 'workTime', 'candidateApproval', 'workProfit'];
+  displayedColumnsTab4: string[] = ['workName', 'candidateApproval', 'confirm'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -117,12 +118,12 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (respWorkApply.result) {
       this.listWorkApply = respWorkApply.result;
       this.listWorkApply.map(async workApply => {
-        if (workApply.status === this.savingApplyId) {
-          var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-          if (respWork.result) {
-            this.listWorkShow.push(respWork.result);
-          }
+        var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
+        if (respWork.result) {
+          this.listWorkShow.push(respWork.result);
         }
+        this.counterTab();
+        this.changeTabWithNumber(1);
       });
     }
     this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.createdAt));
@@ -135,19 +136,19 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.countTab1 = null;
     }
-    const filterTab2 = this.listWorkApply.filter(workApply => workApply.status === this.waitingApplyId || workApply.status === this.refusedApplyId);
+    const filterTab2 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.approvedId);
     if (filterTab2.length > 0) {
       this.countTab2 = filterTab2.length;
     } else {
       this.countTab2 = null;
     }
-    const filterTab3 = this.listWorkApply.filter(workApply => workApply.status === this.acceptApplyId);
+    const filterTab3 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.processingId);
     if (filterTab3.length > 0) {
       this.countTab3 = filterTab3.length;
     } else {
       this.countTab3 = null;
     }
-    const filterTab4 = this.listWorkApply.filter(workApply => workApply.status === this.evaluatingApplyId);
+    const filterTab4 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.evaluationId);
     if (filterTab4.length > 0) {
       this.countTab4 = filterTab4.length;
     } else {
@@ -157,7 +158,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async refreshData() {
     await this.getListWorkApplyDefaults();
-    this.counterTab();
+    // this.counterTab();
   }
 
   ngAfterViewInit() {
@@ -184,82 +185,45 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       case 2:
         this.listWorkApply.map(async workApply => {
-          if (workApply.status === this.waitingApplyId) {
+          if (workApply.status === this.waitingApplyId || workApply.status === this.refusedApplyId || workApply.status === this.acceptApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-            if (respWork.result) {
+            if (respWork.result && respWork.result.workStatusId === this.approvedId) {
               this.listWorkShow.push(respWork.result);
             }
           }
         });
-        // this.listWorkShow.map(work => {
-        //   if (work.workApply && work.workApply.length > 0) {
-        //     work.listTaskerWaitings = [];
-        //     work.listTaskerAccepted = [];
-        //     work.workApply.map(async workApplyId => {
-        //       var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
-        //       if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
-        //         var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-        //         if(resp.result) {
-        //           work.listTaskerWaitings.push(resp.result);
-        //         }
-        //       }
-        //       if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
-        //         var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-        //         if(resp.result) {
-        //           work.listTaskerAccepted.push(resp.result);
-        //         }
-        //       }
-        //     })
-        //   }
-        // });
         break;
       case 3:
         this.listWorkApply.map(async workApply => {
           if (workApply.status === this.acceptApplyId) {
-            var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-            if (respWork.result) {
+            var respWork = await lastValueFrom(this.workService.getWorkByWorkId(workApply.workId));
+            if (respWork.result && respWork.result?.workStatusId === this.processingId) {
+              if (respWork.result?.workApply && respWork.result?.workApply?.length > 0) {
+                respWork.result.listTaskerAccepted = [];
+                respWork.result?.workApply.map(async workApplyId => {
+                  var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
+                  if (respWorkApply.result && respWorkApply.result?.status === this.acceptApplyId) {
+                    var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                    if(resp.result) {
+                      respWork.result.listTaskerAccepted.push(resp.result);
+                    }
+                  }
+                })
+              }
               this.listWorkShow.push(respWork.result);
             }
-          }
-        });
-        this.listWorkShow.map(work => {
-          if (work.workApply && work.workApply.length > 0) {
-            work.listTaskerAccepted = [];
-            work.workApply.map(async workApplyId => {
-              var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
-              if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
-                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
-                  work.listTaskerAccepted.push(resp.result);
-                }
-              }
-            })
           }
         });
         break;
       case 4:
         this.listWorkApply.map(async workApply => {
-          if (workApply.status === this.evaluatingApplyId) {
+          if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatingApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-            if (respWork.result) {
+            if (respWork.result && respWork.result.workStatusId === this.evaluationId) {
               this.listWorkShow.push(respWork.result);
             }
           }
         });
-        // this.listWorkShow.map(work => {
-        //   if (work.workApply && work.workApply.length > 0) {
-        //     work.listTaskerAccepted = [];
-        //     work.workApply.map(async workApplyId => {
-        //       var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
-        //       if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
-        //         var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-        //         if(resp.result) {
-        //           work.listTaskerAccepted.push(resp.result);
-        //         }
-        //       }
-        //     })
-        //   }
-        // });
         break;
     }
     this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.createdAt));
@@ -280,34 +244,13 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       case 2:
         this.listWorkApply.map(async workApply => {
-          if (workApply.status === this.waitingApplyId) {
+          if (workApply.status === this.waitingApplyId || workApply.status === this.refusedApplyId || workApply.status === this.acceptApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
             if (respWork.result) {
               this.listWorkShow.push(respWork.result);
             }
           }
         });
-        // this.listWorkShow.map(work => {
-        //   if (work.workApply && work.workApply.length > 0) {
-        //     work.listTaskerWaitings = [];
-        //     work.listTaskerAccepted = [];
-        //     work.workApply.map(async workApplyId => {
-        //       var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
-        //       if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
-        //         var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-        //         if(resp.result) {
-        //           work.listTaskerWaitings.push(resp.result);
-        //         }
-        //       }
-        //       if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
-        //         var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-        //         if(resp.result) {
-        //           work.listTaskerAccepted.push(resp.result);
-        //         }
-        //       }
-        //     })
-        //   }
-        // });
         break;
       case 3:
         this.listWorkApply.map(async workApply => {
@@ -335,27 +278,13 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       case 4:
         this.listWorkApply.map(async workApply => {
-          if (workApply.status === this.evaluatingApplyId) {
+          if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatingApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-            if (respWork.result) {
+            if (respWork.result && respWork.result.workStatusId === this.evaluationId) {
               this.listWorkShow.push(respWork.result);
             }
           }
         });
-        // this.listWorkShow.map(work => {
-        //   if (work.workApply && work.workApply.length > 0) {
-        //     work.listTaskerAccepted = [];
-        //     work.workApply.map(async workApplyId => {
-        //       var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
-        //       if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
-        //         var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-        //         if(resp.result) {
-        //           work.listTaskerAccepted.push(resp.result);
-        //         }
-        //       }
-        //     })
-        //   }
-        // });
         break;
     }
     this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.createdAt));
