@@ -12,14 +12,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
-    title: 'User',
+    title: 'Users',
     icon: 'person-outline',
     link: '/admin/user',
     home: true,
   },
   {
-    title: 'DataState',
+    title: 'DataStates',
     icon: 'bookmark-outline',
     link: '/admin/datastate',
+  },
+  {
+    title: 'Reports',
+    icon: 'alert-triangle-outline',
+    link: '/admin/report',
+  },
+  {
+    title: 'Works',
+    icon: 'briefcase-outline',
+    link: '/admin/work',
   },
 ];

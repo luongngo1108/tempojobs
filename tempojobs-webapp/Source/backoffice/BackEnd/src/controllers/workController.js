@@ -9,8 +9,8 @@ import WorkApply from '../models/workApplyModel.js';
 
 class WorkController {
     async getWorkAll(req, res, next) {
+        var result = new ReturnResult();
         try {
-            var result = new ReturnResult();
             const work = await Work.find({ deleted: false});
             if (work) {
                 result.result = work;
