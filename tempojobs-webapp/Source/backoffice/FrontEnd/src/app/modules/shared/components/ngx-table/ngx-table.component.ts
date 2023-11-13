@@ -88,6 +88,7 @@ export class NgxTableComponent implements OnInit {
 
   setData(result: PagedData<any>) {
     if (result) {
+      console.log(result)
       this.isLoading--;
       this.page = result.page;
       this.rows = result.data;

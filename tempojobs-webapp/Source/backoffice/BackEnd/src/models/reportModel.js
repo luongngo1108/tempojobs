@@ -4,7 +4,6 @@ const Schema = _Schema;
 const Report = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
-        required: true,
         ref: "User",
     },
     fullName: {
@@ -22,6 +21,8 @@ const Report = new Schema({
         type: String,
         default: ""
     },
+}, {
+    timestamps: true,
 });
 
 export default model("Report", Report);
