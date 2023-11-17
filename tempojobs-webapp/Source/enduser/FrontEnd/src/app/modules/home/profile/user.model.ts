@@ -15,6 +15,21 @@ export class User {
   exp: number;
 }
 
+export class UserModel {
+  @prop()
+  id: string;
+
+  @prop()
+  displayName: string;
+
+  @prop()
+  email: string;
+
+  @prop()
+  role: string;
+  exp: number;
+}
+
 export class UserRegister {
   @prop()
   @required()
