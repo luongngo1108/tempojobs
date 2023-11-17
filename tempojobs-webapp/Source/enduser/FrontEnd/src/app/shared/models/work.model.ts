@@ -1,5 +1,5 @@
 import { NumericValueType, numeric, prop, required } from "@rxweb/reactive-form-validators";
-import { GoogleMapLocation, ProfileDetail, User } from "src/app/modules/home/profile/user.model";
+import { GoogleMapLocation, ProfileDetail, User, UserModel } from "src/app/modules/home/profile/user.model";
 import { DataStateModel } from "./data-state.model";
 
 export class WorkModel {
@@ -34,7 +34,7 @@ export class WorkModel {
     workProfit: string | null;
 
     @prop()
-    createdBy: User | null;
+    createdBy: UserModel | null;
 
     @prop()
     createdAt: Date | string | null;

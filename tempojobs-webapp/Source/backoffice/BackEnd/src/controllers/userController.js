@@ -38,16 +38,18 @@ class userController {
     async getUserDetailByUserId(req, res, next) {
         var result = new ReturnResult();
         try {
-            const userId = req.query.id;
-            if(userId) {
+            let userId = req.query.id;
+            if(userId) {             
                 const user = await User.findById(userId, '-_id userDetail').lean().exec();
-                const userDetail = await UserDetail.findById(user.userDetail);
-                const googleLocation = await GoogleMapLocation.findById(userDetail.googleLocation);
-                if (googleLocation) userDetail.googleLocation = googleLocation
-                if (userDetail) {
-                    result.result = userDetail;
-                } else {
-                    result.message = "No user detail found";
+                if(user) {
+                    const userDetail = await UserDetail.findById(user.userDetail);
+                    const googleLocation = await GoogleMapLocation.findById(userDetail.googleLocation);
+                    if (googleLocation) userDetail.googleLocation = googleLocation
+                    if (userDetail) {
+                        result.result = userDetail;
+                    } else {
+                        result.message = "No user detail found";
+                    }
                 }
             }
         }

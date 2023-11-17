@@ -228,6 +228,10 @@ class WorkController {
                                                                     );
                     if(updatedWork) result.result = updatedWork;
                 }
+
+                if(result.result) {
+                    // Send notification for created user
+                }
             }
         }
         catch(error) {

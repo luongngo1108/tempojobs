@@ -1,0 +1,7 @@
+<div class="base-container" style="margin-bottom: 10px;">
+    <app-charts></app-charts>
+</div>
+
+<div class="base-container">
+    <app-ngx-table #ngxTable [isNormalShowTable]="true" [columnsTable]="columns" (onRefresh)="refreshData($event)"></app-ngx-table>
+</div>
