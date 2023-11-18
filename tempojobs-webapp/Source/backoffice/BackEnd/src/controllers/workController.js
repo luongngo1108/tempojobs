@@ -54,11 +54,11 @@ class WorkController {
                         {workName: { $regex: filterSearch, $options: "i"}},
                         {workDescription: { $regex: filterSearch, $options: "i"}}
                     ]
-                }).skip(page.pageNumber * page.size).limit(page.size);
+                }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
             } else {
                 if (filterWorkType.length === 0 && filterProvince.length === 0) {
                     page.totalElements = await Work.find().count();
-                    listWork = await Work.find().skip(page.pageNumber * page.size).limit(page.size);
+                    listWork = await Work.find().sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterWorkType.length > 0 && filterProvince.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
@@ -69,7 +69,7 @@ class WorkController {
                         deleted: false,
                         $or: filterWorkType,
                         $or: filterProvince
-                    }).skip(page.pageNumber * page.size).limit(page.size);
+                    }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterWorkType.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
@@ -78,7 +78,7 @@ class WorkController {
                     listWork = await Work.find({
                         deleted: false,
                         $or: filterWorkType
-                    }).skip(page.pageNumber * page.size).limit(page.size);
+                    }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterProvince.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
@@ -87,7 +87,7 @@ class WorkController {
                     listWork = await Work.find({
                         deleted: false,
                         $or: filterProvince
-                    }).skip(page.pageNumber * page.size).limit(page.size);
+                    }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
                 }
             }
             pagedData.data = listWork;

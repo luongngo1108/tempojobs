@@ -60,6 +60,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   longitude!: any;
   markers: google.maps.Marker[] = [];
   // Google map end
+  workHoursValue: number = 0.5;
 
   constructor(
     private frmBuilder: RxFormBuilder,
@@ -107,11 +108,6 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
           this.createBy = token.getPayload();
         }
       });
-
-    this.frmCreateWork.patchValue({
-      quantity: this.workModel.quantity == null ? "0" : this.workModel.quantity,
-      workHours: this.workModel.workHours == null ? "0" : this.workModel.workHours,
-    });
     this.frmCreateWork.get('workProvince').valueChanges.subscribe((valueChanges) => {
       this.provinceName = this.listProvince?.find(province => province.codename === valueChanges)?.name;
       this.listProvince.map((province, index) => {
@@ -119,6 +115,10 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
           this.listDistrict = this.listProvince[index].districts;
         }
       })
+    });
+    this.frmCreateWork.get('workHours').valueChanges.subscribe((valueChanges) => {
+      this.workHoursValue = valueChanges;
+      this.frmCreateWork.get('workHours').setValue(valueChanges);
     });
     this.frmCreateWork.get('workProfit').valueChanges.subscribe((valueChanges) => {
       console.log(valueChanges);

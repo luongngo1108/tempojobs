@@ -5,3 +5,18 @@
 .layout-custom {
     padding: 20px;
 }
+
+.example-label-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 10px 0;
+    max-width: 284px;
+}
+
+.example-value-label {
+    font-weight: 600;
+}
+
+.example-margin {
+    margin-left: 80px;
+}

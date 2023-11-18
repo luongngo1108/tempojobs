@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { RxFormBuilder } from '@rxweb/reactive-form-validators';
+import { RxFormBuilder, async } from '@rxweb/reactive-form-validators';
 import { Subject, takeUntil } from 'rxjs';
 import { DataStateModel } from 'src/app/shared/models/data-state.model';
 import { Page } from 'src/app/shared/models/page';
@@ -41,6 +41,14 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
 
   savingApplyId: number;
 
+  listWorkStatus: DataStateModel[] = [];
+  approvingId: number;
+  approvedId: number;
+  refuseApprovalId: number;
+  processingId: number;
+  evaluationId: number;
+  doneId: number;
+
   constructor(
     private formBuilder: RxFormBuilder,
     private workService: WorkManagementService,
@@ -73,6 +81,16 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
       this.listWorkApply = respWorkApply.result;
       this.savingApplyId = this.listWorkApply.find(item => item.dataStateName === 'Đang lưu').dataStateId;
     }
+    var resultStatus = await this.dataStateService.getDataStateByType("WORK_STATUS").pipe(takeUntil(this.destroy$)).toPromise();
+    if (resultStatus.result) {
+      this.listWorkStatus = resultStatus.result;
+      this.approvingId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang duyệt').dataStateId;
+      this.approvedId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đã duyệt').dataStateId;
+      this.refuseApprovalId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt').dataStateId;
+      this.processingId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang thực hiện')?.dataStateId;
+      this.evaluationId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Chờ đánh giá')?.dataStateId;
+      this.doneId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Hoàn thành')?.dataStateId;
+    }
     await this.getPagingWork();
   }
 
@@ -81,9 +99,16 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     if (resp.result) {
       this.listWork = resp.result.data;
       this.paging = resp.result.page;
+      this.listWork = this.listWork.filter(work => work.workStatusId === this.approvedId || work.workStatusId === this.processingId);
       this.listWork.map((work) => {
         work.workProvinceName = this.listProvince.find(item => item.codename === work.workProvince)?.name;
         work.timeLine = this.getTimeLine(work?.createdAt);
+        work.listWorkApply = [];
+        work.workApply.map(async item => {
+          var resp = await this.workService.getWorkApplyById(item).pipe(takeUntil(this.destroy$)).toPromise();
+          if (resp.result && resp.result.userId === this.currentUser?.user?.id 
+            && resp.result.status === this.savingApplyId) work.listWorkApply.push(resp.result);
+        });
       });
     }
   }
@@ -178,7 +203,7 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
 
   saveWorkInToStore(work: WorkModel) {
     var workApplyModel = new WorkApply();
-    workApplyModel.userId = this.currentUser.user.id;
+    workApplyModel.userId = this.currentUser?.user?.id;
     workApplyModel.workId = work.workId;
     workApplyModel.status = this.savingApplyId;
     this.workService.applyForWork(workApplyModel, this.currentUser.user.id).subscribe(res => {
@@ -190,5 +215,13 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
         });
       }
     })
+  }
+
+  checkIsSaved(work: WorkModel): boolean {
+    if (work?.listWorkApply && work?.listWorkApply?.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

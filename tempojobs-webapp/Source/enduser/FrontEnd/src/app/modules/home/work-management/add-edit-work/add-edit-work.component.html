@@ -57,15 +57,24 @@
             </mat-form-field>
           </div>
           <div class="form-floating mb-3">
-            <mat-form-field appearance="fill"  class="form-field">
+            <div class="example-label-container">
+              <label id="example-name-label" class="example-name-label">Thời lượng làm việc:</label>
+              <label class="example-value-label">{{workHoursValue}} tiếng</label>
+            </div>
+            <mat-slider class="example-margin" [max]="24" [min]="0.5" [step]="0.5" [discrete]="true" [showTickMarks]="false">
+              <input matSliderThumb matInput formControlName="workHours" autocomplete="off" required trim="blur">
+            </mat-slider>
+            <!-- <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Thời lượng làm việc</mat-label>
-              <input matInput formControlName="workHours" autocomplete="off" required trim="blur" />
+              <mat-slider class="example-margin" [max]="24" [min]="0.5" [step]="0.5" [discrete]="true" [showTickMarks]="false">
+                <input matSliderThumb matInput formControlName="workHours" autocomplete="off" required trim="blur">
+              </mat-slider>
               <mat-error *ngIf="
                   frmCreateWork.controls?.workHours?.errors &&
                   (frmCreateWork.controls?.workHours?.dirty ||
                     frmCreateWork.controls?.workHours?.touched)">
                 {{ frmCreateWork.controls.workHours["errorMessage"] }}</mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
           </div>
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
@@ -146,7 +155,7 @@
               [options]="options"
           ></google-map>
           <div class="d-grid" style="margin-top: 10px;"><button class="btn btn-primary" type="submit" (click)="saveData()"
-              [disabled]="!frmCreateWork.valid">Đăng công việc</button></div>
+              >Đăng công việc</button></div>
         </form>
       </div>
       <div fxFlex="50" class="layout-custom">
