@@ -62,7 +62,7 @@ export class ProfileDialogComponent implements OnInit, OnDestroy, AfterViewInit 
         backdropClass: 'custom-backdrop',
         hasBackdrop: true,
         data: {
-          message: "Bạn có chắc muốn thoát? Tất cả nội dung sẽ mất."
+          message: "Do you want to quit? unsaved data will be lost."
         }
       });
 

@@ -1,13 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminComponent } from './admin.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { DatastateManagementComponent } from './datastate-management/datastate-management.component';
+import { ReportManagementComponent } from './report-management/report-management.component';
 import { UserManagementComponent } from './user-management/user-management.component';
+import { WorkManagementComponent } from './work-management/work-management.component';
 
 const routes: Routes = [{
   path: '',
   component: AdminComponent,
   children: [
+    {
+      path: 'dashboard',
+      component: DashboardComponent,
+    },
     {
       path: 'user',
       component: UserManagementComponent,
@@ -17,8 +24,16 @@ const routes: Routes = [{
       component: DatastateManagementComponent,
     },
     {
+      path: 'report',
+      component: ReportManagementComponent,
+    },
+    {
+      path: 'work',
+      component: WorkManagementComponent,
+    },
+    {
       path: '',
-      redirectTo: 'tables/tree-grid',
+      redirectTo: 'dashboard',
       pathMatch: 'full',
     },
   ],

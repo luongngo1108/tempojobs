@@ -23,6 +23,7 @@ export class NgxTableComponent implements OnInit {
   @Output() editEvent: EventEmitter<any> = new EventEmitter<any>();
   @Input() columnsTable: [];
   @Input() addEditComponent: any;
+  @Input() isNormalShowTable: boolean = false;
   isLoading = 0;
   rows = [];
   columns = [];
@@ -62,7 +63,9 @@ export class NgxTableComponent implements OnInit {
       cellClass: 'text-center remove-padding',
       frozenLeft: true,
     });
-    this.columns = this.columns.concat(this.actionColumn);
+    if(!this.isNormalShowTable) {
+      this.columns = this.columns.concat(this.actionColumn);
+    }
     var lstDatePipe = ['birth', 'createdAt','updatedAt'];
     if (this.columnsTable && this.columnsTable.length > 0) {
       this.columnsTable.forEach((column: any, index) => {
@@ -88,6 +91,7 @@ export class NgxTableComponent implements OnInit {
 
   setData(result: PagedData<any>) {
     if (result) {
+      console.log(result)
       this.isLoading--;
       this.page = result.page;
       this.rows = result.data;

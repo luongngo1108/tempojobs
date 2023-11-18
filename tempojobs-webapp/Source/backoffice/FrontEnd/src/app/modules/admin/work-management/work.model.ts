@@ -1,7 +1,6 @@
 import { NumericValueType, numeric, prop, required } from "@rxweb/reactive-form-validators";
-import { GoogleMapLocation, ProfileDetail, User, UserModel } from "src/app/modules/home/profile/user.model";
-import { DataStateModel } from "./data-state.model";
-import { WorkApply } from "src/app/modules/home/work-management/work-detail/appy-work/work-appy.model";
+import { GoogleMapLocation, User } from "../../shared/models/user.model";
+import { DataStateModel } from "../datastate-management/data-state.model";
 
 export class WorkModel {
     @prop()
@@ -35,7 +34,7 @@ export class WorkModel {
     workProfit: string | null;
 
     @prop()
-    createdBy: UserModel | null;
+    createdBy: User | null;
 
     @prop()
     createdAt: Date | string | null;
@@ -44,7 +43,6 @@ export class WorkModel {
 
     listTaskerWaitings: User[] | null;
     listTaskerAccepted: User[] | null;
-    listWorkApply: WorkApply[] | null;
 
     googleLocation: GoogleMapLocation = null; 
 
@@ -52,4 +50,5 @@ export class WorkModel {
     timeLine: string | null;
     workType: DataStateModel | null;
     orderId: string | null;
+    workStatus: DataStateModel | null;
 }

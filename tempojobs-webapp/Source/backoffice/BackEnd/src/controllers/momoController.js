@@ -4,6 +4,7 @@ import { ReturnResult } from '../DTO/returnResult.js';
 import Work from "../models/workModel.js";
 import PaymentHistory from "../models/paymentHistoryModel.js";
 import User from "../models/userModel.js";
+import { PagedData } from '../models/pageModel.js';
 
 class momoController {
     async createMomoPayment(req, res, next) {
@@ -135,6 +136,19 @@ class momoController {
             if(paymentHistories) {
                 result.result = paymentHistories;
             }    
+        }
+        catch {
+            console.log(error);
+            next(error);
+        }
+        return res.status(200).json(result);
+    }
+
+    async getPaymentHistoryByUserId(req, res, next) {
+        var result = new PagedData();
+        try {
+            var paymentHistories = await PaymentHistory.find();
+            result.data = paymentHistories;
         }
         catch {
             console.log(error);

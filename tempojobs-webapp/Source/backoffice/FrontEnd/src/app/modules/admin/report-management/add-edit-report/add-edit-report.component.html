@@ -1,0 +1,64 @@
+<div class="d-flex flex-wrap" mat-dialog-title
+    style="margin: unset; padding: 1px 10px 1px 28px; justify-content: center; align-items: center;">
+    <button nbButton status="success" (click)="saveData()" [disabled]="!form.valid" style="margin: 10px 0px 5px 0px;">
+        <nb-icon icon="save-outline"></nb-icon>Lưu
+    </button>
+    <button nbButton ghost (click)="closeDialog()" class="ml-auto">
+        <nb-icon icon="close-outline"></nb-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<p-toast position="bottom-right" key="toast1"></p-toast>
+<mat-dialog-content>
+    <form [formGroup]="form">
+        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
+            Data States</h5>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-control-group">
+                    <label class="label" for="fullName">Name</label>
+                    <input style="width: 100% !important; max-width: 100% !important;" nbInput formControlName="fullName" type="text" class="form-control" id="fullName"
+                        placeholder="Enter Name">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.fullName.errors && (form.controls.fullName.dirty || form.controls.fullName.touched)">
+                        {{form.controls.fullName['errorMessage']}}</small>
+                </div>
+            </div>
+        </div> <!-- end row -->
+        <div class="row">
+            <div class="col-12">
+                <div class="form-control-group">
+                    <label class="label" for="email">Email</label>
+                    <input style="width: 100% !important; max-width: 100% !important;" nbInput formControlName="email" email="text" class="form-control" id="email"
+                        placeholder="Enter email">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.email.errors && (form.controls.email.dirty || form.controls.email.touched)">
+                        {{form.controls.email['errorMessage']}}</small>
+                </div>
+            </div> <!-- end col -->
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-12">
+                <label class="label" for="phone">Phone</label>
+                    <input style="width: 100% !important; max-width: 100% !important;" nbInput formControlName="phone" phone="text" class="form-control" id="phone"
+                        placeholder="Enter phone">
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.phone.errors && (form.controls.phone.dirty || form.controls.phone.touched)">
+                        {{form.controls.phone['errorMessage']}}</small>
+            </div>
+        </div> <!-- end row -->
+
+        <div class="row">
+            <div class="col-12">
+                <label class="label" for="message">Message</label>
+                    <textarea style="width: 100% !important; max-width: 100% !important;" nbInput formControlName="message" message="text" class="form-control" id="message"
+                        placeholder="Enter message"></textarea>
+                    <small class="caption text-danger"
+                        *ngIf="form.controls.message.errors && (form.controls.message.dirty || form.controls.message.touched)">
+                        {{form.controls.message['errorMessage']}}</small>
+            </div>
+        </div> <!-- end row -->
+        
+    </form>
+</mat-dialog-content>
