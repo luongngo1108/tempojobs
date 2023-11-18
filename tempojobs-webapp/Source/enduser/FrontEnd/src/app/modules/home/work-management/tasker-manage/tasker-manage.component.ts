@@ -130,35 +130,31 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   counterTab() {
+    this.countTab1 = null;
+    this.countTab2 = null;
+    this.countTab3 = null;
+    this.countTab4 = null;
     const filterTab1 = this.listWorkApply.filter(workApply => workApply.status === this.savingApplyId);
     if (filterTab1.length > 0) {
       this.countTab1 = filterTab1.length;
-    } else {
-      this.countTab1 = null;
     }
-    const filterTab2 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.approvedId);
+    const filterTab2 = this.listWorkApply.filter(workApply => workApply.status === this.waitingApplyId || workApply.status === this.acceptApplyId);
     if (filterTab2.length > 0) {
       this.countTab2 = filterTab2.length;
-    } else {
-      this.countTab2 = null;
     }
     const filterTab3 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.processingId);
     if (filterTab3.length > 0) {
       this.countTab3 = filterTab3.length;
-    } else {
-      this.countTab3 = null;
     }
     const filterTab4 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.evaluationId);
     if (filterTab4.length > 0) {
       this.countTab4 = filterTab4.length;
-    } else {
-      this.countTab4 = null;
     }
   }
 
   async refreshData() {
     await this.getListWorkApplyDefaults();
-    // this.counterTab();
+    this.counterTab();
   }
 
   ngAfterViewInit() {
