@@ -69,7 +69,7 @@
                   {{work?.workName}}
                 </span>
                 <nb-icon icon="bookmark-outline" style="color: black; margin-left: 360px; cursor: pointer;" 
-                  (click)="saveWorkInToStore(work)" [ngClass]="{saveWork: checkIsSaved(work)}"></nb-icon>
+                  (click)="saveWorkInToStore(work)" [ngClass]="{saveWork: work?.isSaving}"></nb-icon>
                 <span>
                   <nb-icon icon="star-outline"></nb-icon>
                   <nb-icon icon="star-outline"></nb-icon>

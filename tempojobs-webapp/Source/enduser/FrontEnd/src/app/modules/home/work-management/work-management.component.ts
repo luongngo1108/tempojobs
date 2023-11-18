@@ -104,10 +104,13 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
         work.workProvinceName = this.listProvince.find(item => item.codename === work.workProvince)?.name;
         work.timeLine = this.getTimeLine(work?.createdAt);
         work.listWorkApply = [];
+        work.isSaving = false;
         work.workApply.map(async item => {
           var resp = await this.workService.getWorkApplyById(item).pipe(takeUntil(this.destroy$)).toPromise();
-          if (resp.result && resp.result.userId === this.currentUser?.user?.id 
-            && resp.result.status === this.savingApplyId) work.listWorkApply.push(resp.result);
+          if (resp.result && resp.result.userId === this.currentUser?.user?.id) {
+            if (resp.result.status === this.savingApplyId) work.isSaving = true;
+            work.listWorkApply.push(resp.result);
+          }
         });
       });
     }
@@ -201,27 +204,54 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     }
   }
 
-  saveWorkInToStore(work: WorkModel) {
-    var workApplyModel = new WorkApply();
-    workApplyModel.userId = this.currentUser?.user?.id;
-    workApplyModel.workId = work.workId;
-    workApplyModel.status = this.savingApplyId;
-    this.workService.applyForWork(workApplyModel, this.currentUser.user.id).subscribe(res => {
+  async saveWorkInToStore(work: WorkModel) {
+    if (work.listWorkApply && work.listWorkApply.length > 0) {
+      if (work.isSaving) {
+        var findWorkApply = work.listWorkApply.find(item => item.status === this.savingApplyId);
+        if (findWorkApply) {
+          var unSaving = await this.workService.deleteWorkApply(findWorkApply).pipe(takeUntil(this.destroy$)).toPromise();
+          if (unSaving.result) {
+            await this.getPagingWork();
+            this.messageService.clear();
+            this.messageService.add({
+              key: 'toast1', severity: 'success', summary: 'Bỏ lưu thành công',
+              detail: `Kiểm tra công việc đã lưu trong phần quản lý công việc nhận làm!`, life: 30000
+            });
+          } else {
+            this.messageService.clear();
+            this.messageService.add({
+              key: 'toast1', severity: 'error', summary: 'Lưu thất bại',
+              detail: unSaving.message.toString(), life: 30000
+            });
+          }
+        }
+      } else {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'warn', summary: 'Công việc này đã được đăng ký',
+          detail: `Vui lòng kiểm tra mục "Gửi hồ sơ" trong phần quản lý công việc nhận làm`, life: 30000
+        });
+      }
+    } else {
+      var workApplyModel = new WorkApply();
+      workApplyModel.userId = this.currentUser?.user?.id;
+      workApplyModel.workId = work.workId;
+      workApplyModel.status = this.savingApplyId;
+      var res = await this.workService.applyForWork(workApplyModel, this.currentUser?.user?.id).pipe(takeUntil(this.destroy$)).toPromise();
       if(res.result) {
+        await this.getPagingWork();
         this.messageService.clear();
         this.messageService.add({
           key: 'toast1', severity: 'success', summary: 'Lưu thành công',
-          detail: `Kiểm tra công việc đã lưu trong phần quản lý công việc đã đăng ký!`, life: 30000
+          detail: `Kiểm tra mục công việc đã lưu trong phần quản lý công việc nhận làm!`, life: 30000
+        });
+      } else {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'error', summary: 'Lưu thất bại',
+          detail: `Công việc đã bị hủy hoặc hết hạn!`, life: 30000
         });
       }
-    })
-  }
-
-  checkIsSaved(work: WorkModel): boolean {
-    if (work?.listWorkApply && work?.listWorkApply?.length > 0) {
-      return true;
-    } else {
-      return false;
     }
   }
 }

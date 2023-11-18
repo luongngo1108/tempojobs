@@ -46,6 +46,8 @@ export class WorkModel {
     listTaskerAccepted: User[] | null;
     listWorkApply: WorkApply[] | null;
 
+    isSaving: boolean;
+
     googleLocation: GoogleMapLocation = null; 
 
     workProvinceName: string | null;
