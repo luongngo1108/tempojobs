@@ -2,7 +2,8 @@
 <header>
   <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 fixed-content-nav">
     <div class="container px-5">
-      <a class="navbar-brand" href="index.html"><span class="fw-bolder text-primary text-gradient d-inline">TempoJobs TJ</span></a>
+      <a class="navbar-brand" href="index.html"><span class="fw-bolder text-primary text-gradient d-inline">TempoJobs
+          TJ</span></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
           class="navbar-toggler-icon"></span></button>
@@ -63,8 +64,7 @@
               <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                   <!-- dropdown-toggle -->
-                  <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown"
-                    aria-expanded="false">
+                  <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     VI
                   </a>
                   <!-- <ul class="dropdown-menu dropdown-menu-dark">
@@ -82,58 +82,135 @@
       </div>
     </div>
   </nav>
-  
+
   <nav *ngIf="userLoggedIn" class="navbar navbar-expand-lg fixed-content-nav-user">
     <div class="container-fluid px-5" style="margin-left: 60px; margin-right: 60px;">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item dropdown">
-                    <a style="color: #c5c5c5 !important;" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Quản lý cho người tạo việc
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/created-manage">Quản lý công việc đã tạo</a></li>
-                        <li><a class="dropdown-item" href="#">Danh sách ứng viên yêu thích</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item dropdown">
-                    <a style="color: #c5c5c5 !important;" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Quản lý cho người làm việc
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/tasker-manage">Quản lý công việc nhận làm</a></li>
-                    </ul>
-                </li>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a style="color: #c5c5c5 !important;" class="nav-link dropdown-toggle" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Quản lý cho người tạo việc
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/created-manage">Quản lý công việc đã tạo</a></li>
+              <li><a class="dropdown-item" href="#">Danh sách ứng viên yêu thích</a></li>
             </ul>
-            <!-- <a class="nav-link" href="/management-work" style="margin-right: 20px;">
+          </li>
+          <li class="nav-item dropdown">
+            <a style="color: #c5c5c5 !important;" class="nav-link dropdown-toggle" href="#" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Quản lý cho người làm việc
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/tasker-manage">Quản lý công việc nhận làm</a></li>
+            </ul>
+          </li>
+        </ul>
+        <!-- <a class="nav-link" href="/management-work" style="margin-right: 20px;">
                 <button type="button" class="btn btn-outline-primary">Quản lý công việc đã tạo</button>
             </a> -->
-            <a class="nav-link" href="/add-edit-work" style="margin-right: 80px;">
-                <button type="button" class="btn btn-success" style="background-color: #2db964;">Tạo công việc</button>
-            </a>
-        </div>
+        <a class="nav-link" href="/add-edit-work" style="margin-right: 80px;">
+          <button type="button" class="btn btn-success" style="background-color: #2db964;">Tạo công việc</button>
+        </a>
+      </div>
     </div>
   </nav>
-  
+
   <ng-template #login>
     <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
       <fa-icon [icon]="faCircleUser"></fa-icon>
       <a class="nav-link" href="/auth">Login</a>
     </div>
   </ng-template>
-  
+
   <ng-template #user>
     <div class="header-container collapse navbar-collapse" id="navbarNavDarkDropdown">
-      <nb-icon class="nav-item-icon" icon="bell-outline"></nb-icon>
-      <nb-icon class="nav-item-icon" icon="message-square-outline"></nb-icon>
+      <!-- <div class="notification-number">2</div> -->
+      <!-- <nb-icon class="nav-item-icon" icon="bell-outline"></nb-icon> -->
+      <button mat-icon-button (click)="getListNotifications()" matTooltip="Notifications"
+        [matMenuTriggerFor]="realtimeNotification" #matMenuTrigger="matMenuTrigger" (menuClosed)="menuClosed()">
+        <mat-icon>notifications</mat-icon>
+        <ng-container *ngIf="countNotification != 0">
+          <div class="icon-notification">
+            <p class="numbers-of-notification">{{countNotification}}</p>
+          </div>
+        </ng-container>
+      </button>
+      <!-- <nb-icon class="nav-item-icon" icon="message-square-outline"></nb-icon> -->
       <nb-actions size="small">
         <nb-action class="user-action">
-          <nb-user size="medium" [name]="userDetail?.firstName + ' ' + userDetail?.lastName" 
-          [onlyPicture]="userPictureOnly" [nbContextMenu]="userMenu"  [picture]="userDetail?.avatarUrl"></nb-user>
+          <nb-user size="medium" [name]="userDetail?.firstName + ' ' + userDetail?.lastName"
+            [onlyPicture]="userPictureOnly" [nbContextMenu]="userMenu" [picture]="userDetail?.avatarUrl"></nb-user>
         </nb-action>
       </nb-actions>
     </div>
   </ng-template>
 </header>
+
+<mat-menu #realtimeNotification="matMenu" style="width: 25vw !important;">
+  <div *ngIf="!skeletonLoading; else loadingNotification">
+    <div matMenuContent style='width: 25vw'>
+      <div style="width: 25vw; max-width: 25vw; max-height: 30vh !important; overflow-y: scroll;" infiniteScroll
+        [infiniteScrollDistance]="scrollDistance" [infiniteScrollUpDistance]="infiniteScrollUpDistance"
+        [infiniteScrollThrottle]="throttle" [scrollWindow]="false" (scrolled)="onScroll()" [immediateCheck]="true"
+        [alwaysCallback]="true">
+
+        <!-- <div class="navbar-notification">
+          <div class="option-notification">
+            <button mat-button [ngClass]="isAllNotification ? 'button-option-notification': ''"
+              (click)="$event.stopPropagation();changeNotiToAll()">All</button>
+            <button mat-button [ngClass]="!isAllNotification ? 'button-option-notification': ''"
+              (click)="$event.stopPropagation();changeNotiToUnread()">Unread</button>
+          </div>
+          <mat-hint class="text-mark-all-unread" (click)="$event.stopPropagation();UpdateMarkAllAsRead()"><mat-icon
+              class="icon-mark-done">done_all</mat-icon>All as read</mat-hint>
+
+        </div> -->
+        <div style="background-color:#3498db ; display: flex;">
+          <h3 class="noti-header col-8">Notifications</h3>
+          <div class="mark-all-as-read col-4" >
+            <mat-icon (click)="markAllAsRead()" matTooltip="Mark all as read" aria-hidden="false" aria-label="Example home icon" fontIcon="playlist_add_check"></mat-icon>
+          </div>
+        </div>
+        <ul class="notifications-list">
+          <ng-container *ngFor="let noti of listNotification; let i = index" style="margin: 1px" class="cheat_mode">
+            <ng-container [ngTemplateOutlet]='notificationDetail' [ngTemplateOutletContext]="{noti:noti, i:i}">
+            </ng-container>
+          </ng-container>
+        </ul>
+        <div *ngIf="!loading; else loadingNotificationEnd"></div>
+      </div>
+    </div>
+
+    <div *ngIf="listNotification.length<=0;" matMenuContent>
+      <div class="container" style="max-width: 22vw; max-height: 50vh !important;">
+        <!-- <app-blank-page class="no-notification" messageSize='0.875rem'
+          [message]="isAllNotification ? 'No Notification Available': 'No unread notifications'"></app-blank-page> -->
+        <li class="item no-data">Empty notification</li>
+      </div>
+    </div>
+  </div>
+</mat-menu>
+
+
+<ng-template #loadingNotification>
+  <div style="width: 25vw">
+    <ngx-skeleton-loader count="10" appearance="line"></ngx-skeleton-loader>
+  </div>
+</ng-template>
+
+<ng-template #loadingNotificationEnd>
+  <div style="width:23vw">
+    <ngx-skeleton-loader count="1" appearance="line"></ngx-skeleton-loader>
+  </div>
+</ng-template>
+
+<ng-template #notificationDetail let-noti="noti">
+  <li class="item js-item" (click)="navigateUrl(noti)">
+    <div class="details">
+      <span class="title"><b>{{noti.title}}</b></span>
+      <span class="content">{{noti.content}}</span>
+    </div>
+  </li>
+</ng-template>

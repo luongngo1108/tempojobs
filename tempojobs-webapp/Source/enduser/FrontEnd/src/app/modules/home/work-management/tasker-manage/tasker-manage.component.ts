@@ -396,6 +396,8 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!cancelApply) message = 'Bạn chắc chắn muốn bỏ lưu công việc này?'
     else message = 'Bạn chắc chắn muốn hủy đăng ký công việc này?'
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
       data: {
         message: message
       }

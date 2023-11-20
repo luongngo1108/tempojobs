@@ -44,6 +44,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MatSliderModule } from '@angular/material/slider';
 import { CurrencyPipePipe } from './pipes/currency-pipe.pipe';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { InfiniteScrollModule } from "ngx-infinite-scroll";
 
 const materialModules = [
   MatFormFieldModule,
@@ -114,6 +116,8 @@ const angularModules = [
     NgxDatatableModule,
     GoogleMapsModule,
     ToastModule,
+    NgxSkeletonLoaderModule,
+    InfiniteScrollModule,
     [...materialModules],
     [...nebularModules],
   ],
@@ -133,7 +137,9 @@ const angularModules = [
     NgxMatTimepickerModule,
     GoogleMapsModule,
     HtmlSafetyPipe,
+    NgxSkeletonLoaderModule,
     ToastModule,
+    InfiniteScrollModule,
     [...materialModules],
     [...nebularModules],
     [...angularModules],

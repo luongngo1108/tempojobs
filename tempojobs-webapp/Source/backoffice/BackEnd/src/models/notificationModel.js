@@ -3,12 +3,12 @@ const Schema = _Schema;
 
 const Notification = new Schema({
     reciever: {
-        type: Schema.Types.Object,
+        type: Schema.Types.ObjectId,
         ref: 'User',
         default: null,
     },
     referenceUser: {
-        type: Schema.Types.Object,
+        type: Schema.Types.ObjectId,
         ref: 'User',
         default: null,
     },

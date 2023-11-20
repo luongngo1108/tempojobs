@@ -1,5 +1,4 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
-import { format } from 'currency-formatter';
 
 @Directive({
   selector: '[appFormatCurrency]'
