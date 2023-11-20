@@ -121,7 +121,13 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       this.frmCreateWork.get('workHours').setValue(valueChanges);
     });
     this.frmCreateWork.get('workProfit').valueChanges.subscribe((valueChanges) => {
-      console.log(valueChanges);
+      const cleanValue = valueChanges.replace(/[^0-9]/g, '');
+      const numberValue = Number(cleanValue);
+      const formattedValue = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND'
+      }).format(numberValue);
+      this.frmCreateWork.get('workProfit').setValue(formattedValue.replace('₫', ''));
     });
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
@@ -271,6 +277,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
           if (!this.workModel?.workId) {
             model.workId = 0;
             model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
+            
           }
           if (this.createBy) {
             model.createdById = this.createBy?.user?.id;

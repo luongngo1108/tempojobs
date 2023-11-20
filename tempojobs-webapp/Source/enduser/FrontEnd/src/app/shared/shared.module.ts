@@ -43,6 +43,7 @@ import { MatListModule } from '@angular/material/list';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MatSliderModule } from '@angular/material/slider';
+import { CurrencyPipePipe } from './pipes/currency-pipe.pipe';
 
 const materialModules = [
   MatFormFieldModule,
@@ -97,7 +98,8 @@ const angularModules = [
     ConfirmModalComponent,
     HtmlSafetyPipe,
     DatePipePipe,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    CurrencyPipePipe
   ],
   imports: [
     CommonModule,
@@ -136,7 +138,8 @@ const angularModules = [
     [...nebularModules],
     [...angularModules],
     FormatCurrencyDirective,
-    DatePipePipe
+    DatePipePipe,
+    CurrencyPipePipe,
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

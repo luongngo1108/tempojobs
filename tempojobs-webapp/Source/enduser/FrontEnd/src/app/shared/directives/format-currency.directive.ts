@@ -1,4 +1,5 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
+import { format } from 'currency-formatter';
 
 @Directive({
   selector: '[appFormatCurrency]'
@@ -27,7 +28,6 @@ export class FormatCurrencyDirective {
       style: 'currency',
       currency: 'VND'
     }).format(numberValue);
-
-    return formattedValue;
+    return formattedValue.replace('₫', '');
   }
 }
