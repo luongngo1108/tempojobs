@@ -121,9 +121,10 @@
                         </dl>
                     </div>
                 </div>
-                <button *ngIf="user?.user?.id !== workModel?.createdBy?.id" [disabled]="!user?.user" (click)="openApplyForWorkDialog()" status="success" style="width: 100%; margin-top: 10px;" nbButton>
+                <button *ngIf="user?.user?.id !== workModel?.createdBy?.id" [disabled]="!user?.user || (workApplied && workApplied?.status !== 14)" (click)="openApplyForWorkDialog()" status="success" style="width: 100%; margin-top: 10px;" nbButton>
                     Đăng ký nhận việc</button>
                 <div style="color: #6e2828; margin-top: 10px;"><i *ngIf="!user?.user">Vui lòng đăng nhập để nhận việc!</i></div>
+                <div style="color: #6e2828; margin-top: 10px;"><i *ngIf="workApplied && workApplied?.status !== 14">Bạn đã đăng ký nhận việc, kiểm tra trong hồ sơ xin việc!</i></div>
                 <ng-container  *ngIf="user?.user?.id === workModel?.createdBy?.id">
                     <div class="row" style="display: flex; justify-content: center; align-items: center;">
                         <nb-icon class="col-2" icon="alert-triangle-outline"></nb-icon>

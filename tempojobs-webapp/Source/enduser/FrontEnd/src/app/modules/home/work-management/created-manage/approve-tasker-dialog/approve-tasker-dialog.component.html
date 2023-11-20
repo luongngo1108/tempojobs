@@ -15,8 +15,8 @@
       </div>
       <ng-container *ngIf="forTab === 2">
         <div class="col-12" style="margin-top: 30px;">
-          <p class="text-muted font-13 mb-3">
-            {{ workApply?.content }}
+          <p [innerHTML]="workApply?.content" class="text-muted font-13 mb-3">
+            
           </p>
         </div>
         <div class="col-12" style="margin-top: 30px;">
@@ -31,12 +31,12 @@
         <div class="col-12" style="height: fit-content">
           <ul class="social-list list-inline mt-3 mb-0">
             <li class="list-inline-item">
-                <a target="_blank" [href]="profile?.facebook || 'javascript: void(0);'" [matTooltip]="profile?.facebook || 'No facebook account'"
+                <a target="_blank" [href]="profile?.facebook || 'javascript: return false;'" [matTooltip]="profile?.facebook || 'No facebook account'"
                 class="social-list-item border-purple text-purple">
                 <i class="fab fa-facebook"></i></a>
             </li>
             <li class="list-inline-item">
-                <a target="_blank" [href]="profile?.instagram || 'javascript: void(0);'" [matTooltip]="profile?.instagram || 'No instagram account'" 
+                <a target="_blank" [href]="profile?.instagram || 'javascript: return false;'" [matTooltip]="profile?.instagram || 'No instagram account'" 
                 class="social-list-item border-danger text-danger">
                 <i class="fab fa-instagram"></i></a>
             </li>

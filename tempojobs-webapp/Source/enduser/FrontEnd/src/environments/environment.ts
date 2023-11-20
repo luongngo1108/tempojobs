@@ -12,6 +12,7 @@ export const environment = {
     apiDataStateManagement: apiUrl + '/dataState',
     apiPayment: apiUrl + '/payment',
     apiReport: apiUrl + '/report',
+    apiNotification: apiUrl + '/notification',
     firebaseConfig: {
         apiKey: "AIzaSyAXH_vK2MTTNdigQsi1PvhPyl5pu5-Y9Ek",
         authDomain: "tempojob2nd.firebaseapp.com",

@@ -6,12 +6,14 @@ import DataState from '../models/dataStateModel.js';
 import GoogleMapLocation from '../models/googleMapLocationModel.js';
 import { getLastCounterValue } from '../utils/counterUtil.js';
 import WorkApply from '../models/workApplyModel.js';
+import User from '../models/userModel.js';
+import Notification from '../models/notificationModel.js';
 
 class WorkController {
     async getWorkAll(req, res, next) {
         var result = new ReturnResult();
         try {
-            const work = await Work.find({ deleted: false});
+            const work = await Work.find({ deleted: false });
             if (work) {
                 result.result = work;
             } else {
@@ -19,7 +21,7 @@ class WorkController {
             }
         } catch (error) {
             next(error);
-        } 
+        }
         res.status(200).json(result);
     }
 
@@ -33,32 +35,32 @@ class WorkController {
             var filterMappingList = page?.filter;
             var filterWorkType = [];
             filterMappingList.map(item => {
-                if (item.prop === 'workType') filterWorkType.push({workTypeId: item.value});
+                if (item.prop === 'workType') filterWorkType.push({ workTypeId: item.value });
             });
             var filterProvince = [];
             filterMappingList.filter(item => {
-                if (item.prop === 'workProvince') filterProvince.push({workProvince: item.value});
+                if (item.prop === 'workProvince') filterProvince.push({ workProvince: item.value });
             });
             var filterSearch = filterMappingList.find(item => item.prop === 'SEARCHING')?.value;
             if (filterSearch) {
                 page.totalElements = await Work.find({
                     deleted: false,
                     $or: [
-                        {workName: { $regex: filterSearch, $options: "i"}},
-                        {workDescription: { $regex: filterSearch, $options: "i"}}
+                        { workName: { $regex: filterSearch, $options: "i" } },
+                        { workDescription: { $regex: filterSearch, $options: "i" } }
                     ]
                 }).count();
                 listWork = await Work.find({
                     deleted: false,
                     $or: [
-                        {workName: { $regex: filterSearch, $options: "i"}},
-                        {workDescription: { $regex: filterSearch, $options: "i"}}
+                        { workName: { $regex: filterSearch, $options: "i" } },
+                        { workDescription: { $regex: filterSearch, $options: "i" } }
                     ]
-                }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
+                }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
             } else {
                 if (filterWorkType.length === 0 && filterProvince.length === 0) {
                     page.totalElements = await Work.find().count();
-                    listWork = await Work.find().sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
+                    listWork = await Work.find().sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterWorkType.length > 0 && filterProvince.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
@@ -69,7 +71,7 @@ class WorkController {
                         deleted: false,
                         $or: filterWorkType,
                         $or: filterProvince
-                    }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
+                    }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterWorkType.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
@@ -78,7 +80,7 @@ class WorkController {
                     listWork = await Work.find({
                         deleted: false,
                         $or: filterWorkType
-                    }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
+                    }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterProvince.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
@@ -87,16 +89,16 @@ class WorkController {
                     listWork = await Work.find({
                         deleted: false,
                         $or: filterProvince
-                    }).sort({workStatusId: 1}).skip(page.pageNumber * page.size).limit(page.size);
+                    }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 }
             }
             pagedData.data = listWork;
             pagedData.page = page;
             if (listWork) {
-                res.status(200).json({result: pagedData, message: message});
+                res.status(200).json({ result: pagedData, message: message });
             } else {
                 message = "Can't find all work";
-                res.status(400).json({result: null, message: message});
+                res.status(400).json({ result: null, message: message });
             }
         } catch (error) {
             next(error);
@@ -118,17 +120,17 @@ class WorkController {
                 workToSave.workId = nextWorkId;
                 workToSave.deleted = false;
                 let ggmap;
-                if(workToSave.googleMapLocation) ggmap = await GoogleMapLocation.create(workToSave.googleMapLocation);
+                if (workToSave.googleMapLocation) ggmap = await GoogleMapLocation.create(workToSave.googleMapLocation);
                 console.log(workToSave);
                 const work = await Work.create(workToSave);
-                const counterUpdated = await Counter.findOneAndUpdate({field: 'workId'}, {lastValue: nextWorkId});
+                const counterUpdated = await Counter.findOneAndUpdate({ field: 'workId' }, { lastValue: nextWorkId });
                 if (work) {
                     result.result = work;
                 } else {
                     result.message = "Can't create work";
                 }
             } else {
-                const updateWork = await Work.updateOne({workId: workBody.workId}, workBody);
+                const updateWork = await Work.updateOne({ workId: workBody.workId }, workBody);
                 const updateGgMap = await GoogleMapLocation.findByIdAndUpdate(workBody.googleMapLocation._id, workBody.googleMapLocation);
                 if (updateWork) {
                     result.result = updateWork;
@@ -192,54 +194,66 @@ class WorkController {
     async getWorkByWorkId(req, res, next) {
         var result = new ReturnResult();
         try {
-            const work = await Work.findOne({workId: req.params.workId});
-            if(work) {
+            const work = await Work.findOne({ workId: req.params.workId });
+            if (work) {
                 result.result = work;
-                work.workType = await DataState.findOne({dataStateId: work.workTypeId});
-            } 
+                work.workType = await DataState.findOne({ dataStateId: work.workTypeId });
+            }
         }
-        catch(error) {
+        catch (error) {
             next(error);
         }
         res.status(200).json(result);
-    }  
+    }
 
     async applyForWork(req, res, next) {
         var result = new ReturnResult();
         try {
             const workApply = req.body;
             const userId = req.query.id;
-            if(workApply) {
-                const findApplied = await WorkApply.findOne({userId: userId, workId: workApply.workId});
-                if(findApplied) {
-                    await Work.findOneAndUpdate({workId: workApply.workId}, {$pull: {workApply: findApplied._id}});
+            if (workApply) {
+                const findApplied = await WorkApply.findOne({ userId: userId, workId: workApply.workId });
+                if (findApplied) {
+                    await Work.findOneAndUpdate({ workId: workApply.workId }, { $pull: { workApply: findApplied._id } });
                     await WorkApply.deleteOne(findApplied);
                     const createdWorkApply = await WorkApply.create(workApply);
-                    const updatedWork = await Work.findOneAndUpdate(  {workId: workApply.workId}, 
-                                                                        {$push: {workApply: createdWorkApply._id}},
-                                                                        {returnOriginal: false},
-                                                                    );
-                    if(updatedWork) result.result = updatedWork;
+                    const updatedWork = await Work.findOneAndUpdate({ workId: workApply.workId },
+                        { $push: { workApply: createdWorkApply._id } },
+                        { returnOriginal: false },
+                    );
+                    if (updatedWork) result.result = updatedWork;
                 } else {
                     const createdWorkApply = await WorkApply.create(workApply);
-                    const updatedWork = await Work.findOneAndUpdate(  {workId: workApply.workId}, 
-                                                                        {$push: {workApply: createdWorkApply._id}},
-                                                                        {returnOriginal: false},
-                                                                    );
-                    if(updatedWork) result.result = updatedWork;
+                    const updatedWork = await Work.findOneAndUpdate({ workId: workApply.workId },
+                        { $push: { workApply: createdWorkApply._id } },
+                        { returnOriginal: false },
+                    );
+                    if (updatedWork) result.result = updatedWork;
                 }
-
-                if(result.result) {
+                if (result.result && workApply.status !== 14) {
                     // Send notification for created user
+                    const referenceUser = await User.findById(userId);
+                    const work = await Work.findOne({ workId: workApply.workId });
+                    const reciever = await User.findById(work.createdById);
+                    const content = `${referenceUser.displayName} đã đăng ký công việc số ${workApply.workId} của bạn.`;
+                    const title = `Có người ứng tuyển!`;
+                    const notification = await Notification.create({
+                        referenceUser,
+                        reciever,
+                        content,
+                        title,
+                        type: 'WorkApply',
+                        redirectUrl: 'created-manage'
+                    })
                 }
             }
         }
-        catch(error) {
+        catch (error) {
             next(error);
         }
         res.status(200).json(result);
-    } 
-    
+    }
+
     async getWorkApplyById(req, res, next) {
         try {
             var result = new ReturnResult();
@@ -287,16 +301,48 @@ class WorkController {
         var result = new ReturnResult();
         try {
             const workApply = req.body;
-            if(workApply) {
+            const work = await Work.findOne({ workId: workApply.workId });
+            const reciever = await User.findById(workApply.userId);
+            const referenceUser = await User.findById(work.createdBy.id);
+            var content = '';
+            var title = '';
+            const existedNotification = await Notification.findOne({reciever: workApply.userId, referenceUser: work.createdBy.id});
+            if (workApply) {
+                var existedWorkApply = await WorkApply.findById(workApply._id);
+                // Only send notification when change from "Da dang ky" to "Da nhan"/ "Tu choi"
+                if (existedWorkApply && (existedWorkApply.status === 7 || existedWorkApply.status === 8 || existedWorkApply.status === 9)) {
+                    // "Da nhan"
+                    if(workApply.status === 9) {
+                        content = `Bạn đã được nhận công việc số ${workApply.workId}`;
+                        title = `Chúc mừng!`;  
+                    }
+                    // "Tu choi"
+                    if(workApply.status === 8) {
+                        content = `Người đăng công việc ${workApply.workId} đã từ chối yêu cầu của bạn.`;
+                        title = `Xin chia buồn!`;        
+                    }
+                    if(existedNotification) {
+                        await Notification.findByIdAndUpdate(existedNotification._id, {content, title, isRead: false}); 
+                    } else {
+                        const notification = await Notification.create({
+                            referenceUser,
+                            reciever,
+                            content,
+                            title,
+                            type: 'WorkApplyCreator',
+                            redirectUrl: 'tasker-manage'
+                        })
+                    }
+                }
                 const saveApplied = await WorkApply.updateOne({ _id: workApply._id }, workApply);
-                if(saveApplied) {
+                if (saveApplied) {
                     result.result = saveApplied;
                 } else {
                     result.message = "Work applied doesn't exist";
                 }
             }
         }
-        catch(error) {
+        catch (error) {
             next(error);
         }
         res.status(200).json(result);
@@ -306,20 +352,34 @@ class WorkController {
         var result = new ReturnResult();
         try {
             const workApply = req.body;
-            if(workApply) {
+            if (workApply) {
                 const deleteApplied = await WorkApply.deleteOne({ _id: workApply._id });
                 const deleteWorkApplyInWork = await Work.updateOne(
                     { workId: workApply.workId },
                     { $pull: { workApply: workApply._id } }
                 );
-                if(deleteApplied.deletedCount > 0) {
+                if (deleteApplied.deletedCount > 0) {
                     result.result = true;
+                    // Send notification
+                    const work = await Work.findOne({ workId: workApply.workId });
+                    const referenceUser = await User.findById(workApply.userId);
+                    const reciever = await User.findById(work.createdById);
+                    const content = `${referenceUser.displayName} đã hủy đăng ký công việc số ${workApply.workId} của bạn.`;
+                    const title = `Hủy nhận việc!`;
+                    const notification = await Notification.create({
+                        referenceUser,
+                        reciever,
+                        content,
+                        title,
+                        type: 'UnSaveWorkApply',
+                        redirectUrl: 'created-manage'
+                    })
                 } else {
                     result.message = "Work applied doesn't exist";
                 }
             }
         }
-        catch(error) {
+        catch (error) {
             next(error);
         }
         res.status(200).json(result);

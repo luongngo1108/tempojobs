@@ -356,6 +356,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
 
   deleteWork(work: WorkModel) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
       data: {
         message: "Bạn chắc chắn muốn xóa công việc này?"
       }
@@ -389,6 +391,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
 
   changeWorkStatus(work: WorkModel, status: number, tab: number) {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
       data: {
         message: "Xác nhận công việc đã hoàn thành?"
       }
@@ -426,6 +430,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       disableClose: false,
       width: '500px',
       autoFocus: false,
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
       data: {
         user: user,
         work: work,

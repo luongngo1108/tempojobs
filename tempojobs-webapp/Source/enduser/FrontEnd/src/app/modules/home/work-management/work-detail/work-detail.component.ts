@@ -12,6 +12,7 @@ import { AppyWorkComponent } from './appy-work/appy-work.component';
 import { NbToastrService } from '@nebular/theme';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { MessageService } from 'primeng/api';
+import { WorkApply } from './appy-work/work-appy.model';
 
 @Component({
   selector: 'app-work-detail',
@@ -23,6 +24,8 @@ export class WorkDetailComponent implements OnInit {
   userDetailModel: ProfileDetail;
   destroy$: Subject<void> = new Subject<void>();
   user: any = {};
+  workApplied: WorkApply; 
+
   constructor(
     private workService: WorkManagementService,
     private route: ActivatedRoute,
@@ -45,6 +48,7 @@ export class WorkDetailComponent implements OnInit {
     var res = await lastValueFrom(this.workService.getWorkByWorkId(Number(workId)));
     if (res.result) {
       this.workModel = res.result;
+      this.workApplied = (await lastValueFrom(this.workService.getWorkApplyByWorkIdAndUserId(this.workModel.workId, this.user.user.id))).result;
       var detailRes = await lastValueFrom(this.userService.getUserDetailByUserId(this.workModel?.createdBy?.id || ""));
       if (detailRes.result) this.userDetailModel = detailRes.result;
     }
@@ -62,19 +66,21 @@ export class WorkDetailComponent implements OnInit {
     });
   }
 
-  openApplyForWorkDialog() {
+  async openApplyForWorkDialog() {
     const dialogRef = this.dialog.open(AppyWorkComponent, {
       height: 'auto',
       width: '600px',
       backdropClass: 'custom-backdrop',
       hasBackdrop: true,
       data: {
-        workModel: this.workModel
+        workModel: this.workModel,
+        workApplyModel: this.workApplied
       },
     });
 
-    dialogRef.afterClosed().subscribe(res => {
+    dialogRef.afterClosed().subscribe(async res => {
       if (res) {
+      this.workApplied = (await lastValueFrom(this.workService.getWorkApplyByWorkIdAndUserId(this.workModel.workId, this.user.user.id))).result;
         this.messageService.clear();
         this.messageService.add({
           key: 'toast1', severity: 'success', summary: 'Thành công',
