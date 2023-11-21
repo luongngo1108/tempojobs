@@ -117,8 +117,10 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       })
     });
     this.frmCreateWork.get('workHours').valueChanges.subscribe((valueChanges) => {
-      this.workHoursValue = valueChanges;
-      this.frmCreateWork.get('workHours').setValue(valueChanges);
+      if (valueChanges && valueChanges !== this.workHoursValue) {
+        this.workHoursValue = valueChanges;
+        this.frmCreateWork.get('workHours').setValue(valueChanges);
+      }
     });
     this.frmCreateWork.get('workProfit').valueChanges.subscribe((valueChanges) => {
       const cleanValue = valueChanges.replace(/[^0-9]/g, '');
