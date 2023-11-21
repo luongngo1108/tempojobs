@@ -25,7 +25,7 @@ import { MessageService } from 'primeng/api';
 })
 export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumnsTab1: string[] = ['workName', 'workTypeName', 'workProfit', 'workStatusName', 'moreAction'];
-  displayedColumnsTab2: string[] = ['workName', 'candidate', 'candidateApproval', 'confirm'];
+  displayedColumnsTab2: string[] = ['workName', 'candidate', 'candidateApproval', 'candidateRefused', 'confirm'];
   displayedColumnsTab3: string[] = ['workName', 'candidateApproval', 'confirm'];
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -35,6 +35,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   listWorkType: DataStateModel[] = [];
   listWorkStatus: DataStateModel[] = [];
   listWorkApplyStatus: DataStateModel[] = [];
+
+  // work status ID
   approvingId: number;
   approvedId: number;
   refuseApprovalId: number;
@@ -50,8 +52,11 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   paymentMessage = null;
   amount = null;
   userId = null;
+
+  // work apply status ID
   waitingApplyId: number;
   acceptApplyId: number;
+  refusedApplyId: number;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -116,6 +121,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.listWorkApplyStatus = resultApply.result;
       this.waitingApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Đang đăng ký').dataStateId;
       this.acceptApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Được nhận').dataStateId;
+      this.refusedApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Bị từ chối').dataStateId;
     }
   }
 
@@ -179,6 +185,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
           if (work.workApply && work.workApply.length > 0) {
             work.listTaskerWaitings = [];
             work.listTaskerAccepted = [];
+            work.listTaskerRefused = [];
             work.workApply.map(async workApplyId => {
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
@@ -191,6 +198,12 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
                 if(resp.result) {
                   work.listTaskerAccepted.push(resp.result);
+                }
+              }
+              if (respWorkApply.result && respWorkApply.result.status === this.refusedApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerRefused.push(resp.result);
                 }
               }
             })
@@ -245,6 +258,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
           if (work.workApply && work.workApply.length > 0) {
             work.listTaskerWaitings = [];
             work.listTaskerAccepted = [];
+            work.listTaskerRefused = [];
             work.workApply.map(async workApplyId => {
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
@@ -257,6 +271,12 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
                 if(resp.result) {
                   work.listTaskerAccepted.push(resp.result);
+                }
+              }
+              if (respWorkApply.result && respWorkApply.result.status === this.refusedApplyId) {
+                var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
+                if(resp.result) {
+                  work.listTaskerRefused.push(resp.result);
                 }
               }
             })

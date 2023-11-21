@@ -44,6 +44,8 @@ export class WorkModel {
 
     listTaskerWaitings: User[] | null;
     listTaskerAccepted: User[] | null;
+    listTaskerRefused: User[] | null;
+    
     listWorkApply: WorkApply[] | null;
 
     isSaving: boolean;

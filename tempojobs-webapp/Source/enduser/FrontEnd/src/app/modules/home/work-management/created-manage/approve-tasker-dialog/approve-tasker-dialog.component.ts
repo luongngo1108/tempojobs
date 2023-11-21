@@ -22,9 +22,12 @@ export class ApproveTaskerDialogComponent implements OnInit {
   forTab: number;
   work: WorkModel;
   workApply: WorkApply;
+
+  waitingId: number;
   acceptedId: number;
   refuseId: number;
   evaluatedId: number;
+
   form: FormGroup;
   valueStar = 0;
 
@@ -53,17 +56,21 @@ export class ApproveTaskerDialogComponent implements OnInit {
     if (respWorkApply.result) {
       this.workApply = respWorkApply.result;
     }
+    var respWaiting = await this.dataStateService.getDataStateByTypeAndName('WORK_APPLY_STATUS', 'Đang đăng ký').toPromise();
+    if (respWaiting.result) {
+      this.waitingId = respWaiting?.result?.dataStateId;
+    }
     var respAccept = await this.dataStateService.getDataStateByTypeAndName('WORK_APPLY_STATUS', 'Được nhận').toPromise();
     if (respAccept.result) {
-      this.acceptedId = respAccept.result.dataStateId;
+      this.acceptedId = respAccept?.result?.dataStateId;
     }
     var respRefuse = await this.dataStateService.getDataStateByTypeAndName('WORK_APPLY_STATUS', 'Bị từ chối').toPromise();
     if (respRefuse.result) {
-      this.refuseId = respRefuse.result.dataStateId;
+      this.refuseId = respRefuse?.result?.dataStateId;
     }
     var respEvaluated = await this.dataStateService.getDataStateByTypeAndName('WORK_APPLY_STATUS', 'Đã đánh giá').toPromise();
     if (respEvaluated.result) {
-      this.evaluatedId = respEvaluated.result.dataStateId;
+      this.evaluatedId = respEvaluated?.result?.dataStateId;
     }
   }
 
@@ -79,7 +86,7 @@ export class ApproveTaskerDialogComponent implements OnInit {
         this.closeDialog(true);
       } else {
         this.toast.success(`Xác nhận thất bại`);
-        this.closeDialog();
+        this.closeDialog(true);
       }
     });
   }

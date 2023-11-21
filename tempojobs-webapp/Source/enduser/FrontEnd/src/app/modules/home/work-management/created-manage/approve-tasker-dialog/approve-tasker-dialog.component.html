@@ -59,8 +59,13 @@
 <mat-dialog-actions align="end">
   <button mat-button [mat-dialog-close]="false" cdkFocusInitial>Đóng</button>
   <ng-container *ngIf="forTab === 2">
-    <button mat-button color="warn" (click)="saveWorkApplyStatus(refuseId)">Từ chối</button>
-    <button mat-button color="primary" (click)="saveWorkApplyStatus(acceptedId)">Chấp nhận</button>
+    <ng-container *ngIf="workApply?.status !== refuseId">
+      <button mat-button color="warn" (click)="saveWorkApplyStatus(refuseId)">Từ chối</button>
+      <button mat-button color="primary" (click)="saveWorkApplyStatus(acceptedId)">Chấp nhận</button>
+    </ng-container>
+    <ng-container *ngIf="workApply?.status === refuseId">
+      <button mat-button color="primary" (click)="saveWorkApplyStatus(waitingId)">Đưa trở lại hàng đợi</button>
+    </ng-container>
   </ng-container>
   <ng-container *ngIf="forTab === 4">
     <button mat-button color="primary" (click)="saveWorkApplyStar()">Đánh giá</button>
