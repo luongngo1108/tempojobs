@@ -20,8 +20,8 @@ class reportController {
             const userId = req.params.userId;
             const { pageNumber } = req.body;    
             if (userId) {
-                if (pageNumber == -1) result.result = (await Notification.find({ reciever: userId }));
-                else result.result = (await Notification.find({ reciever: userId })).slice(pageNumber * 5, pageNumber * 5 + 5);
+                if (pageNumber == -1) result.result = await Notification.find({ reciever: userId }).sort({createdAt: -1});
+                else result.result = (await Notification.find({ reciever: userId }).sort({createdAt: -1})).slice(pageNumber * 5, pageNumber * 5 + 5);
             }
         }
         catch {
