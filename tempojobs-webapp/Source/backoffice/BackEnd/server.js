@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 import route from './src/routes/indexRoutes.js';
 import connect from './src/configs/dbConnection.js';
+import { outDateWork } from './src/cronJobs/workJobs.js';
 
 //database connection
 connect();
@@ -16,6 +17,9 @@ app.use(cors());
 
 //base route
 route(app);
+
+// cron jobs
+outDateWork.start();
 
 app.listen(port, () => {
   console.log(`App listening on port http://localhost:${port}`);
