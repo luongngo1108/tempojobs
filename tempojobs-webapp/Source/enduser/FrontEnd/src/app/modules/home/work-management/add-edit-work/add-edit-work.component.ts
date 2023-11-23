@@ -279,7 +279,10 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
           if (!this.workModel?.workId) {
             model.workId = 0;
             model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
-            
+          } else {
+            if (model.workStatusId === this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt')?.dataStateId) {
+              model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
+            }
           }
           if (this.createBy) {
             model.createdById = this.createBy?.user?.id;

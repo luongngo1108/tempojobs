@@ -129,6 +129,9 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     var resultListWork = await this.workService.getWorkByCreatorId(this.currentUser?.user?.id).pipe(takeUntil(this.destroy$)).toPromise();
     if (resultListWork.result) {
       this.listWork = resultListWork.result;
+      this.listWork.map(work => {
+        work.timeLine = this.getTimeLine(work?.createdAt);
+      });
       this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
     }
   }
@@ -172,6 +175,17 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  getTimeLine(startDate: Date | string) {
+    var dateCreateWork = new Date(startDate);
+    dateCreateWork.setDate(dateCreateWork.getDate() + 10);
+    var toDay = new Date();
+    var timeLine = Math.ceil((dateCreateWork.getTime() - toDay.getTime()) / (60 * 60 * 1000));
+    var timeLineDate = Math.floor(timeLine / 24);
+    var timeLineHours = timeLine - timeLineDate * 24;
+    if (timeLineDate < 0) return 'Hết hạn';
+    return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
   }
 
   changeTab(event) {
@@ -465,5 +479,9 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeTabWithNumber(2);
       }
     })
+  }
+
+  extendTimeLine() {
+    
   }
 }
