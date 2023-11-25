@@ -75,7 +75,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
     public dialog: MatDialog,
     private paymentService: PaymentServiceService,
     private cdref: ChangeDetectorRef,
-    private messageService: MessageService,
+    private messageService: MessageService
   ) {
     this.workModel = window?.history?.state?.work ?? new WorkModel();
     this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
@@ -261,10 +261,11 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        backdropClass: 'custom-backdrop',
+        hasBackdrop: true,
         data: {
-          content: `Vui lòng hoàn thành thanh toán ${amount} vnd để có thể đăng tải công việc!\n` +
-            "Chúng tôi chỉ chấp nhận hình thức thanh toán bằng MOMO!",
-          nextButtonContent: "Thanh toán"
+          content: `Bạn có chắc muốn đăng công việc này?`,
+          nextButtonContent: "Chắc chắn"
         },
       });
 
@@ -291,7 +292,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
 
           if (!this.workModel?.workId) {
             model.workId = 0;
-            model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
+            model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
           } else {
             if (model.workStatusId === this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt')?.dataStateId) {
               model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
@@ -307,9 +308,11 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
           var respSaveWork = await lastValueFrom(this.workService.saveWork(model));
           if (respSaveWork.result) {
             this.workModel = respSaveWork.result;
-            // create momo payment
-            var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel.createdBy.email, inputAmount: amount, workId: this.workModel.workId }));
-            if (respCreatePayment.result) window.location.href = respCreatePayment.result;
+            this.messageService.clear();
+            this.messageService.add({
+              key: 'root-toast', severity: 'success', summary: 'Thành công',
+              detail: 'Công việc của bạn đã được đưa vào hàng chờ duyệt của chúng tôi!', life: 20000
+            });
             this.router.navigateByUrl('/created-manage');
           }
         }

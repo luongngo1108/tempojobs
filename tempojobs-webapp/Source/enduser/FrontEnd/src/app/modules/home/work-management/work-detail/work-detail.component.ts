@@ -102,6 +102,6 @@ export class WorkDetailComponent implements OnInit {
   }
 
   openAppliedForWork() {
-
+    this.router.navigateByUrl("created-manage");
   }
 }

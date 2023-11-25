@@ -18,6 +18,7 @@ import { UserManagementService } from '../../profile/user-management.service';
 import { ProfileDetail, User } from '../../profile/user.model';
 import { ApproveTaskerDialogComponent } from './approve-tasker-dialog/approve-tasker-dialog.component';
 import { MessageService } from 'primeng/api';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -42,6 +43,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   refuseApprovalId: number;
   processingId: number;
   evaluationId: number;
+  waitForPaymentId: number;
   doneId: number;
   currentUser;
   countTab1: number;
@@ -88,17 +90,18 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   async ngOnInit() {
+    if (this.paymentToken && this.paymentMessage.includes("Successful.") && this.userId) {
+      var paymentResult = await lastValueFrom(this.paymentService.momoPayementSuccess({ paymentToken: this.paymentToken, amount: this.amount, userId: this.userId }));
+      if(paymentResult) {
+        this.messageService.clear();
+          this.messageService.add({
+            key: 'toast1', severity: 'success', summary: 'Thành công',
+            detail: `Bạn đã thanh toán thành công với số tiền là ${this.amount} vnd`, life: 20000
+          });
+      }  
+    }
     await this.getDataDefaults();
     await this.refreshData();
-    if (this.paymentToken && this.paymentMessage.includes("Successful.") && this.userId) {
-      this.paymentService.momoPayementSuccess({ paymentToken: this.paymentToken, amount: this.amount, userId: this.userId }).subscribe(res => {
-        this.messageService.clear();
-        this.messageService.add({
-          key: 'toast1', severity: 'success', summary: 'Thành công',
-          detail: `Bạn đã thanh toán thành công với số tiền là ${this.amount}`, life: 20000
-        });
-      })
-    }
   }
 
   async getDataDefaults() {
@@ -111,6 +114,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.processingId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang thực hiện')?.dataStateId;
       this.evaluationId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Chờ đánh giá')?.dataStateId;
       this.doneId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Hoàn thành')?.dataStateId;
+      this.waitForPaymentId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
     }
     var resultType = await this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).toPromise();
     if (resultType.result) {
@@ -132,12 +136,12 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.listWork.map(work => {
         work.timeLine = this.getTimeLine(work?.createdAt);
       });
-      this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+      this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId || work.workStatusId === this.waitForPaymentId);
     }
   }
 
   counterTab() {
-    const filterTab1 = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+    const filterTab1 = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId || work.workStatusId === this.waitForPaymentId);
     if (filterTab1.length > 0) {
       this.countTab1 = filterTab1.length;
     } else {
@@ -191,7 +195,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   changeTab(event) {
     switch (Number(event.tabId)) {
       case 1:
-        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId || work.workStatusId === this.waitForPaymentId);
         break;
       case 2:
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
@@ -204,19 +208,19 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerWaitings.push(resp.result);
                 }
               }
               if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerAccepted.push(resp.result);
                 }
               }
               if (respWorkApply.result && respWorkApply.result.status === this.refusedApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerRefused.push(resp.result);
                 }
               }
@@ -233,7 +237,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerAccepted.push(resp.result);
                 }
               }
@@ -250,7 +254,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerAccepted.push(resp.result);
                 }
               }
@@ -277,19 +281,19 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.waitingApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerWaitings.push(resp.result);
                 }
               }
               if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerAccepted.push(resp.result);
                 }
               }
               if (respWorkApply.result && respWorkApply.result.status === this.refusedApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerRefused.push(resp.result);
                 }
               }
@@ -306,7 +310,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerAccepted.push(resp.result);
                 }
               }
@@ -323,7 +327,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
               var respWorkApply = await lastValueFrom(this.workService.getWorkApplyById(workApplyId));
               if (respWorkApply.result && respWorkApply.result.status === this.acceptApplyId) {
                 var resp = await lastValueFrom(this.userService.getUserById(respWorkApply?.result?.userId));
-                if(resp.result) {
+                if (resp.result) {
                   work.listTaskerAccepted.push(resp.result);
                 }
               }
@@ -340,10 +344,23 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     const diffTime = Math.abs(Number(startDate) - Number(createdAt));
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     var amount = diffDays * 5000 + workModel.quantity * 1000;
-    var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
-      userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
-    }));
-    if (respCreatePayment.result) window.location.href = respCreatePayment.result;
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        content: `Bạn có chắc muốn tiếp tục thanh toán?`,
+        nextButtonContent: "Thanh toán"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async result => {
+      if (result) {
+        var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
+          userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
+        }));
+        if (respCreatePayment.result) window.location.href = respCreatePayment.result;
+      }
+    })
   }
 
   handleDisplayStatus(state: number, isDisplayColor: boolean = false): string {
@@ -482,6 +499,62 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   extendTimeLine() {
-    
+
   }
+
+  // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+  //   data: {
+  //     content: `Vui lòng hoàn thành thanh toán ${amount} vnd để có thể đăng tải công việc!\n` +
+  //       "Chúng tôi chỉ chấp nhận hình thức thanh toán bằng MOMO!",
+  //     nextButtonContent: "Thanh toán"
+  //   },
+  // });
+
+  // dialogRef.afterClosed().subscribe(async result => {
+  //   if (result) {
+  //     // Save work
+  //     this.workModel = model;
+  //     console.log(this.workModel)
+  //     const latLng = {
+  //       lat: parseFloat(this.latitude?.toString()),
+  //       lng: parseFloat(this.longitude?.toString())
+  //     }
+  //     try {
+  //       await this.geocoder.geocode({ location: latLng }).then(async response => {
+  //         if (response.results[0]) {
+  //           this.workModel.googleLocation.address = response.results[0].formatted_address;
+  //           this.workModel.googleLocation.latitude = this.latitude;
+  //           this.workModel.googleLocation.longitude = this.longitude;
+  //         }
+  //       })
+  //     } catch (error) {
+  //       console.log("Request limited!!!");
+  //     }
+
+  //     if (!this.workModel?.workId) {
+  //       model.workId = 0;
+  //       model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
+  //     } else {
+  //       if (model.workStatusId === this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt')?.dataStateId) {
+  //         model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
+  //       }
+  //     }
+  //     if (this.createBy) {
+  //       model.createdById = this.createBy?.user?.id;
+  //       model.createdBy = this.createBy?.user;
+  //     }
+  //     if (!model.workApply) {
+  //       model.workApply = [];
+  //     }
+  //     var respSaveWork = await lastValueFrom(this.workService.saveWork(model));
+  //     if (respSaveWork.result) {
+  //       this.workModel = respSaveWork.result;
+  //       // create momo payment
+  //       // var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel.createdBy.email, inputAmount: amount, workId: this.workModel.workId }));
+  //       // if (respCreatePayment.result) window.location.href = respCreatePayment.result;
+  //       this.router.navigateByUrl('/created-manage');
+  //     }
+  //   }
+  // });
+
 }

@@ -111,7 +111,7 @@ class momoController {
         var result = new ReturnResult();
         try {
             const {paymentToken, amount, userId} = req.body;
-            const updatedWork = await Work.findOneAndUpdate({paymentToken: paymentToken}, {workStatusId: 1, paymentToken:""}, {returnOriginal: false});
+            const updatedWork = await Work.findOneAndUpdate({paymentToken: paymentToken}, {workStatusId: 2, paymentToken:""}, {returnOriginal: false});
             if(updatedWork) {
                 const savedPaymentHistory = await PaymentHistory.create({
                     payerId: userId,
