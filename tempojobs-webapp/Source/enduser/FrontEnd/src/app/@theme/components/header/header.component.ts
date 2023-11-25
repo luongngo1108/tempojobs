@@ -67,11 +67,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.notificationService.getNotificationByUserId(this.userLoggedIn.user.id, -1).subscribe(res => {
-      if (res.result && res.result.length > 0) {
-        this.countNotification = res.result.filter(x => !x.isRead).length;
-      }
-    })
+    if(this.userLoggedIn) {
+      this.notificationService.getNotificationByUserId(this.userLoggedIn.user.id, -1).subscribe(res => {
+        if (res.result && res.result.length > 0) {
+          this.countNotification = res.result.filter(x => !x.isRead).length;
+        }
+      })
+    }
     // this.currentTheme = this.themeService.currentTheme;
     // catch menu event
     this.menuServiceObservable = this.menuService.onItemClick().subscribe((event) => {

@@ -24,11 +24,11 @@ async function changeStatusAndSendNotification(allOutDateWork) {
         let content = '';
         let title = '';
         switch (work.workStatusId) {
-            case 1:
+            case 1, 6:
                 await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
                 reciever = await User.findById(work.createdById);
-                content = `Công việc số ${work.workId} của bạn có vẻ như vẫn chưa được duyệt. Chúng tôi đã hoàn tiền đến tài khoản của bạn.`;
-                title = `Xin lỗi vì vấn đề này!`;
+                content = `Công việc số ${work.workId} của bạn đã hết hạn. Vui lòng tạo công việc mới.`;
+                title = `Nhắc nhở!`;
                 await Notification.create({
                     reciever,
                     content,
@@ -37,19 +37,19 @@ async function changeStatusAndSendNotification(allOutDateWork) {
                     redirectUrl: ''
                 })
                 break;
-            case 2, 6:
-                await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
-                reciever = await User.findById(work.createdById);
-                content = `Công việc số ${work.workId} của bạn đã hết hạn. Vui lòng gia hạn thêm.`;
-                title = `Hết hạn!`;
-                await Notification.create({
-                    reciever,
-                    content,
-                    title,
-                    type: 'OutDateWork',
-                    redirectUrl: 'created-manage'
-                })
-                break;
+            // case 6:
+            //     await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
+            //     reciever = await User.findById(work.createdById);
+            //     content = `Công việc số ${work.workId} của bạn đã hết hạn. Vui lòng gia hạn thêm.`;
+            //     title = `Hết hạn!`;
+            //     await Notification.create({
+            //         reciever,
+            //         content,
+            //         title,
+            //         type: 'OutDateWork',
+            //         redirectUrl: 'created-manage'
+            //     })
+            //     break;
         }
 
     }

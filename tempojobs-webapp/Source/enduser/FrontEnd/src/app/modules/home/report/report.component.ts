@@ -20,7 +20,7 @@ export class ReportComponent implements OnInit, OnDestroy {
   reportModel: Report;
   isLoading: boolean = false;
   private destroy$: Subject<void> = new Subject<void>();
-  user: any = {};
+  user: any =null;
   userDetail: ProfileDetail;
   constructor(
     // @Inject(MAT_DIALOG_DATA) public data: {userId: string},
@@ -40,8 +40,10 @@ export class ReportComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.user.user.id));
-    if (res.result) this.userDetail = res.result;;
+    if(this.user) {
+      var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.user.user.id));
+      if (res.result) this.userDetail = res.result;;
+    }
     if (!this.reportModel) this.reportModel = new Report();
     this.reportModel._id = null
     if (this.user?.user && this.userDetail) {
