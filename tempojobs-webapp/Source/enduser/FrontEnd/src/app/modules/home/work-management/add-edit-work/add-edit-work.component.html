@@ -110,7 +110,7 @@
           <div class="form-floating mb-3">
             <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Ngân sách dự kiến chi trả cho công việc này</mat-label>
-              <input matInput required type="text" appFormatCurrency formControlName="workProfit" autocomplete="off" trim="blur" />
+              <input matInput type="text" appFormatCurrency formControlName="workProfit" autocomplete="off" trim="blur" />
               <mat-error *ngIf="
                   frmCreateWork.controls?.workProfit?.errors &&
                   (frmCreateWork.controls?.workProfit?.dirty ||

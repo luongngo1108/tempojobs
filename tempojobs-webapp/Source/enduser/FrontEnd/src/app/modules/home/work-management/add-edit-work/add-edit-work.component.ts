@@ -16,6 +16,7 @@ import { GoogleMap } from '@angular/google-maps';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { PaymentServiceService } from 'src/app/shared/services/payment-service.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-add-edit-work',
@@ -61,6 +62,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   markers: google.maps.Marker[] = [];
   // Google map end
   workHoursValue: number = 0.5;
+  workProfitValue: string = "";
 
   constructor(
     private frmBuilder: RxFormBuilder,
@@ -72,7 +74,8 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
     private ngZone: NgZone,
     public dialog: MatDialog,
     private paymentService: PaymentServiceService,
-    private cdref: ChangeDetectorRef
+    private cdref: ChangeDetectorRef,
+    private messageService: MessageService,
   ) {
     this.workModel = window?.history?.state?.work ?? new WorkModel();
     this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
@@ -123,13 +126,16 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     this.frmCreateWork.get('workProfit').valueChanges.subscribe((valueChanges) => {
-      const cleanValue = valueChanges.replace(/[^0-9]/g, '');
-      const numberValue = Number(cleanValue);
-      const formattedValue = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND'
-      }).format(numberValue);
-      this.frmCreateWork.get('workProfit').setValue(formattedValue.replace('₫', ''));
+      if (valueChanges && valueChanges !== this.workProfitValue) {
+        this.workProfitValue = valueChanges.toString();
+        const cleanValue = valueChanges.replace(/[^0-9]/g, '');
+        const numberValue = Number(cleanValue);
+        const formattedValue = new Intl.NumberFormat('vi-VN', {
+          style: 'currency',
+          currency: 'VND'
+        }).format(numberValue);
+        this.frmCreateWork.get('workProfit').setValue(formattedValue.replace('₫', ''));
+      }
     });
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
@@ -247,6 +253,13 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       const diffTime = Math.abs(Number(model.startDate) - Number(currentDate));
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       var amount = diffDays * 5000 + model.quantity * 1000;
+      if (model?.workStatusId === this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt')?.dataStateId) {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'info', summary: 'Thông báo',
+          detail: `Số tiền công việc trước sẽ được hoàn trả, bạn cần thanh toán để đăng công việc này.`, life: 50000
+        });
+      }
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         data: {
           content: `Vui lòng hoàn thành thanh toán ${amount} vnd để có thể đăng tải công việc!\n` +
