@@ -24,6 +24,8 @@ export class NgxTableComponent implements OnInit {
   @Input() columnsTable: [];
   @Input() addEditComponent: any;
   @Input() isNormalShowTable: boolean = false;
+  @Input() addEditHeight: string = '100vh';
+  @Input() addEditWidth: string = '600px';
   isLoading = 0;
   rows = [];
   columns = [];
@@ -91,7 +93,6 @@ export class NgxTableComponent implements OnInit {
 
   setData(result: PagedData<any>) {
     if (result) {
-      console.log(result)
       this.isLoading--;
       this.page = result.page;
       this.rows = result.data;
@@ -112,8 +113,8 @@ export class NgxTableComponent implements OnInit {
   onClickEdit(row, rowIndex) {
     const dialogRef = this.dialog.open(this.addEditComponent, {
       disableClose: true,
-      height: '100vh',
-      width: '600px',
+      height: this.addEditHeight,
+      width: this.addEditWidth,
       backdropClass: 'custom-backdrop',
       hasBackdrop: true,
       autoFocus: false,

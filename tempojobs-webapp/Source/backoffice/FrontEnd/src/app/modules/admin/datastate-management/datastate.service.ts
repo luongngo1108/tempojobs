@@ -14,6 +14,9 @@ export class DatastateService {
   constructor(
     private http: HttpClient
   ) { }
+  getListProvince() {
+    return this.http.get<any>(`https://provinces.open-api.vn/api/?depth=2`);
+  }
 
   getAllDataState() {
     return this.http.get<PagedData<DataStateModel[]>>(`${this.baseUrl}/getDataStateAll`);
@@ -25,5 +28,13 @@ export class DatastateService {
 
   onDeletes(ids: any = []): Observable<ReturnResult<DataStateModel>> {
     return this.http.post<ReturnResult<DataStateModel>>(`${this.baseUrl}/onDeletes`, ids)
+  }
+
+  getDataStateByType(type: string = null) {
+    return this.http.get<ReturnResult<DataStateModel[]>>( !type ? `${this.baseUrl}/getDataStateByType` : `${this.baseUrl}/getDataStateByType?type=${type}` );
+  }
+
+  getDataStateByTypeAndName(type: string = null, name: string = null) {
+    return this.http.get<ReturnResult<DataStateModel>>(`${this.baseUrl}/getDataStateByTypeAndName?type=${type}&name=${name}` );
   }
 }

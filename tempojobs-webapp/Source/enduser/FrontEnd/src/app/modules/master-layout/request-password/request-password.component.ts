@@ -44,12 +44,7 @@ export class RequestPasswordComponent {
 
     this.authService.sendEmailChangePassword(this.user.email).subscribe(res => {
       this.submitted = false;
-      if(res.result) {
-        this.messages = [res.result];
-      } else {
-        this.messages = [];
-        this.errors = ["Your email hasn't been registerd"];
-      }
+      this.messages = [res.result];
       this.cd.detectChanges();
     })
   }

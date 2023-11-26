@@ -34,6 +34,10 @@ export class DatastateManagementComponent {
         prop: 'type'
       },
       {
+        name: 'order',
+        prop: 'order'
+      },
+      {
         name: 'colorCode',
         prop: 'colorCode'
       },

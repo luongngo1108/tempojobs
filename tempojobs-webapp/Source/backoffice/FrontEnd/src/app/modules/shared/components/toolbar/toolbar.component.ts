@@ -14,6 +14,8 @@ export class ToolbarComponent implements OnInit{
   @Output() onDeletes = new EventEmitter<any>();
   @Output() addEvent: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedCout: number = 0;
+  @Input() addEditHeight: string = '100vh';
+  @Input() addEditWidth: string = '600px';
   constructor(
     private dialog: MatDialog
   ) {
@@ -26,8 +28,8 @@ export class ToolbarComponent implements OnInit{
   onClickAddNew() {
     const dialogRef = this.dialog.open(this.addEditComponent, {
       disableClose: true,
-      height: '100vh',
-      width: '600px',
+      height: this.addEditHeight,
+      width: this.addEditWidth,
       backdropClass: 'custom-backdrop',
       hasBackdrop: true,
       autoFocus: false,

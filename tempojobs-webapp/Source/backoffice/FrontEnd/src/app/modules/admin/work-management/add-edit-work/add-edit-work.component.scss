@@ -1,0 +1,22 @@
+.fix-section {
+    padding-top: 40px !important;
+}
+
+.example-label-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 10px 0;
+    max-width: 284px;
+}
+
+.example-value-label {
+    font-weight: 600;
+}
+
+.example-margin {
+    margin-left: 80px;
+}
+
+::ng-deep .mat-mdc-dialog-content {
+    max-height: calc(100vh - 58px) !important;
+}

@@ -1,0 +1,89 @@
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+    integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+    integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+<div class="d-flex flex-wrap" mat-dialog-title style="margin: unset; padding: 1px 10px 1px 28px; align-items: center;">
+    <div>
+        <span style="font-size: 15px;">#{{userDetail?.email}}</span>
+    </div>
+    <!-- <button mat-button color="primary" (click)="closeDialog()">
+        <mat-icon>clear</mat-icon>Cancel
+    </button> -->
+    <button mat-icon-button aria-label="Close the dialog" (click)="closeDialog()" class="ml-auto">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <div class="container" *ngIf="!isLoading;else skeletonLoader" class="row">
+        <div *ngIf="userDetail;else userNotFound" class="row">
+            <div class="col-lg-12 col-xl-12">
+                <div class="card-box text-center">
+                    <img style="cursor: pointer;" [src]="userDetail?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                    class="rounded-circle avatar-xl img-thumbnail" alt="profile-image" >
+
+                    <h4 class="mb-0" style="margin-bottom: 10px !important;">{{userDetail?.firstName + " " +
+                        userDetail?.lastName}}</h4>
+
+
+                    <!-- <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Follow</button>
+                    <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light m-l-button">Message</button> -->
+                    
+                    <div class="text-left mt-3">
+                        <h4 class="font-13 text-uppercase">Mô tả : </h4>
+                        <p class="text-muted font-13 mb-3">
+                            {{userDetail?.description || "No description"}}
+                        </p>
+                        <p class="text-muted mb-2 font-13"><strong>Họ và tên: </strong> <span class="ml-2">
+                                {{userDetail?.firstName + " " + userDetail?.lastName}}</span></p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Giới tính: </strong> <span
+                                class="ml-2 ">{{userDetail?.sex}}</span></p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Sinh ngày: </strong> <span
+                                class="ml-2 ">{{userDetail?.birth | datePipe}}</span></p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Số điện thoại: </strong><span
+                                class="ml-2">{{userDetail?.phone || "Không có"}}</span></p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Email: </strong> <span
+                                class="ml-2 ">{{userDetail?.email}}</span></p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Địa chỉ: </strong> <span
+                                class="ml-2 ">{{userDetail?.googleLocation?.address || "Không có"}}</span></p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Đã tham gia từ ngày: </strong> <span
+                                class="ml-2 ">{{userDetail?.createdAt | datePipe}}</span></p>
+                    </div>
+
+                    <ul class="social-list list-inline mt-3 mb-0">
+                        <li class="list-inline-item">
+                            <a target="_blank" [href]="userDetail?.facebook || 'javascript: void(0);'"
+                                [matTooltip]="userDetail?.facebook || 'No facebook account'"
+                                class="social-list-item border-purple text-purple"><i class="fab fa-facebook"></i></a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a target="_blank" [href]="userDetail?.instagram || 'javascript: void(0);'"
+                                [matTooltip]="userDetail?.instagram || 'No instagram account'"
+                                class="social-list-item border-danger text-danger"><i class="fab fa-instagram"></i></a>
+                        </li>
+                    </ul>
+                </div> <!-- end card-box -->
+            </div> <!-- end col-->
+        </div>
+    </div>
+</mat-dialog-content>
+
+<ng-template #userNotFound>
+    <div class="row" style="margin-bottom: 10px;">
+        <div class="col-lg-12 col-xl-12" style="text-align: center; justify-content: center;">
+            <h2>Tài khoản không tồn tại hoặc đã bị khóa!</h2>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #skeletonLoader>
+    <div class="item">
+        <ngx-skeleton-loader count="5"></ngx-skeleton-loader>
+      </div>
+</ng-template>

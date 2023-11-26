@@ -16,6 +16,9 @@ const DataState = new Schema ({
     colorCode: {
         type: String,
         required: [false, "Please add the data state color code!"],
+    },
+    order: {
+        type: Number
     }
 }, {
     timestamps: true,

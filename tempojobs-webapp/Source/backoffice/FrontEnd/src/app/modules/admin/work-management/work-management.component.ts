@@ -1,10 +1,16 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { MessageService } from 'primeng/api';
-import { Subject, takeUntil } from 'rxjs';
+import { lastValueFrom, Subject, takeUntil } from 'rxjs';
 import { NgxTableComponent } from '../../shared/components/ngx-table/ngx-table.component';
 import { PagedData } from '../../shared/models/paged-data';
+import { DatePipePipe } from '../../shared/pipes/date-pipe.pipe';
+import { DataStateModel } from '../datastate-management/data-state.model';
+import { DatastateService } from '../datastate-management/datastate.service';
+import { UserManagementService } from '../user-management/user-management.service';
 import { AddEditWorkComponent } from './add-edit-work/add-edit-work.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
 import { WorkService } from './work.service';
 
 @Component({
@@ -15,13 +21,21 @@ import { WorkService } from './work.service';
 export class WorkManagementComponent {
   columns = [];
   @ViewChild('ngxTable', { static: true }) ngxTable: NgxTableComponent;
+  @ViewChild('statusCell', { static: true }) statusCell: TemplateRef<any>;
+  @ViewChild('userCell', { static: true }) userCell: TemplateRef<any>;
   addEditComponent = AddEditWorkComponent;
   private destroy$: Subject<void> = new Subject<void>();
   user: any = {};
+  listStatus: any = null;
   constructor(
     private workService: WorkService,
     private messageService: MessageService,
-    private authService: NbAuthService
+    private authService: NbAuthService,
+    private datePipe: DatePipePipe,
+    private datastateService: DatastateService,
+    private userService: UserManagementService,
+    public dialog: MatDialog,
+
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
     .subscribe(async (token: NbAuthJWTToken) => {
@@ -31,10 +45,20 @@ export class WorkManagementComponent {
       }
     });
 
+    this.datastateService.getAllDataState().subscribe(res => {
+      if(res.data) {
+        this.listStatus = res.data;
+      }
+    })
+
   }
 
   ngOnInit(): void {
     this.columns = [
+      {
+        name: "workId",
+        prop: "workId"
+      },
       {
         name: "Name",
         prop: "workName"
@@ -57,11 +81,8 @@ export class WorkManagementComponent {
       },
       {
         name: 'Start Date',
-        prop: 'startDate'
-      },
-      {
-        name: 'facebook',
-        prop: 'facebook'
+        prop: 'startDate',
+        pipe: this.datePipe
       },
       {
         name: 'Hours',
@@ -69,15 +90,22 @@ export class WorkManagementComponent {
       },
       {
         name: 'status',
-        prop: 'workStatus.'
+        prop: 'workStatusId',
+        cellTemplate: this.statusCell,
+        cellClass: 'text-center',
       },
       {
-        name: 'address',
+        name: 'type',
+        prop: 'workTypeId'
+      },
+      {
+        name: 'Google address',
         prop: 'googleLocation.address'
       },
       {
-        name: 'quantity',
-        prop: 'quantity'
+        name: 'Owner',
+        prop: 'createdBy.displayName',
+        cellTemplate: this.userCell
       }
     ];
     this.refreshData();
@@ -155,5 +183,35 @@ export class WorkManagementComponent {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  handleDisplayStatus(state: number, isDisplayColor: boolean = false): string {
+    if (this.listStatus?.length <= 0) {
+      return isDisplayColor ? '#0000' : '';
+    }
+    if (state) {
+      if (isDisplayColor) {
+        var findColor = this.listStatus.find(x => x.dataStateId === state);
+        if (findColor) return findColor.colorCode;
+        else return '#0000';
+      }
+      else {
+        var findName = this.listStatus.find(x => x.dataStateId === state);
+        if (findName) return findName.dataStateName;
+        else return '';
+      }
+    }
+  }
+
+  openUserDetail(row) {
+    const dialogRef = this.dialog.open(UserProfileComponent, {
+      height: 'auto',
+      width: '600px',
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        userId: row.createdBy.id
+      },
+    });
   }
 }

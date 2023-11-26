@@ -45,6 +45,7 @@
     "moment": "^2.29.4",
     "ngx-color-picker": "^12.0.1",
     "ngx-quill": "^14.3.0",
+    "ngx-skeleton-loader": "^4.0.0",
     "popper.js": "^1.16.1",
     "primeicons": "^6.0.1",
     "primeng": "^15.4.1",

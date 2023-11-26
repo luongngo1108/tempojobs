@@ -54,7 +54,7 @@ export class ResetPasswordComponent {
         this.messages = [res.result];
         this.isChangedPassword = true;
       } else {
-        this.errors = ["This reset link has been decrypted"];
+        this.errors = ["Đường link này đã hết hạn!"];
       }
       this.cd.detectChanges();
     })

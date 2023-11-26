@@ -60,6 +60,24 @@ class userController {
         res.status(200).json(result);
     }
 
+    async getUserByUserId(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            let userId = req.query.id;
+            if(userId) {             
+                const user = await User.findById(userId);
+                if(user) {
+                    result.result = user;
+                }
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
     async getUserById(req, res, next) {
         var result = new ReturnResult();
         try {
@@ -107,9 +125,7 @@ class userController {
                     //Hash password
                     const hashedPassword = await hash(userDetail.password, 10);
                     const googleLocation = await GoogleMapLocation.create({});
-                    console.log(googleLocation);
                     const ggMap = await GoogleMapLocation.findByIdAndUpdate(googleLocation._id, {address: userDetail.address})
-                    console.log(ggMap)
                     const userDetailCreated = await UserDetail.create({
                         firstName: userDetail.firstName,
                         lastName: userDetail.lastName,
@@ -156,6 +172,22 @@ class userController {
                     if(removedUserDetail?.googleLocation) await GoogleMapLocation.findByIdAndRemove(removedUserDetail.googleLocation);
                 }
                 result.result = true;
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
+    async getUserByRole(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const role = req.body;
+            if(roll) {
+                var users = await User.find({role: role});  
+                result.result = users;
             }
         }
         catch (ex) {

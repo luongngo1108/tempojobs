@@ -1,1 +1,159 @@
-<p>add-edit-work works!</p>
+<div class="d-flex flex-wrap" mat-dialog-title
+    style="margin: unset; padding: 1px 10px 1px 28px; justify-content: center; align-items: center;">
+    <button nbButton status="success" (click)="saveData()" style="margin: 10px 0px 5px 0px;">
+        <nb-icon icon="save-outline"></nb-icon>Lưu
+    </button>
+    <button nbButton ghost (click)="closeDialog()" class="ml-auto">
+        <nb-icon icon="close-outline"></nb-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<p-toast position="bottom-right" key="toast1"></p-toast>
+<mat-dialog-content>
+    <form [formGroup]="frmCreateWork">
+        <div class="row">
+            <div class="col-12">
+                <ng-container *ngFor="let status of listWorkStatus">
+                    <span *ngIf="status?.dataStateId === frmCreateWork.value?.workStatusId;"
+                        style="margin-bottom: 10px; margin-right: 10px;" class="badge"
+                        [style.background-color]="status?.colorCode">
+                        {{status.dataStateName}}</span>
+                    <span (click)="changeWorkStatus(status)" *ngIf="status?.dataStateId !== frmCreateWork.value?.workStatusId;"
+                        style="margin-bottom: 10px; margin-right: 10px; background-color: #666666; cursor: pointer;" class="badge">
+                        {{status?.dataStateName}}</span>
+                </ng-container>
+            </div>
+        </div>
+        <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
+            Work detail</h5>
+        <div class="row">
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Work name</mat-label>
+                    <input matInput formControlName="workName" autocomplete="off" required trim="blur" />
+                    <mat-error *ngIf="
+                frmCreateWork.controls?.workName?.errors &&
+                (frmCreateWork.controls?.workName?.dirty ||
+                  frmCreateWork.controls?.workName?.touched)">
+                        {{ frmCreateWork.controls.workName["errorMessage"] }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Wok type</mat-label>
+                    <mat-select formControlName="workTypeId" required>
+                        <mat-option *ngFor="let workType of listWorkType" [value]="workType.dataStateId">
+                            {{workType.dataStateName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Quantity</mat-label>
+                    <input matInput formControlName="quantity" autocomplete="off" required trim="blur" />
+                    <mat-error *ngIf="
+                frmCreateWork.controls?.quantity?.errors &&
+                (frmCreateWork.controls?.quantity?.dirty ||
+                  frmCreateWork.controls?.quantity?.touched)">
+                        {{ frmCreateWork.controls.quantity["errorMessage"] }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Start date</mat-label>
+                    <input matInput [ngxMatDatetimePicker]="pickerCustomIcon" placeholder="Choose a date"
+                        formControlName="startDate" required>
+                    <ngx-mat-datepicker-toggle matSuffix [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
+                    <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [stepHour]="1" [stepMinute]="15"
+                        [showSeconds]="false" [touchUi]="false" [enableMeridian]="false">
+                        <ngx-mat-datepicker-actions>
+                            <button mat-button ngxMatDatepickerCancel>Hủy</button>
+                            <button mat-raised-button color="primary" ngxMatDatepickerApply>Đồng ý</button>
+                        </ngx-mat-datepicker-actions>
+                    </ngx-mat-datetime-picker>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Province</mat-label>
+                    <mat-select formControlName="workProvince" required>
+                        <mat-option *ngFor="let province of listProvince" [value]="province.codename">
+                            {{province.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <label id="example-name-label" class="example-name-label">Thời lượng làm việc:</label>
+                <!-- <div class="example-label-container">
+                    <label class="example-value-label">{{workHoursValue}} tiếng</label>
+                </div> -->
+                <mat-slider class="example-margin" [max]="24" [min]="0.5" [step]="0.5" [discrete]="true"
+                    [showTickMarks]="false" [displayWith]="formatLabel">
+                    <input matSliderThumb matInput formControlName="workHours" autocomplete="off" required trim="blur">
+                </mat-slider>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>District</mat-label>
+                    <mat-select formControlName="workDistrict" required>
+                        <mat-option *ngFor="let district of listDistrict" [value]="district.codename">
+                            {{district.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Address</mat-label>
+                    <input matInput formControlName="workAddress" autocomplete="off" trim="blur" />
+                    <mat-error *ngIf="
+                frmCreateWork.controls?.workAddress?.errors &&
+                (frmCreateWork.controls?.workAddress?.dirty ||
+                  frmCreateWork.controls?.workAddress?.touched)">
+                        {{ frmCreateWork.controls.workAddress["errorMessage"] }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Budget</mat-label>
+                    <input matInput type="text" appFormatCurrency formControlName="workProfit" autocomplete="off"
+                        trim="blur" />
+                    <mat-error *ngIf="
+                frmCreateWork.controls?.workProfit?.errors &&
+                (frmCreateWork.controls?.workProfit?.dirty ||
+                  frmCreateWork.controls?.workProfit?.touched)">
+                        {{ frmCreateWork.controls.workProfit["errorMessage"] }}</mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-6">
+                <mat-form-field appearance="fill" class="form-field"
+                    (click)="openUserDetail(frmCreateWork.value?.createdBy?.id)">
+                    <mat-label>Created By</mat-label>
+                    <input style="pointer-events: none;" matInput type="text" appFormatCurrency
+                        [value]="frmCreateWork.value?.createdBy?.email" autocomplete="off" trim="blur" readonly />
+                </mat-form-field>
+            </div>
+            <div class="col-12">
+                <mat-label style="color: #666666">description</mat-label>
+                <quill-editor [modules]="editorOptions" [styles]="{height: '200px'}" placeholder="description"
+                    formControlName="workDescription">
+                </quill-editor>
+            </div>
+            <div class="col-12">
+                <div style="margin-bottom: 10px;">
+                    <p style="margin-top: 10px;" class="text-muted mb-1 font-13"><strong>Picked address: </strong> <span
+                            class="ml-2">{{workModel?.googleLocation?.address || ''}}</span></p>
+                    <mat-label style="color: #666666; font-size: 12px; margin-right: 10px;"><i>Search address in here or
+                            pick on map</i></mat-label>
+                    <input nbInput type="text" style="width: 100%; margin-top: 10px;" class="my-search-box"
+                        (keydown.enter)="$event.preventDefault()" placeholder="Search address" type="text" #search />
+                </div>
+
+                <google-map #myGoogleMap height="400px" width="100%" [zoom]="zoom" [center]="center"
+                    [options]="options"></google-map>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>

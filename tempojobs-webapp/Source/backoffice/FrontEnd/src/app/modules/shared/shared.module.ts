@@ -44,7 +44,10 @@ import { NgxTableComponent } from './components/ngx-table/ngx-table.component';
 import { MatTableComponent } from './components/mat-table/mat-table.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { ColorPickerModule } from 'ngx-color-picker';
-
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inline-edit.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { MatSliderModule } from '@angular/material/slider';
 const materialModules = [
   MatFormFieldModule,
   MatCheckboxModule,
@@ -66,7 +69,8 @@ const materialModules = [
   MatDialogModule,
   QuillModule,
   MatListModule,
-  MatDividerModule
+  MatDividerModule,
+  MatSliderModule
 ];
 
 const nebularModules = [
@@ -91,7 +95,8 @@ const angularModules = [
   RxReactiveFormsModule,
   HttpClientModule,
   FlexLayoutModule,
-  ColorPickerModule
+  ColorPickerModule,
+  NgxSkeletonLoaderModule,
 ];
 
 @NgModule({
@@ -101,7 +106,9 @@ const angularModules = [
     ConfirmModalComponent,
     NgxTableComponent,
     MatTableComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    RichInlineEditComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -144,6 +151,8 @@ const angularModules = [
     NgxTableComponent,
     MatTableComponent,
     ToolbarComponent,
+    RichInlineEditComponent,
+    ConfirmDialogComponent
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

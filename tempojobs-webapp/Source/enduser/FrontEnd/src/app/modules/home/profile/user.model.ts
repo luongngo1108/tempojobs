@@ -46,6 +46,7 @@ export class UserRegister {
   email: string;
 
   @prop()
+  @required()
   @password({ validation: { maxLength: 40, minLength: 5 } })
   password: string;
 }

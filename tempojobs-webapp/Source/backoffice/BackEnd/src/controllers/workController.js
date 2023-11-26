@@ -7,15 +7,16 @@ import GoogleMapLocation from '../models/googleMapLocationModel.js';
 import { getLastCounterValue } from '../utils/counterUtil.js';
 import WorkApply from '../models/workApplyModel.js';
 import User from '../models/userModel.js';
+import UserDetail from '../models/userDetailModel.js';
 import Notification from '../models/notificationModel.js';
 
 class WorkController {
     async getWorkAll(req, res, next) {
         var result = new ReturnResult();
         try {
-            const work = await Work.find({ deleted: false });
-            if (work) {
-                result.result = work;
+            const works = await Work.find({ deleted: false });
+            if (works) {
+                result.result = works;
             } else {
                 result.message = "Can't find all work";
             }
@@ -121,7 +122,6 @@ class WorkController {
                 workToSave.deleted = false;
                 let ggmap;
                 if (workToSave.googleMapLocation) ggmap = await GoogleMapLocation.create(workToSave.googleMapLocation);
-                console.log(workToSave);
                 const work = await Work.create(workToSave);
                 const counterUpdated = await Counter.findOneAndUpdate({ field: 'workId' }, { lastValue: nextWorkId });
                 if (work) {
@@ -130,10 +130,12 @@ class WorkController {
                     result.message = "Can't create work";
                 }
             } else {
-                const updateWork = await Work.updateOne({ workId: workBody.workId }, workBody);
-                const updateGgMap = await GoogleMapLocation.findByIdAndUpdate(workBody.googleMapLocation._id, workBody.googleMapLocation);
-                if (updateWork) {
-                    result.result = updateWork;
+                const updatedWork = await Work.updateOne({ workId: workBody.workId }, workBody);
+                if (workBody.googleMapLocation) {
+                    await GoogleMapLocation.findByIdAndUpdate(workBody.googleMapLocation._id, workBody.googleMapLocation);
+                }
+                if (updatedWork) {
+                    result.result = updatedWork;
                 } else {
                     result.message = "Can't find work";
                 }
@@ -152,10 +154,12 @@ class WorkController {
                 result.message = "Id is required";
                 return;
             }
+            var user = await User.findById(id);
             const listWork = await Work.find({
                 createdById: id,
                 deleted: false,
             });
+            console.log(listWork, id);
             if (listWork) {
                 result.result = listWork;
             } else {
@@ -306,23 +310,23 @@ class WorkController {
             const referenceUser = await User.findById(work.createdBy.id);
             var content = '';
             var title = '';
-            const existedNotification = await Notification.findOne({reciever: workApply.userId, referenceUser: work.createdBy.id});
+            const existedNotification = await Notification.findOne({ reciever: workApply.userId, referenceUser: work.createdBy.id });
             if (workApply) {
                 var existedWorkApply = await WorkApply.findById(workApply._id);
                 // Only send notification when change from "Da dang ky" to "Da nhan"/ "Tu choi"
                 if (existedWorkApply && (existedWorkApply.status === 7 || existedWorkApply.status === 8 || existedWorkApply.status === 9)) {
                     // "Da nhan"
-                    if(workApply.status === 9) {
+                    if (workApply.status === 9) {
                         content = `Bạn đã được nhận công việc số ${workApply.workId}`;
-                        title = `Chúc mừng!`;  
+                        title = `Chúc mừng!`;
                     }
                     // "Tu choi"
-                    if(workApply.status === 8) {
+                    if (workApply.status === 8) {
                         content = `Người đăng công việc ${workApply.workId} đã từ chối yêu cầu của bạn.`;
-                        title = `Xin chia buồn!`;        
+                        title = `Xin chia buồn!`;
                     }
-                    if(existedNotification) {
-                        await Notification.findByIdAndUpdate(existedNotification._id, {content, title, isRead: false}); 
+                    if (existedNotification) {
+                        await Notification.findByIdAndUpdate(existedNotification._id, { content, title, isRead: false });
                     } else {
                         const notification = await Notification.create({
                             referenceUser,
@@ -400,6 +404,43 @@ class WorkController {
                 result.result = listWork;
             } else {
                 result.message = "Error get WorkApply by userId: " + userId;
+            }
+        } catch (error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
+    async changeWorkStatus(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const { statusId, workId } = req.body;
+            if (statusId && workId) {
+                result.result = await Work.findOneAndUpdate({ workId }, { workStatusId: statusId }, { returnOriginal: false });
+                if (result.result) {
+                    var content = '';
+                    var title = '';
+                    switch (statusId) {
+                        case 2:
+                            content = `Công việc số ${workId} của bạn đã dược duyệt.`;
+                            title = `Chúc mừng!`;
+                            break;
+                        case 3:
+                            content = `Công việc số ${workId} của bạn đã bị từ chối.`;
+                            title = `Từ chối!`;
+                            break;
+                    }
+                    // Send notification
+                    const work = await Work.findOne({ workId: workId });
+                    const reciever = await User.findById(work.createdById);
+                    const notification = await Notification.create({
+                        reciever,
+                        content,
+                        title,
+                        type: 'ApproveOrDeclineWork',
+                        redirectUrl: 'created-manage'
+                    })
+                }
             }
         } catch (error) {
             next(error);
