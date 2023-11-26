@@ -126,7 +126,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.changeTabWithNumber(1);
       });
     }
-    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.createdAt));
+    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt));
   }
 
   counterTab() {
@@ -222,7 +222,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
-    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.createdAt));
+    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt));
   }
 
   changeTabWithNumber(data: number) {
@@ -283,7 +283,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
-    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.createdAt));
+    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt));
   }
 
   async createPayment(workModel: any) {
@@ -432,14 +432,18 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  getTimeLine(startDate: Date | string) {
-    var dateCreateWork = new Date(startDate);
-    dateCreateWork.setDate(dateCreateWork.getDate() + 10);
+  getTimeLine(startDate: Date | string, createdDate: Date | string) {
+    var dateStartWork = new Date(startDate);
+    var dateCreatedWork = new Date(createdDate);
     var toDay = new Date();
-    var timeLine = Math.ceil((dateCreateWork.getTime() - toDay.getTime()) / (60 * 60 * 1000));
-    var timeLineDate = Math.floor(timeLine / 24);
-    var timeLineHours = timeLine - timeLineDate * 24;
-    if (timeLineDate < 0) return 'Hết hạn';
-    return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
+    if (toDay.getTime() > dateStartWork.getTime()) {
+      return 'Hết hạn';
+    } else {
+      var timeLine = Math.ceil((dateStartWork.getTime() - dateCreatedWork.getTime()) / (60 * 60 * 1000));
+      var timeLineDate = Math.floor(timeLine / 24);
+      var timeLineHours = timeLine - timeLineDate * 24;
+      if (timeLineDate < 0) return 'Hết hạn';
+      return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
+    }
   }
 }

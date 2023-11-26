@@ -45,7 +45,7 @@
             <mat-form-field appearance="fill"  class="form-field">
               <mat-label>Thời gian bắt đầu làm việc</mat-label>
               <input matInput [ngxMatDatetimePicker]="pickerCustomIcon" placeholder="Choose a date"
-                formControlName="startDate" required>
+                formControlName="startDate" required [min]="minDate">
               <ngx-mat-datepicker-toggle matSuffix [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
               <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [stepHour]="1"
                 [stepMinute]="15" [showSeconds]="false" [touchUi]="false" [enableMeridian]="false">

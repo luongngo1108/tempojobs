@@ -64,6 +64,8 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   workHoursValue: number = 0.5;
   workProfitValue: string = "";
 
+  minDate: Date = new Date();
+
   constructor(
     private frmBuilder: RxFormBuilder,
     private workService: WorkManagementService,
