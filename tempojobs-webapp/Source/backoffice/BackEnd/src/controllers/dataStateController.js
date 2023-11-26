@@ -29,7 +29,6 @@ class DataStateController {
                 if(updatedDataState) res.status(200).json({result: updatedDataState, message: message});
             } else {
                 var nextDataStateId = await getLastCounterValue('dataStateId') + 1;
-                console.log(nextDataStateId);
                 const counterUpdated = await counterModel.findOneAndUpdate({field: 'dataStateId'}, {lastValue: nextDataStateId});
                 dataStateToSave.dataStateId = nextDataStateId;
                 const dataState = await DataState.create(dataStateToSave);

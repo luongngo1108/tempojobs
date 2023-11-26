@@ -11,4 +11,7 @@ export class DataStateModel {
     type: string | null;
     @prop()
     colorCode: string | null;
+    @prop()
+    @required()
+    order: number | null;
 }

@@ -14,13 +14,13 @@
     align-items: center;
   }
 
-  // nb-card {
-  //   background-image: url('../../../../../assets/images/team.png');
-  //   background-repeat: no-repeat;
-  //   background-position: center;
-  //   background-size: cover;
-  //   backdrop-filter: blur(10px) !important;
-  // }
+  nb-card {
+    background-image: url('../../../../assets/images/login_background.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    backdrop-filter: blur(10px) !important;
+  }
 
   nb-auth-block {
     padding: 30px;

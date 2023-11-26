@@ -48,8 +48,10 @@ export class LoginComponent {
 
       if (result.isSuccess()) {
         this.messages = result.getMessages();
+        this.messages = ['Bạn đã đăng nhập thành công. Vui lòng đợi trong giây lát.'];
       } else {
         this.errors = result.getErrors();
+        this.errors = ['Mật khẩu hoặc email không hợp lệ.'];
       }
 
       const redirect = result.getRedirect();

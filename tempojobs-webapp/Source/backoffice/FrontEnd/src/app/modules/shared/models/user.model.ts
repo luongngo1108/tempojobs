@@ -5,7 +5,7 @@ export class User {
   id: string;
 
   @prop()
-  displayname: string;
+  displayName: string;
 
   @prop()
   email: string;
@@ -90,6 +90,8 @@ export class ProfileDetail {
   @prop()
   @required()
   birth: Date;
+  @prop()
+  avatarUrl: string;
 }
 
 export class GoogleMapLocation {

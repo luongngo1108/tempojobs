@@ -15,5 +15,6 @@ router.route('/getWorkApplyByWorkIdAndUserId').get(workController.getWorkApplyBy
 router.route('/saveWorkApply').post(workController.saveWorkApply);
 router.route('/getAllWorkApplyByUserId/:userId').get(workController.getAllWorkApplyByUserId);
 router.route('/deleteWorkApply').post(workController.deleteWorkApply)
+router.route('/changeWorkStatus').post(workController.changeWorkStatus)
 
 export default router;

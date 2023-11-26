@@ -48,6 +48,10 @@ export class UserManagementService {
         return this.httpclient.get<ReturnResult<ProfileDetail>>(`${this.baseUrl}/getUserDetailByUserId?id=${id}`);
     }
 
+    getUserByUserId(id: string): Observable<ReturnResult<User>> {
+        return this.httpclient.get<ReturnResult<User>>(`${this.baseUrl}/getUserByUserId?id=${id}`);
+    }
+
     saveProfileDetail(profileDetail: ProfileDetail): Observable<ReturnResult<ProfileDetail>> {
         return this.httpclient.post<ReturnResult<ProfileDetail>>(`${this.baseUrl}/saveUserDetail`, profileDetail)
     }
@@ -58,5 +62,9 @@ export class UserManagementService {
 
     onDeletes(emails: any = []): Observable<ReturnResult<GoogleMapLocation>> {
         return this.httpclient.post<ReturnResult<GoogleMapLocation>>(`${this.baseUrl}/onDeletes`, emails)
+    }
+
+    getUserByRole(role: string): Observable<ReturnResult<GoogleMapLocation>> {
+        return this.httpclient.post<ReturnResult<GoogleMapLocation>>(`${this.baseUrl}/getUserByRole`, {role: role})
     }
 }

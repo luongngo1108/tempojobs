@@ -19,7 +19,7 @@ class authController {
         }
         const userAvailable = await User.findOne({ email });
         if (userAvailable) {
-            res.status(400).json("Email has been registered, please try another one");
+            res.status(400).json("Email đã được đăng ký, vui lòng chọn email khác!");
             return;
         }
 
@@ -52,7 +52,7 @@ class authController {
 
             res.status(200).json({ accessToken });
         } else {
-            res.status(400).json("Email or password is not valid!");
+            res.status(400).json("Email hoặc mật khẩu không hợp lệ!");
         }
     }
 
@@ -78,7 +78,7 @@ class authController {
                 });
             res.status(200).json({ accessToken });
         } else {
-            res.status(401).json("Email or password is not valid");
+            res.status(401).json("Email hoặc mật khẩu không hợp lệ!");
             return;
         }
     }
@@ -92,8 +92,6 @@ class authController {
                 const user = await User.findOne({ email: email });
                 if(user) {
                     let token = await Token.findOne({ user: user.id});
-                    console.log(token)
-
                     if (!token) {
                         token = await new Token({
                             user: user,
@@ -102,10 +100,9 @@ class authController {
                     }
                     const link = `${process.env.FRONT_END_BASE_URL}/auth/reset-password/${user._id}/${token.token}`;
                     await sendEmail(user.email, "Password reset", link);
-                    result.result = "Password reset link sent to your email account";
                 }
-            } 
-            
+                result.result = "Yêu cầu thay đổi mật khẩu đã được gửi tới email của bạn.";
+            }   
         }
         catch (error) {
             console.log(error);
@@ -124,13 +121,11 @@ class authController {
                     token: req.params.token,
                 });
                 if(token) {
-                    console.log(req.body.password);
                     user.password = await hash(req.body.password, 10); 
                     var updatedUser = await user.save();
                     var removedToken = await Token.deleteOne(token);
                     if(updatedUser && removedToken) {
-                        console.log("SUCCESS");
-                        result.result = "Updated password successfully!!";
+                        result.result = "Thay đổi mật khẩu thành công!!";
                     }
                 }
             }

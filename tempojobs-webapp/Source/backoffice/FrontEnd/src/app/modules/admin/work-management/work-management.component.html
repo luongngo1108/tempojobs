@@ -1,7 +1,22 @@
 <div class="base-container">
-    <app-toolbar (onRefresh)="refreshData($event)" (onDeletes)="onClickDeletes($event)" [selectedCout]="ngxTable?.selected.length"
-    [addEditComponent]="addEditComponent" (addEvent)="successEventAdd($event)"></app-toolbar>
+    <app-toolbar (onRefresh)="refreshData($event)" (onDeletes)="onClickDeletes($event)"
+        [selectedCout]="ngxTable?.selected.length" [addEditComponent]="addEditComponent" [addEditWidth]="'900px'"
+        (addEvent)="successEventAdd($event)"></app-toolbar>
     <mat-divider></mat-divider>
-    <app-ngx-table #ngxTable [columnsTable]="columns" (onRefresh)="refreshData($event)"
-    [addEditComponent]="addEditComponent" (editEvent)="successEventEdit($event)" (onDelete)="onClickDelete($event)"></app-ngx-table>
+    <app-ngx-table #ngxTable [columnsTable]="columns" [addEditWidth]="'900px'" (onRefresh)="refreshData($event)"
+        [addEditComponent]="addEditComponent" (editEvent)="successEventEdit($event)"
+        (onDelete)="onClickDelete($event)"></app-ngx-table>
 </div>
+
+<ng-template #statusCell let-row="row">
+    <div class="badge" [style.background-color]="handleDisplayStatus(row.workStatusId, true)"
+        style="max-width: 200px; text-align: center; font-size: 13px;">
+        <div style="color: white; ">
+            {{handleDisplayStatus(row.workStatusId)}}
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #userCell let-row="row">
+    <b style="cursor: pointer;" matTooltip="Open user detail" (click)="openUserDetail(row)">{{row?.createdBy?.displayName}}</b>
+</ng-template>
