@@ -1,0 +1,22 @@
+<div class="d-flex flex-wrap" mat-dialog-title style="margin: unset; padding: 1px 10px 1px 28px">
+    <!-- <button mat-button color="primary" (click)="saveData()" [disabled]="!frmUser.valid">
+        <mat-icon fontSet=" material-icons-outlined">save</mat-icon>Save
+    </button> -->
+    <!-- <button mat-button color="primary" (click)="closeDialog()">
+        <mat-icon>clear</mat-icon>Cancel
+    </button> -->
+    <button mat-icon-button aria-label="Close the dialog" (click)="closeDialog()" class="ml-auto">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<mat-dialog-content>
+    <div class="container">
+        <h2>Nhập ngày bạn muốn gia hạn thêm</h2>
+        <input nbInput placeholder="Pick Date" [nbDatepicker]="picker">
+        <nb-date-timepicker withSeconds #picker [min]="min" ></nb-date-timepicker>
+    </div>
+</mat-dialog-content>
+<div mat-dialog-actions>
+    <button nbButton class="ml-auto" status="primary" (click)="extendPayment()"><nb-icon icon="credit-card-outline"></nb-icon>Gia hạn</button>
+</div>

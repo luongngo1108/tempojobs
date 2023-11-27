@@ -12,7 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { NbAuthModule } from '@nebular/auth';
 import { RxReactiveFormsModule } from '@rxweb/reactive-form-validators';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbDatepickerModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule, NbSpinnerModule, NbTabsetModule } from '@nebular/theme';
+import { NbAlertModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbDatepickerModule, NbIconModule, NbInputModule, NbLayoutModule, NbMenuModule, NbRadioModule, NbSearchModule, NbSpinnerModule, NbTabsetModule, NbTimepickerModule } from '@nebular/theme';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { MatSelectModule } from '@angular/material/select';
 import { HttpClientModule } from '@angular/common/http';
@@ -46,6 +46,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { CurrencyPipePipe } from './pipes/currency-pipe.pipe';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
+import { MatDividerModule } from '@angular/material/divider';
 
 const materialModules = [
   MatFormFieldModule,
@@ -69,6 +70,7 @@ const materialModules = [
   QuillModule,
   MatListModule,
   MatSliderModule,
+  MatDividerModule
 ];
 
 const nebularModules = [
@@ -82,7 +84,8 @@ const nebularModules = [
   NbAlertModule,
   NbTabsetModule,
   NbSpinnerModule,
-  NbDatepickerModule
+  NbDatepickerModule,
+  NbTimepickerModule,
 ];
 
 const angularModules = [

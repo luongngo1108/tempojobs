@@ -366,17 +366,31 @@ export class AddEditWorkComponent {
   }
 
   changeWorkStatus(status: any) {
-    this.workService.changeWorkStatus(status.dataStateId, this.workModel.workId).subscribe(res => {
-      if (res.result) {
-        this.workModel = res.result;
-        this.frmCreateWork.controls['workStatusId'].setValue(this.workModel.workStatusId);
-        this.messageService.clear();
-        this.messageService.add({
-          key: 'toast1', severity: 'success', summary: 'Success',
-          detail: `Change work status successfully`, life: 4000
-        });
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        content: `Are you sure want to change data states? Notification will 
+        be sent to users when you change to 'Từ chối duyệt' or 'Đã duyệt'.`,
+        nextButtonContent: "Sure"
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if(res) {
+        this.workService.changeWorkStatus(status.dataStateId, this.workModel.workId).subscribe(res => {
+          if (res.result) {
+            this.workModel = res.result;
+            this.frmCreateWork.controls['workStatusId'].setValue(this.workModel.workStatusId);
+            this.messageService.clear();
+            this.messageService.add({
+              key: 'toast1', severity: 'success', summary: 'Success',
+              detail: `Change work status successfully`, life: 4000
+            });
+          }
+        })
       }
-    })
+    }); 
   }
 }
 
