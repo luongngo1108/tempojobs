@@ -45,6 +45,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   evaluationId: number;
   waitForPaymentId: number;
   doneId: number;
+  expiredId: number;
+
   currentUser;
   countTab1: number;
   countTab2: number;
@@ -115,6 +117,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.evaluationId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Chờ đánh giá')?.dataStateId;
       this.doneId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Hoàn thành')?.dataStateId;
       this.waitForPaymentId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
+      this.expiredId = this.listWorkStatus.find(workStatus => workStatus.dataStateName === 'Hết hạn')?.dataStateId;
     }
     var resultType = await this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).toPromise();
     if (resultType.result) {
@@ -147,7 +150,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     } else {
       this.countTab1 = null;
     }
-    const filterTab2 = this.listWork.filter(work => work.workStatusId === this.approvedId);
+    const filterTab2 = this.listWork.filter(work => work.workStatusId === this.approvedId || work.workStatusId === this.expiredId);
     if (filterTab2.length > 0) {
       this.countTab2 = filterTab2.length;
     } else {
@@ -202,7 +205,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId || work.workStatusId === this.waitForPaymentId);
         break;
       case 2:
-        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId || work.workStatusId === this.expiredId);
         this.listWorkShow.map(work => {
           if (work.workApply && work.workApply.length > 0) {
             work.listTaskerWaitings = [];
@@ -272,10 +275,10 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   changeTabWithNumber(data: number) {
     switch (data) {
       case 1:
-        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId);
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId || work.workStatusId === this.waitForPaymentId);
         break;
       case 2:
-        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId);
+        this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvedId || work.workStatusId === this.expiredId);
         this.listWorkShow.map(work => {
           if (work.workApply && work.workApply.length > 0) {
             work.listTaskerWaitings = [];
@@ -360,7 +363,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     dialogRef.afterClosed().subscribe(async result => {
       if (result) {
         var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
-          userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
+          userEmail: workModel?.createdBy?.email, inputAmount: amount, workId: workModel.workId
         }));
         if (respCreatePayment.result) window.location.href = respCreatePayment.result;
       }
@@ -497,7 +500,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     dialogRef.afterClosed().subscribe(async res => {
       if (res) {
         await this.refreshData();
-        this.changeTabWithNumber(2);
+        this.changeTabWithNumber(tab);
       }
     })
   }
@@ -554,7 +557,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   //     if (respSaveWork.result) {
   //       this.workModel = respSaveWork.result;
   //       // create momo payment
-  //       // var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel.createdBy.email, inputAmount: amount, workId: this.workModel.workId }));
+  //       // var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel?.createdBy?.email, inputAmount: amount, workId: this.workModel.workId }));
   //       // if (respCreatePayment.result) window.location.href = respCreatePayment.result;
   //       this.router.navigateByUrl('/created-manage');
   //     }

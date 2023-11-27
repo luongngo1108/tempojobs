@@ -43,8 +43,8 @@ export class AppyWorkComponent implements OnInit, OnDestroy {
     if (this.data.workApplyModel) this.workApplyModel = this.data.workApplyModel;
     else this.workApplyModel = new WorkApply();
     if (this.data.workModel) this.workModel = this.data.workModel;
-    this.workApplyModel.userId = this.workModel.createdBy.id;
-    this.workApplyModel.workId = this.workModel.workId;
+    this.workApplyModel.userId = this.workModel?.createdById;
+    this.workApplyModel.workId = this.workModel?.workId;
     this.workApplyModel.status = 7;
     this.form = this.formBuilder.formGroup(WorkApply, this.workApplyModel);
   }

@@ -19,9 +19,6 @@ const WorkApply = new Schema({
         type: String,
         default: null
     },
-    star: {
-        type: Number,
-    }
 });
 
 export default model("WorkApply",  WorkApply);

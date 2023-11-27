@@ -159,7 +159,6 @@ class WorkController {
                 createdById: id,
                 deleted: false,
             });
-            console.log(listWork, id);
             if (listWork) {
                 result.result = listWork;
             } else {

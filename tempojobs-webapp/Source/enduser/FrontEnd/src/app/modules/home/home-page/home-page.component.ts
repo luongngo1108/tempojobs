@@ -8,6 +8,8 @@ import { NbToastrService } from '@nebular/theme';
 import { MessageService } from 'primeng/api';
 import { DataStateModel } from 'src/app/shared/models/data-state.model';
 import { Page } from 'src/app/shared/models/page';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-home-page',
@@ -24,6 +26,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   paging = new Page();
 
   listWorkStatus: DataStateModel[] = [];
+  listWorkType: DataStateModel[] = [];
   approvingId: number;
   approvedId: number;
   refuseApprovalId: number;
@@ -35,7 +38,8 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private workService: WorkManagementService,
     private router: Router,
     private dataStateService: DataStateManagementService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    public dialog: MatDialog,
   ) {
     this.paging.filter = [];
   }
@@ -62,6 +66,10 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   async getDataDefaults() {
+    var respWorkType = await this.dataStateService.getDataStateByType("WORK_TYPE").pipe(takeUntil(this.destroy$)).toPromise();
+    if (respWorkType.result) {
+      this.listWorkType = respWorkType.result;
+    }
     var resultProvince = await this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).toPromise();
     if (resultProvince) {
       this.listProvince = resultProvince;
@@ -106,5 +114,35 @@ export class HomePageComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigateByUrl(`/work/${work.workId}`);
     }
+  }
+
+  handleDisplayWorkType(type: number, isDisplayColor: boolean = false): string {
+    if (this.listWorkType?.length <= 0) {
+      return isDisplayColor ? '#0000' : '';
+    }
+    if (type) {
+      if (isDisplayColor) {
+        var findColor = this.listWorkType.find(x => x.dataStateId === type);
+        if (findColor) return findColor.colorCode;
+        else return '#0000';
+      }
+      else {
+        var findName = this.listWorkType.find(x => x.dataStateId === type);
+        if (findName) return findName.dataStateName;
+        else return '';
+      }
+    }
+  }
+
+  openUserDetailDialog(userId: string = "") {
+    const dialogRef = this.dialog.open(UserProfileComponent, {
+      height: 'auto',
+      width: '600px',
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        userId: userId
+      },
+    });
   }
 }

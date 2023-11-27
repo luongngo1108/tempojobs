@@ -215,7 +215,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.listWorkApply.map(async workApply => {
           if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatingApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-            if (respWork.result && respWork.result.workStatusId === this.evaluationId) {
+            if (respWork.result && (respWork.result.workStatusId === this.evaluationId || respWork.result.workStatusId === this.doneId)) {
               this.listWorkShow.push(respWork.result);
             }
           }
@@ -293,7 +293,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     var amount = diffDays * 5000 + workModel.quantity * 1000;
     var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
-      userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
+      userEmail: workModel?.createdBy?.email, inputAmount: amount, workId: workModel.workId
     }));
     if (respCreatePayment.result) window.location.href = respCreatePayment.result;
   }

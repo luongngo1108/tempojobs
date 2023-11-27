@@ -30,7 +30,8 @@ class authController {
             firstName,
             lastName,
             googleLocation,
-            email
+            email,
+            evaluation: [],
         })
 
         const user = await User.create({

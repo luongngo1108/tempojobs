@@ -13,5 +13,6 @@ router.route('/saveUserDetail').post(userController.saveUserDetail);
 router.route('/onDeletes').post(userController.onDeletes);
 router.route('/getUserById').get(userController.getUserById);
 router.route('/getUserByRole').get(userController.getUserByRole);
+router.route('/evaluationUser').get(userController.evaluationUser);
 
 export default router;
