@@ -175,7 +175,7 @@ export function CalculateMoneyPayment(startDate: any): number {
   if(startDate > currentDate) {
     const diffTime = Math.abs(Number(startDate) - Number(currentDate));
     const diffMinutes = Math.ceil(diffTime / (1000 * 60));
-    var amount = diffMinutes * 3.472222222222222;
-    return amount;
+    var amount = diffMinutes * 10.472222222222222;
+    return Math.round(amount);
   }
 }

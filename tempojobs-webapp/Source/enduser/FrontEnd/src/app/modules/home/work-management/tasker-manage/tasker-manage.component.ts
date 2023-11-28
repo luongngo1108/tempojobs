@@ -20,6 +20,7 @@ import { MessageService } from 'primeng/api';
 import { ApproveTaskerDialogComponent } from '../created-manage/approve-tasker-dialog/approve-tasker-dialog.component';
 import { AppyWorkComponent } from '../work-detail/appy-work/appy-work.component';
 import { WorkApply } from '../work-detail/appy-work/work-appy.model';
+import { CalculateMoneyPayment } from 'src/app/shared/utility/Helper';
 
 @Component({
   selector: 'app-tasker-manage',
@@ -286,17 +287,13 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt));
   }
 
-  async createPayment(workModel: any) {
-    var startDate = new Date(workModel.startDate);
-    var createdAt = new Date(workModel.createdAt);
-    const diffTime = Math.abs(Number(startDate) - Number(createdAt));
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    var amount = diffDays * 5000 + workModel.quantity * 1000;
-    var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
-      userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
-    }));
-    if (respCreatePayment.result) window.location.href = respCreatePayment.result;
-  }
+  // async createPayment(workModel: any) {
+  //   const amount = CalculateMoneyPayment(workModel.startDate);
+  //   var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
+  //     userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
+  //   }));
+  //   if (respCreatePayment.result) window.location.href = respCreatePayment.result;
+  // }
 
   handleDisplayStatus(state: number, isDisplayColor: boolean = false): string {
     if (this.listWorkStatus?.length <= 0) {

@@ -1,10 +1,4 @@
 <div class="d-flex flex-wrap" mat-dialog-title style="margin: unset; padding: 1px 10px 1px 28px">
-    <!-- <button mat-button color="primary" (click)="saveData()" [disabled]="!frmUser.valid">
-        <mat-icon fontSet=" material-icons-outlined">save</mat-icon>Save
-    </button> -->
-    <!-- <button mat-button color="primary" (click)="closeDialog()">
-        <mat-icon>clear</mat-icon>Cancel
-    </button> -->
     <button mat-icon-button aria-label="Close the dialog" (click)="closeDialog()" class="ml-auto">
         <mat-icon>close</mat-icon>
     </button>
@@ -13,10 +7,21 @@
 <mat-dialog-content>
     <div class="container">
         <h2>Nhập ngày bạn muốn gia hạn thêm</h2>
-        <input nbInput placeholder="Pick Date" [nbDatepicker]="picker">
-        <nb-date-timepicker withSeconds #picker [min]="min" ></nb-date-timepicker>
+        <mat-form-field appearance="fill"  class="form-field">
+            <mat-label>Thời gian gia hạn thêm</mat-label>
+            <input matInput [ngxMatDatetimePicker]="pickerCustomIcon" placeholder="Choose a date"
+              [(ngModel)]="chooseDate" required [min]="minDate">
+            <ngx-mat-datepicker-toggle matSuffix [for]="pickerCustomIcon"></ngx-mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #pickerCustomIcon [showSpinners]="true" [stepHour]="1"
+              [stepMinute]="15" [showSeconds]="false" [touchUi]="false" [enableMeridian]="false">
+              <ngx-mat-datepicker-actions>
+                <button mat-button ngxMatDatepickerCancel>Hủy</button>
+                <button mat-raised-button color="primary" ngxMatDatepickerApply>Đồng ý</button>
+              </ngx-mat-datepicker-actions>
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
     </div>
 </mat-dialog-content>
 <div mat-dialog-actions>
-    <button nbButton class="ml-auto" status="primary" (click)="extendPayment()"><nb-icon icon="credit-card-outline"></nb-icon>Gia hạn</button>
+    <button nbButton [disabled]="!chooseDate" class="ml-auto" status="primary" (click)="extendPayment()"><nb-icon icon="credit-card-outline"></nb-icon>Gia hạn</button>
 </div>

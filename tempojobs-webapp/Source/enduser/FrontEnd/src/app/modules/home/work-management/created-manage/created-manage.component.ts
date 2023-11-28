@@ -21,6 +21,7 @@ import { MessageService } from 'primeng/api';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 import { CalculateMoneyPayment } from 'src/app/shared/utility/Helper';
 import { ExtendDayDialogComponent } from './extend-day-dialog/extend-day-dialog.component';
+import { PaymentType } from 'src/app/shared/enums/payment-type';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -358,7 +359,10 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     dialogRef.afterClosed().subscribe(async result => {
       if (result) {
         var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
-          userEmail: workModel.createdBy.email, inputAmount: amount, workId: workModel.workId
+          userEmail: workModel.createdBy.email, 
+          inputAmount: amount, 
+          workId: workModel.workId,
+          paymentType: PaymentType.PayForWork
         }));
         if (respCreatePayment.result) window.location.href = respCreatePayment.result;
       }
@@ -500,13 +504,14 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     })
   }
 
-  extendTimeLine() {
+  extendTimeLine(work: any) {
     let dialogRef = this.dialog.open(ExtendDayDialogComponent, {
       disableClose: false,
       autoFocus: false,
       backdropClass: 'custom-backdrop',
       hasBackdrop: true,
       data: {
+        workModel: work
       }
     });
 

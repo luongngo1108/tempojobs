@@ -5,37 +5,40 @@ import Work from "../models/workModel.js";
 import PaymentHistory from "../models/paymentHistoryModel.js";
 import User from "../models/userModel.js";
 import { PagedData } from '../models/pageModel.js';
+import PaymentType from '../DTO/enums/paymentType.js';
 
 class momoController {
     async createMomoPayment(req, res, next) {
         var result = new ReturnResult();
         try {
-            const { inputAmount, workId, userEmail } = req.body;
+            const { inputAmount, workId, userEmail, paymentType } = req.body;
             var userId = null;
             var user = null;
-            if(userEmail) user = await User.findOne({email: userEmail});
+            if (userEmail) user = await User.findOne({ email: userEmail });
             userId = user._id
             //https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
             //parameters
             var partnerCode = "MOMO";
             var accessKey = "F8BBA842ECF85";
             var secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
-            var requestId = partnerCode + new Date().getTime();
             var paymentToken = new Date().getTime() + crypto.randomBytes(32).toString("hex");
+            var requestId = partnerCode + paymentToken;
             var orderId = requestId;
-            var orderInfo = "pay with MoMo";
-            var redirectUrl = userId ? `http://localhost:4200/created-manage?userId=${userId}&paymentToken=${paymentToken}`
-                                : `http://localhost:4200/created-manage?paymentToken=${paymentToken}`;
+            var orderInfo = "Thanh toán bằng MOMO";
+            var redirectUrl = userId ? `http://localhost:4200/created-manage?userId=${userId}&paymentToken=${paymentToken}&paymentType=${paymentType}`
+                : `http://localhost:4200/created-manage?paymentToken=${paymentToken}&paymentType=${paymentType}`;
             var ipnUrl = "https://callback.url/notify";
             // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
             var amount = `${inputAmount}`;
             var requestType = "captureWallet"
             var extraData = ""; //pass empty value if your merchant does not have stores
             // Save orderId into work
-            var updatedWork = await Work.findOneAndUpdate({workId: workId}, {paymentToken: paymentToken}, {returnOriginal: false});
+            var updatedWork = await Work.findOneAndUpdate({ workId: workId }, { paymentToken: paymentToken }, { returnOriginal: false });
             //before sign HMAC SHA256 with format
             //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
-            var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType
+            var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" 
+                            + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" 
+                            + requestId + "&requestType=" + requestType
             //puts raw signature
             console.log("--------------------RAW SIGNATURE----------------")
             console.log(rawSignature)
@@ -110,16 +113,25 @@ class momoController {
     async momoPayementSuccess(req, res, next) {
         var result = new ReturnResult();
         try {
-            const {paymentToken, amount, userId} = req.body;
-            const updatedWork = await Work.findOneAndUpdate({paymentToken: paymentToken}, {workStatusId: 2, paymentToken:""}, {returnOriginal: false});
-            if(updatedWork) {
+            const { paymentToken, amount, userId, paymentType } = req.body;
+            var updateValues = { workStatusId: 2, paymentToken: "" }
+            switch (paymentType) {
+                case PaymentType.PayForWork:
+                    updateValues.paymentType = PaymentType.PayForWork;
+                    break;
+                case PaymentType.ExtendWork:
+                    updateValues.paymentType = PaymentType.ExtendWork;
+                    break;
+            }
+            const updatedWork = await Work.findOneAndUpdate({ paymentToken: paymentToken }, updateValues, { returnOriginal: false });
+            if (updatedWork) {
                 const savedPaymentHistory = await PaymentHistory.create({
                     payerId: userId,
                     workId: updatedWork.workId,
                     amount: amount
                 });
-                if(savedPaymentHistory) result.result = true;
-            }    
+                if (savedPaymentHistory) result.result = true;
+            }
         }
         catch {
             console.log(error);
@@ -132,10 +144,10 @@ class momoController {
         try {
             let userId = req.params.userId;
             let paymentHistories;
-            if(userId) paymentHistories = await PaymentHistory.find({payerId: userId});
-            if(paymentHistories) {
+            if (userId) paymentHistories = await PaymentHistory.find({ payerId: userId });
+            if (paymentHistories) {
                 result.result = paymentHistories;
-            }    
+            }
         }
         catch {
             console.log(error);

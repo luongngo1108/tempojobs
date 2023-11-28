@@ -8,7 +8,7 @@ const outDateWork = CronJob.from({
         var currentDate = new Date();
         var allOutDateWork = await Work.find({
             startDate: {
-                $gte: currentDate
+                $lte: currentDate
             }
         })
         await changeStatusAndSendNotification(allOutDateWork);

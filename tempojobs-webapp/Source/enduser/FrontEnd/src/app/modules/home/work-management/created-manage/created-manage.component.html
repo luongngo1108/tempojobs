@@ -109,7 +109,7 @@
                         [class.disable-button]="!(element?.listTaskerAccepted?.length > 0)">
                   Hoàn thành duyệt
                 </button>
-                <button mat-button style="background-color: #daae0e; margin-top: 5px; color: white;" (click)="extendTimeLine()"
+                <button mat-button style="background-color: #daae0e; margin-top: 5px; color: white;" (click)="extendTimeLine(element)"
                         *ngIf="element.timeLine === 'Hết hạn'">
                   Gia hạn thêm
                 </button>
