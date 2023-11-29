@@ -47,3 +47,9 @@
     pointer-events: none; 
     opacity: 2.0;
 }
+
+button:disabled,
+button[disabled]{
+  background-color: #cccccc !important;
+  color: #666666 !important;
+}

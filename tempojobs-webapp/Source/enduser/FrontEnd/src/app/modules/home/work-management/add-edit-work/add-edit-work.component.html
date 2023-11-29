@@ -154,7 +154,7 @@
               [center]="center"
               [options]="options"
           ></google-map>
-          <div class="d-grid" style="margin-top: 10px;"><button class="btn btn-primary" type="submit" (click)="saveData()"
+          <div class="d-grid" style="margin-top: 10px;"><button class="btn btn-primary" [disabled]="!frmCreateWork.valid" type="submit" (click)="saveData()"
               >Đăng công việc</button></div>
         </form>
       </div>

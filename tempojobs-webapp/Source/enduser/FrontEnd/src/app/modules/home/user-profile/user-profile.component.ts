@@ -25,6 +25,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   closeDialog() {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
 }

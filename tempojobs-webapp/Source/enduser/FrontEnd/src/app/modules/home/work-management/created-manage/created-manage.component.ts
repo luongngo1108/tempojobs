@@ -19,6 +19,9 @@ import { ProfileDetail, User } from '../../profile/user.model';
 import { ApproveTaskerDialogComponent } from './approve-tasker-dialog/approve-tasker-dialog.component';
 import { MessageService } from 'primeng/api';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
+import { CalculateMoneyPayment } from 'src/app/shared/utility/Helper';
+import { ExtendDayDialogComponent } from './extend-day-dialog/extend-day-dialog.component';
+import { PaymentType } from 'src/app/shared/enums/payment-type';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -346,11 +349,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   async createPayment(workModel: any) {
-    var startDate = new Date(workModel.startDate);
-    var createdAt = new Date(workModel.createdAt);
-    const diffTime = Math.abs(Number(startDate) - Number(createdAt));
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    var amount = diffDays * 5000 + workModel.quantity * 1000;
+    const amount = CalculateMoneyPayment(workModel.startDate);
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       backdropClass: 'custom-backdrop',
       hasBackdrop: true,
@@ -363,7 +362,10 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     dialogRef.afterClosed().subscribe(async result => {
       if (result) {
         var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({
-          userEmail: workModel?.createdBy?.email, inputAmount: amount, workId: workModel.workId
+          userEmail: workModel.createdBy.email, 
+          inputAmount: amount, 
+          workId: workModel.workId,
+          paymentType: PaymentType.PayForWork
         }));
         if (respCreatePayment.result) window.location.href = respCreatePayment.result;
       }
@@ -505,63 +507,21 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     })
   }
 
-  extendTimeLine() {
+  extendTimeLine(work: any) {
+    let dialogRef = this.dialog.open(ExtendDayDialogComponent, {
+      disableClose: false,
+      autoFocus: false,
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        workModel: work
+      }
+    });
 
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        
+      }
+    })
   }
-
-  // const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-  //   data: {
-  //     content: `Vui lòng hoàn thành thanh toán ${amount} vnd để có thể đăng tải công việc!\n` +
-  //       "Chúng tôi chỉ chấp nhận hình thức thanh toán bằng MOMO!",
-  //     nextButtonContent: "Thanh toán"
-  //   },
-  // });
-
-  // dialogRef.afterClosed().subscribe(async result => {
-  //   if (result) {
-  //     // Save work
-  //     this.workModel = model;
-  //     console.log(this.workModel)
-  //     const latLng = {
-  //       lat: parseFloat(this.latitude?.toString()),
-  //       lng: parseFloat(this.longitude?.toString())
-  //     }
-  //     try {
-  //       await this.geocoder.geocode({ location: latLng }).then(async response => {
-  //         if (response.results[0]) {
-  //           this.workModel.googleLocation.address = response.results[0].formatted_address;
-  //           this.workModel.googleLocation.latitude = this.latitude;
-  //           this.workModel.googleLocation.longitude = this.longitude;
-  //         }
-  //       })
-  //     } catch (error) {
-  //       console.log("Request limited!!!");
-  //     }
-
-  //     if (!this.workModel?.workId) {
-  //       model.workId = 0;
-  //       model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang cần được thanh toán')?.dataStateId;
-  //     } else {
-  //       if (model.workStatusId === this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt')?.dataStateId) {
-  //         model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
-  //       }
-  //     }
-  //     if (this.createBy) {
-  //       model.createdById = this.createBy?.user?.id;
-  //       model.createdBy = this.createBy?.user;
-  //     }
-  //     if (!model.workApply) {
-  //       model.workApply = [];
-  //     }
-  //     var respSaveWork = await lastValueFrom(this.workService.saveWork(model));
-  //     if (respSaveWork.result) {
-  //       this.workModel = respSaveWork.result;
-  //       // create momo payment
-  //       // var respCreatePayment = await lastValueFrom(this.paymentService.createMomoPayment({ userEmail: this.workModel?.createdBy?.email, inputAmount: amount, workId: this.workModel.workId }));
-  //       // if (respCreatePayment.result) window.location.href = respCreatePayment.result;
-  //       this.router.navigateByUrl('/created-manage');
-  //     }
-  //   }
-  // });
-
 }

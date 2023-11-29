@@ -416,7 +416,7 @@ class WorkController {
             const { statusId, workId } = req.body;
             if (statusId && workId) {
                 result.result = await Work.findOneAndUpdate({ workId }, { workStatusId: statusId }, { returnOriginal: false });
-                if (result.result) {
+                if (result.result && (statusId === 2 || statusId === 3)) {
                     var content = '';
                     var title = '';
                     switch (statusId) {

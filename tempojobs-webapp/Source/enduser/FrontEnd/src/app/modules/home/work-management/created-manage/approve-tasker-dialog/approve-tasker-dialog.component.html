@@ -1,11 +1,16 @@
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+    integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+    integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
 <h2 mat-dialog-title> Thông tin người nhận việc</h2>
 <!-- <mat-divider></mat-divider> -->
 <mat-dialog-content class="mat-typography">
   <div class="container" style="padding-right: 50px; padding-left: 50px">
     <div class="row">
       <div class="col-12" fxLayout="row" fxLayoutAlign="space-between">
-        <img src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                    class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
+        <img style="cursor: pointer;" [src]="profile?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+          class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
         <h4 style="margin-top: 35px; margin-right: 50px; text-align: center;">
           {{profile?.firstName + " " + profile?.lastName}}
           <app-rating-star [rating]="2.5"></app-rating-star>
@@ -19,29 +24,34 @@
       <ng-container *ngIf="forTab === 2">
         <div class="col-12" style="margin-top: 30px;">
           <p [innerHTML]="workApply?.content" class="text-muted font-13 mb-3">
-            
+
           </p>
         </div>
         <div class="col-12" style="margin-top: 30px;">
-          <p class="text-muted font-13 mb-3">
+          <p class="text-muted font-13 mb-2">
             <strong>Mô tả: </strong>
             {{profile?.description || "No description"}}
           </p>
         </div>
         <div class="col-12" style="height: fit-content">
-          <p class="text-muted mb-2 font-13"><strong>Số điện thoại: </strong><span class="ml-2">{{profile?.phone || "Không có"}}</span></p>
+          <p class="text-muted mb-2 font-13"><strong>Số điện thoại: </strong><span class="ml-2">{{profile?.phone ||
+              "Không có"}}</span></p>
+        </div>
+        <div class="col-12" style="height: fit-content">
+          <p class="text-muted mb-2 font-13"><strong>Email: </strong><span class="ml-2">{{profile?.email ||
+              "Không có"}}</span></p>
         </div>
         <div class="col-12" style="height: fit-content">
           <ul class="social-list list-inline mt-3 mb-0">
-            <li class="list-inline-item">
-                <a target="_blank" [href]="profile?.facebook || 'javascript: return false;'" [matTooltip]="profile?.facebook || 'No facebook account'"
-                class="social-list-item border-purple text-purple">
-                <i class="fab fa-facebook"></i></a>
+            <li class="list-inline-item  text-center">
+              <a target="_blank" [href]="userDetail?.facebook || 'javascript: void(0);'"
+                [matTooltip]="userDetail?.facebook || 'No facebook account'"
+                class="social-list-item border-purple text-purple"><i class="fab fa-facebook"></i></a>
             </li>
-            <li class="list-inline-item">
-                <a target="_blank" [href]="profile?.instagram || 'javascript: return false;'" [matTooltip]="profile?.instagram || 'No instagram account'" 
-                class="social-list-item border-danger text-danger">
-                <i class="fab fa-instagram"></i></a>
+            <li class="list-inline-item  text-center">
+              <a target="_blank" [href]="userDetail?.instagram || 'javascript: void(0);'"
+                [matTooltip]="userDetail?.instagram || 'No instagram account'"
+                class="social-list-item border-danger text-danger"><i class="fab fa-instagram"></i></a>
             </li>
           </ul>
         </div>
