@@ -105,7 +105,7 @@ export class ProfileDetail {
   avatarUrl: String;
 
   @prop()
-  evaluation: Number[] | null;
+  evaluation: number[] | null;
 }
 
 export class GoogleMapLocation {
