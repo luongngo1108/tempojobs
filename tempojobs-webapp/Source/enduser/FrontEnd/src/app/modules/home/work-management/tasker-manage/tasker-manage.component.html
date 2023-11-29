@@ -151,7 +151,7 @@
                           <nb-icon icon="unlock-outline"></nb-icon>
                         </div>
                       </div>
-                      <p>Công việc này đang chờ đánh giá ứng viên</p>
+                      <p>Công việc này đang chờ đánh giá người tạo việc</p>
                     </div>
                   </nb-card-body>
                 </nb-card>
@@ -227,11 +227,7 @@
 </ng-template>
 
 <ng-template #templateTab2CandidateApproval let-row="row" let-tab="tab">
-  <ng-container *ngIf="row?.listTaskerAccepted?.length > 0; else notTasker">
-    <mat-list role="list" *ngFor="let tasker of row?.listTaskerAccepted" style="max-height: 120px; overflow: auto; margin-bottom: 30px;">
-      <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker, row, tab)" style="cursor: pointer;">{{ tasker?.displayName }}</mat-list-item>
-    </mat-list>
-  </ng-container>
+  <div (click)="openMinimizedProfile(row?.createdById, row, tab)" style="cursor: pointer;">{{row?.createdBy?.firstName}} {{row?.createdBy?.lastName}}</div>
 </ng-template>
 
 <ng-template #notTasker>

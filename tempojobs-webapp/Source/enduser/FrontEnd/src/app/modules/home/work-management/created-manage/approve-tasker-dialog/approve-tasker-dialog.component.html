@@ -11,7 +11,10 @@
       <div class="col-12" fxLayout="row" fxLayoutAlign="space-between">
         <img style="cursor: pointer;" [src]="profile?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
           class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
-        <h4 style="margin-top: 35px; margin-right: 50px;">{{profile?.firstName + " " + profile?.lastName}}</h4>
+        <h4 style="margin-top: 35px; margin-right: 50px; text-align: center;">
+          {{profile?.firstName + " " + profile?.lastName}}
+          <app-rating-star [rating]="2.5"></app-rating-star>
+        </h4>
       </div>
       <div class="col-12" style="text-align: center; align-items: center;">
         <p class="text-muted font-13 mb-3">

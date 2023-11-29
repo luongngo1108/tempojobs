@@ -8,7 +8,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { Router } from '@angular/router';
 import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
 import { DataStateModel } from 'src/app/shared/models/data-state.model';
-import { GoogleMapLocation, User } from '../../profile/user.model';
+import { GoogleMapLocation, ProfileDetail, User } from '../../profile/user.model';
 import { UserManagementService } from '../../profile/user-management.service';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { QuillConfiguration } from 'src/app/shared/components/rich-inline-edit/rich-inline-edit.component';
@@ -66,6 +66,8 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
 
   minDate: Date = new Date();
 
+  userProfile: ProfileDetail = new ProfileDetail();
+
   constructor(
     private frmBuilder: RxFormBuilder,
     private workService: WorkManagementService,
@@ -111,6 +113,11 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.createBy = token.getPayload();
+          if (this.createBy?.user?.id) {
+            this.userService.getUserDetailByUserId(this.createBy?.user?.id).pipe(takeUntil(this.destroy$)).subscribe(profile => {
+              if (profile.result) this.userProfile = profile.result;
+            })
+          }
         }
       });
     this.frmCreateWork.get('workProvince').valueChanges.subscribe((valueChanges) => {
@@ -302,7 +309,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           if (this.createBy) {
             model.createdById = this.createBy?.user?.id;
-            model.createdBy = this.createBy?.user;
+            model.createdBy = this.userProfile;
           }
           if (!model.workApply) {
             model.workApply = [];

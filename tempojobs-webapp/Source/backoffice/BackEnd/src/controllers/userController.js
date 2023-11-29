@@ -196,6 +196,35 @@ class userController {
         }
         res.status(200).json(result);
     }
+
+    async evaluationUser(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const userId = req.query.userId;
+            const evaluate = req.query.evaluate;
+            if(userId && evaluate) {
+                var user = await User.findOne({_id: userId});
+                if (user) {
+                    var saveEvaluation = await UserDetail.updateOne(
+                        {_id: user.userDetail},
+                        {$push: {evaluation: evaluate}}
+                    );
+                    if (saveEvaluation) {
+                        result.result = true;
+                    }
+                } else {
+                    result.message = "User không tồn tại";
+                }
+            } else {
+                result.message = "Bạn cần đưa dữ liệu đánh giá";
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
 }
 
 export default new userController;

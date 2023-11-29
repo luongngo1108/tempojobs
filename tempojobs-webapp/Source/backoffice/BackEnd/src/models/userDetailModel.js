@@ -50,7 +50,11 @@ const UserDetail = new Schema ({
     },
     avatarUrl: {
         type: String,
-    }
+    },
+    evaluation: [{
+        type: Number,
+        default: undefined
+    }],
 }, {
     timestamps: true,
 });

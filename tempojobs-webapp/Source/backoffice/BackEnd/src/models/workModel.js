@@ -56,7 +56,7 @@ const Work = new Schema ({
     },
     createdBy: {
         type: Schema.Types.Object,
-        ref: 'User',
+        ref: 'UserDetail',
     },
     deleted: {
         type: Boolean,

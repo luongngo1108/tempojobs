@@ -47,6 +47,7 @@ import { CurrencyPipePipe } from './pipes/currency-pipe.pipe';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { MatDividerModule } from '@angular/material/divider';
+import { RatingStarComponent } from './components/rating-star/rating-star.component';
 
 const materialModules = [
   MatFormFieldModule,
@@ -104,7 +105,8 @@ const angularModules = [
     HtmlSafetyPipe,
     DatePipePipe,
     ConfirmDialogComponent,
-    CurrencyPipePipe
+    CurrencyPipePipe,
+    RatingStarComponent
   ],
   imports: [
     CommonModule,
@@ -149,6 +151,7 @@ const angularModules = [
     FormatCurrencyDirective,
     DatePipePipe,
     CurrencyPipePipe,
+    RatingStarComponent,
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

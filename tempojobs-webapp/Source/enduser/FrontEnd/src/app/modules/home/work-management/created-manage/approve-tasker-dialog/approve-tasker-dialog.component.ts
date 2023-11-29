@@ -29,7 +29,7 @@ export class ApproveTaskerDialogComponent implements OnInit {
   evaluatedId: number;
 
   form: FormGroup;
-  valueStar = 0;
+  valueStar: number = 0;
 
   constructor(
     private dataStateService: DataStateManagementService,
@@ -40,7 +40,12 @@ export class ApproveTaskerDialogComponent implements OnInit {
     private toast: NbToastrService,
     private formBuilder: RxFormBuilder,
   ) {
-    this.user = data.user ?? new User();
+    if (data?.user?._id) {
+      this.user = data.user;
+    } else {
+      this.user = new User();
+      this.user._id = data.user;
+    }
     this.work = data.work ?? new WorkModel();
     this.forTab = data.tab ?? 0;
   }
@@ -51,6 +56,10 @@ export class ApproveTaskerDialogComponent implements OnInit {
     var respProfile = await this.userService.getUserDetailByUserId(this.user._id).toPromise();
     if (respProfile.result) {
       this.profile = respProfile.result;
+      if (this.profile.evaluation && this.profile.evaluation.length > 0) {
+        this.profile.evaluation.map(eva => this.valueStar += eva);
+        this.valueStar = this.valueStar / this.profile.evaluation.length;
+      }
     }
     var respWorkApply = await this.workService.getWorkApplyByWorkIdAndUserId(this.work?.workId, this.user?._id).toPromise();
     if (respWorkApply.result) {
@@ -92,16 +101,25 @@ export class ApproveTaskerDialogComponent implements OnInit {
   }
 
   saveWorkApplyStar() {
-    this.workApply.star = this.form.get('star').value;
-    this.workApply.status = this.evaluatedId;
-    this.workService.saveWorkApply(this.workApply).subscribe(resp => {
+    const evaluation = this.form.get('star').value;
+    this.userService.evaluationUser(this.user?._id, evaluation).subscribe(resp => {
       if (resp.result) {
-        this.toast.success(`Xác nhận thành công`);
-        this.closeDialog(true);
+        this.toast.success("Đánh giá thành công");
       } else {
-        this.toast.success(`Xác nhận thất bại`);
-        this.closeDialog();
+        this.toast.danger(resp.message);
       }
     });
+    if (this.workApply) {
+      this.workApply.status = this.evaluatedId;
+      this.workService.saveWorkApply(this.workApply).subscribe(resp => {
+        if (resp.result) {
+          this.toast.success(`Xác nhận thành công`);
+          this.closeDialog(true);
+        } else {
+          this.toast.success(`Xác nhận thất bại`);
+          this.closeDialog();
+        }
+      });
+    }
   }
 }

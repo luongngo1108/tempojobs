@@ -111,7 +111,7 @@
                         [src]="userDetailModel?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar1.png'" alt="User avatar">
                     </div>
                     <div class="col-lg-9 col-sm-8 col-md-8">
-                        <p (click)="openUserDetailDialog(workModel?.createdBy?.id)" style="margin-left: 5px; color: #0088CC; cursor: pointer;">{{workModel?.createdBy?.displayName }}</p>
+                        <p (click)="openUserDetailDialog(workModel?.createdById)" style="margin-left: 5px; color: #0088CC; cursor: pointer;">{{workModel?.createdBy?.firstName}} {{workModel?.createdBy?.lastName}}</p>
                         <p style="margin-left: 5px;;">{{workModel?.createdBy?.email }}</p>
                     </div>
                     <div class="col-12" style="margin-top: 10px;">
@@ -121,11 +121,11 @@
                         </dl>
                     </div>
                 </div>
-                <button *ngIf="user?.user?.id !== workModel?.createdBy?.id" [disabled]="!user?.user || (workApplied && workApplied?.status !== 14)" (click)="openApplyForWorkDialog()" status="success" style="width: 100%; margin-top: 10px;" nbButton>
+                <button *ngIf="user?.user?.id !== workModel?.createdById" [disabled]="!user?.user || (workApplied && workApplied?.status !== 14)" (click)="openApplyForWorkDialog()" status="success" style="width: 100%; margin-top: 10px;" nbButton>
                     Đăng ký nhận việc</button>
                 <div style="color: #6e2828; margin-top: 10px;"><i *ngIf="!user?.user">Vui lòng đăng nhập để nhận việc!</i></div>
                 <div style="color: #6e2828; margin-top: 10px;"><i *ngIf="workApplied && workApplied?.status !== 14">Bạn đã đăng ký nhận việc, kiểm tra trong hồ sơ xin việc!</i></div>
-                <ng-container  *ngIf="user?.user?.id === workModel?.createdBy?.id">
+                <ng-container  *ngIf="user?.user?.id === workModel?.createdById">
                     <div class="row" style="display: flex; justify-content: center; align-items: center;">
                         <nb-icon class="col-2" icon="alert-triangle-outline"></nb-icon>
                         <i class="col-10" style="color: #6e2828;">Đây là công việc của bạn, bạn chỉ có thể chỉnh sửa!</i>

@@ -13,6 +13,8 @@ import { NbToastrService } from '@nebular/theme';
 import { MessageService } from 'primeng/api';
 import { WorkApply } from './work-detail/appy-work/work-appy.model';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
+import { UserProfileComponent } from '../user-profile/user-profile.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-work-management',
@@ -56,6 +58,7 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
     private dataStateService: DataStateManagementService,
     private messageService: MessageService,
     private authService: NbAuthService,
+    public dialog: MatDialog,
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
     .subscribe(async (token: NbAuthJWTToken) => {
@@ -257,5 +260,35 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
         });
       }
     }
+  }
+
+  handleDisplayWorkType(type: number, isDisplayColor: boolean = false): string {
+    if (this.listWorkType?.length <= 0) {
+      return isDisplayColor ? '#0000' : '';
+    }
+    if (type) {
+      if (isDisplayColor) {
+        var findColor = this.listWorkType.find(x => x.dataStateId === type);
+        if (findColor) return findColor.colorCode;
+        else return '#0000';
+      }
+      else {
+        var findName = this.listWorkType.find(x => x.dataStateId === type);
+        if (findName) return findName.dataStateName;
+        else return '';
+      }
+    }
+  }
+
+  openUserDetailDialog(userId: string = "") {
+    const dialogRef = this.dialog.open(UserProfileComponent, {
+      height: 'auto',
+      width: '600px',
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        userId: userId
+      },
+    });
   }
 }

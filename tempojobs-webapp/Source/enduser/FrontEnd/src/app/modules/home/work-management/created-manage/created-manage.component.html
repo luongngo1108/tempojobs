@@ -110,7 +110,7 @@
                   Hoàn thành duyệt
                 </button>
                 <button mat-button style="background-color: #daae0e; margin-top: 5px; color: white;" (click)="extendTimeLine(element)"
-                        *ngIf="element.timeLine === 'Hết hạn'">
+                        *ngIf="element.workStatusId == expiredId">
                   Gia hạn thêm
                 </button>
               </td>

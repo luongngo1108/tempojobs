@@ -55,4 +55,8 @@ export class UserManagementService {
     getUserById(id: string): Observable<ReturnResult<User>> {
         return this.httpclient.get<ReturnResult<User>>(`${this.baseUrl}/getUserById?id=${id}`);
     }
+
+    evaluationUser(userId: string, evaluate: number): Observable<ReturnResult<boolean>> {
+        return this.httpclient.get<ReturnResult<boolean>>(`${this.baseUrl}/evaluationUser?userId=${userId}&evaluate=${evaluate}`);
+    }
 }

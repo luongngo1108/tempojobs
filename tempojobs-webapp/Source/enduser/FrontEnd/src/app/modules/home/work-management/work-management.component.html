@@ -76,7 +76,9 @@
                   <nb-icon icon="star-outline"></nb-icon>
                   <nb-icon icon="star-outline"></nb-icon>
                   <nb-icon icon="star-outline"></nb-icon>
-                  {{work?.createdBy?.username}}
+                  <strong (click)="openUserDetailDialog(work?.createdById)" style="margin-left: 5px; color: #fd6333; cursor: pointer;">
+                    {{work?.createdBy?.firstName}} {{work?.createdBy?.lastName}}
+                  </strong>
                 </span>
               </div>
             </nb-card-header>
@@ -96,8 +98,14 @@
               <div class="limit-work-description" style="text-align: left; margin-bottom: 10px;" [innerHTML]="work?.workDescription">
                 
               </div>
-              <div style="text-align: right;">
-                Đã ứng tuyển: /{{work?.quantity}}
+              <div fxLayout="row" fxLayoutAlign="space-between center" >
+                <div style="text-align: left;">
+                  <span class="badge badge-pill badge-primary" style="font-size: 12px"
+                  [style.background-color]="'#00a339'"> {{handleDisplayWorkType(work?.workTypeId)}} </span>
+                </div>
+                <div style="text-align: right;">
+                  Đã ứng tuyển: {{work?.workApply?.length > 0 ? work?.workApply?.length : 0}}/{{work?.quantity}}
+                </div>
               </div>
             </nb-card-footer>
           </nb-card>

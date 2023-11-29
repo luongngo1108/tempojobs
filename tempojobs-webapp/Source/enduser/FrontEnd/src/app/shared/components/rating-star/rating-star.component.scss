@@ -1,0 +1,21 @@
+.stars {
+    position: relative;
+    white-space: nowrap;
+}
+.stars svg {
+    width: 20px;
+}
+
+.overlay {
+    background: #fff;
+    height: 100%;
+    overflow: hidden;
+    mix-blend-mode: color;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+svg {
+    fill: gold;
+}

@@ -35,7 +35,7 @@ export class WorkModel {
     workProfit: string | null;
 
     @prop()
-    createdBy: UserModel | null;
+    createdBy: ProfileDetail | null;
 
     @prop()
     createdAt: Date | string | null;
