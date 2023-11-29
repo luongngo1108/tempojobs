@@ -37,19 +37,19 @@ async function changeStatusAndSendNotification(allOutDateWork) {
                     redirectUrl: ''
                 })
                 break;
-            // case 6:
-            //     await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
-            //     reciever = await User.findById(work.createdById);
-            //     content = `Công việc số ${work.workId} của bạn đã hết hạn. Vui lòng gia hạn thêm.`;
-            //     title = `Hết hạn!`;
-            //     await Notification.create({
-            //         reciever,
-            //         content,
-            //         title,
-            //         type: 'OutDateWork',
-            //         redirectUrl: 'created-manage'
-            //     })
-            //     break;
+            case 2:
+                await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
+                reciever = await User.findById(work.createdById);
+                content = `Công việc số ${work.workId} của bạn đã hết hạn. Vui lòng gia hạn thêm.`;
+                title = `Hết hạn!`;
+                await Notification.create({
+                    reciever,
+                    content,
+                    title,
+                    type: 'OutDateWork',
+                    redirectUrl: 'created-manage'
+                })
+                break;
         }
 
     }

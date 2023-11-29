@@ -53,7 +53,8 @@ export class ExtendDayDialogComponent {
           userEmail: this.workModel.createdBy.email, 
           inputAmount: amount, 
           workId: this.workModel.workId,
-          paymentType: PaymentType.ExtendWork
+          paymentType: PaymentType.ExtendWork,
+          extendDay: this.chooseDate
         }));
         if (respCreatePayment.result) window.location.href = respCreatePayment.result;
       }

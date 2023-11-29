@@ -11,7 +11,8 @@ class momoController {
     async createMomoPayment(req, res, next) {
         var result = new ReturnResult();
         try {
-            const { inputAmount, workId, userEmail, paymentType } = req.body;
+            const { inputAmount, workId, userEmail, paymentType, extendDay } = req.body;
+            console.log("paymentType ne",paymentType)
             var userId = null;
             var user = null;
             if (userEmail) user = await User.findOne({ email: userEmail });
@@ -25,7 +26,7 @@ class momoController {
             var requestId = partnerCode + paymentToken;
             var orderId = requestId;
             var orderInfo = "Thanh toán bằng MOMO";
-            var redirectUrl = userId ? `http://localhost:4200/created-manage?userId=${userId}&paymentToken=${paymentToken}&paymentType=${paymentType}`
+            var redirectUrl = userId ? `http://localhost:4200/created-manage?userId=${userId}&paymentToken=${paymentToken}&paymentType=${paymentType}&extendDay=${extendDay}`
                 : `http://localhost:4200/created-manage?paymentToken=${paymentToken}&paymentType=${paymentType}`;
             var ipnUrl = "https://callback.url/notify";
             // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
@@ -113,8 +114,8 @@ class momoController {
     async momoPayementSuccess(req, res, next) {
         var result = new ReturnResult();
         try {
-            const { paymentToken, amount, userId, paymentType } = req.body;
-            var updateValues = { workStatusId: 2, paymentToken: "" }
+            const { paymentToken, amount, userId, paymentType, extendDay } = req.body;
+            var updateValues = { workStatusId: 2, paymentToken: "", startDate: extendDay }
             switch (paymentType) {
                 case PaymentType.PayForWork:
                     updateValues.paymentType = PaymentType.PayForWork;
@@ -128,7 +129,8 @@ class momoController {
                 const savedPaymentHistory = await PaymentHistory.create({
                     payerId: userId,
                     workId: updatedWork.workId,
-                    amount: amount
+                    amount: amount,
+                    paymentType: paymentType
                 });
                 if (savedPaymentHistory) result.result = true;
             }

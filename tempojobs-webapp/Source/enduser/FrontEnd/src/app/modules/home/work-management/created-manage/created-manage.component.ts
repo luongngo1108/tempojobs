@@ -59,7 +59,8 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   paymentMessage = null;
   amount = null;
   userId = null;
-
+  paymentType = null;
+  extendDay = null;
   // work apply status ID
   waitingApplyId: number;
   acceptApplyId: number;
@@ -90,13 +91,21 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
       this.paymentMessage = params['message'];
       this.userId = params['userId'];
       this.amount = params['amount'];
+      this.paymentType = params['paymentType'];
+      this.extendDay = params['extendDay'];
     });
     this._location.go('created-manage');
   }
 
   async ngOnInit() {
     if (this.paymentToken && this.paymentMessage.includes("Successful.") && this.userId) {
-      var paymentResult = await lastValueFrom(this.paymentService.momoPayementSuccess({ paymentToken: this.paymentToken, amount: this.amount, userId: this.userId }));
+      var paymentResult = await lastValueFrom(this.paymentService.momoPayementSuccess({ 
+        paymentToken: this.paymentToken,
+         amount: this.amount, 
+         userId: this.userId,
+         paymentType: this.paymentType,
+         extendDay: this.extendDay
+        }));
       if(paymentResult) {
         this.messageService.clear();
           this.messageService.add({
