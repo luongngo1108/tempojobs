@@ -10,6 +10,7 @@ import { DataStateModel } from 'src/app/shared/models/data-state.model';
 import { Page } from 'src/app/shared/models/page';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { MatDialog } from '@angular/material/dialog';
+import { GetTimeLineForWork } from 'src/app/shared/utility/Helper';
 
 @Component({
   selector: 'app-home-page',
@@ -60,7 +61,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
       this.listWork = this.listWork.filter(work => work.workStatusId === this.approvedId || work.workStatusId === this.processingId);
       this.listWork.map((work) => {
         work.workProvinceName = this.listProvince.find(item => item.codename === work.workProvince)?.name;
-        work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt);
+        work.timeLine = GetTimeLineForWork(work?.startDate);
       });
     }
   }
@@ -89,21 +90,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
       this.destroy$.next();
       this.destroy$.complete();
-  }
-
-  getTimeLine(startDate: Date | string, createdDate: Date | string) {
-    var dateStartWork = new Date(startDate);
-    var dateCreatedWork = new Date(createdDate);
-    var toDay = new Date();
-    if (toDay.getTime() > dateStartWork.getTime()) {
-      return 'Hết hạn';
-    } else {
-      var timeLine = Math.ceil((dateStartWork.getTime() - dateCreatedWork.getTime()) / (60 * 60 * 1000));
-      var timeLineDate = Math.floor(timeLine / 24);
-      var timeLineHours = timeLine - timeLineDate * 24;
-      if (timeLineDate < 0) return 'Hết hạn';
-      return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
-    }
   }
 
   openWorkDetail(work: WorkModel = null) {

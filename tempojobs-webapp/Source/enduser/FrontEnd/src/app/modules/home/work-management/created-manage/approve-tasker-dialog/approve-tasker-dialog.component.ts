@@ -29,7 +29,6 @@ export class ApproveTaskerDialogComponent implements OnInit {
   evaluatedId: number;
 
   form: FormGroup;
-  valueStar: number = 0;
 
   constructor(
     private dataStateService: DataStateManagementService,
@@ -56,10 +55,6 @@ export class ApproveTaskerDialogComponent implements OnInit {
     var respProfile = await this.userService.getUserDetailByUserId(this.user._id).toPromise();
     if (respProfile.result) {
       this.profile = respProfile.result;
-      if (this.profile.evaluation && this.profile.evaluation.length > 0) {
-        this.profile.evaluation.map(eva => this.valueStar += eva);
-        this.valueStar = this.valueStar / this.profile.evaluation.length;
-      }
     }
     var respWorkApply = await this.workService.getWorkApplyByWorkIdAndUserId(this.work?.workId, this.user?._id).toPromise();
     if (respWorkApply.result) {

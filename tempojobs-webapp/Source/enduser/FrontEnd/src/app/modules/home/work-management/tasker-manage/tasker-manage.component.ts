@@ -20,7 +20,7 @@ import { MessageService } from 'primeng/api';
 import { ApproveTaskerDialogComponent } from '../created-manage/approve-tasker-dialog/approve-tasker-dialog.component';
 import { AppyWorkComponent } from '../work-detail/appy-work/appy-work.component';
 import { WorkApply } from '../work-detail/appy-work/work-appy.model';
-import { CalculateMoneyPayment } from 'src/app/shared/utility/Helper';
+import { CalculateMoneyPayment, GetTimeLineForWork } from 'src/app/shared/utility/Helper';
 
 @Component({
   selector: 'app-tasker-manage',
@@ -127,7 +127,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.changeTabWithNumber(1);
       });
     }
-    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt));
+    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
   }
 
   counterTab() {
@@ -223,7 +223,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
-    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt));
+    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
   }
 
   changeTabWithNumber(data: number) {
@@ -284,7 +284,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
-    this.listWorkShow.map(work => work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt));
+    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
   }
 
   // async createPayment(workModel: any) {
@@ -427,20 +427,5 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         
       }
     });
-  }
-
-  getTimeLine(startDate: Date | string, createdDate: Date | string) {
-    var dateStartWork = new Date(startDate);
-    var dateCreatedWork = new Date(createdDate);
-    var toDay = new Date();
-    if (toDay.getTime() > dateStartWork.getTime()) {
-      return 'Hết hạn';
-    } else {
-      var timeLine = Math.ceil((dateStartWork.getTime() - dateCreatedWork.getTime()) / (60 * 60 * 1000));
-      var timeLineDate = Math.floor(timeLine / 24);
-      var timeLineHours = timeLine - timeLineDate * 24;
-      if (timeLineDate < 0) return 'Hết hạn';
-      return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
-    }
   }
 }

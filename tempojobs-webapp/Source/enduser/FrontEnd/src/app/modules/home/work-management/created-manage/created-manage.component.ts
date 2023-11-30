@@ -19,7 +19,7 @@ import { ProfileDetail, User } from '../../profile/user.model';
 import { ApproveTaskerDialogComponent } from './approve-tasker-dialog/approve-tasker-dialog.component';
 import { MessageService } from 'primeng/api';
 import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
-import { CalculateMoneyPayment } from 'src/app/shared/utility/Helper';
+import { CalculateMoneyPayment, GetTimeLineForWork } from 'src/app/shared/utility/Helper';
 import { ExtendDayDialogComponent } from './extend-day-dialog/extend-day-dialog.component';
 import { PaymentType } from 'src/app/shared/enums/payment-type';
 @Component({
@@ -149,7 +149,7 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
     if (resultListWork.result) {
       this.listWork = resultListWork.result;
       this.listWork.map(work => {
-        work.timeLine = this.getTimeLine(work?.startDate, work?.createdAt);
+        work.timeLine = GetTimeLineForWork(work?.startDate);
       });
       this.listWorkShow = this.listWork.filter(work => work.workStatusId === this.approvingId || work.workStatusId === this.refuseApprovalId || work.workStatusId === this.waitForPaymentId);
     }
@@ -194,21 +194,6 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  getTimeLine(startDate: Date | string, createdDate: Date | string) {
-    var dateStartWork = new Date(startDate);
-    var dateCreatedWork = new Date(createdDate);
-    var toDay = new Date();
-    if (toDay.getTime() > dateStartWork.getTime()) {
-      return 'Hết hạn';
-    } else {
-      var timeLine = Math.ceil((dateStartWork.getTime() - dateCreatedWork.getTime()) / (60 * 60 * 1000));
-      var timeLineDate = Math.floor(timeLine / 24);
-      var timeLineHours = timeLine - timeLineDate * 24;
-      if (timeLineDate < 0) return 'Hết hạn';
-      return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
-    }
   }
 
   changeTab(event) {

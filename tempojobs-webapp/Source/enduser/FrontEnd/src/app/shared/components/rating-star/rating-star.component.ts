@@ -1,4 +1,5 @@
 import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
+import { UserManagementService } from 'src/app/modules/home/profile/user-management.service';
 
 @Component({
   selector: 'app-rating-star',
@@ -6,13 +7,26 @@ import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
   styleUrls: ['./rating-star.component.scss']
 })
 export class RatingStarComponent {
-  @Input() rating: number;
+  @Input() profileId: string;
 
-  constructor(private elementRef: ElementRef, private renderer: Renderer2) {}
+  constructor(
+    private elementRef: ElementRef, 
+    private renderer: Renderer2,
+    private userService: UserManagementService,
+  ) {
 
-  ngOnInit() {
-    const percentage = Math.round((this.rating / 5) * 100);
-    const overlayElement = this.elementRef.nativeElement.querySelector('.overlay');
-    this.renderer.setStyle(overlayElement, 'width', `${100 - percentage}%`);
+  }
+
+  async ngOnInit() {
+    var respProfile = await this.userService.getUserDetailByUserId(this.profileId).toPromise();
+    if (respProfile?.result) {
+      if (respProfile?.result?.evaluation && respProfile?.result?.evaluation?.length > 0) {
+        var totalStar = 0;
+        respProfile?.result?.evaluation?.map(eva => totalStar += eva);
+        var percentage = Math.round(((totalStar/respProfile?.result?.evaluation?.length) / 5) * 100);
+        const overlayElement = this.elementRef.nativeElement.querySelector('.overlay');
+        this.renderer.setStyle(overlayElement, 'width', `${100 - percentage}%`);
+      }
+    }
   }
 }
