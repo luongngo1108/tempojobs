@@ -46,6 +46,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   longitude!: any;
   markers: google.maps.Marker[] = [];
   // Google map end
+  isEditProfile: boolean = false;
 
   constructor(
     private authService: NbAuthService,
@@ -56,7 +57,6 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     private storage: Storage = inject(Storage)
   ) {
   }
-  isEditProfile: boolean = false;
   ngOnInit(): void {
     this.isEditProfile = false;
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))

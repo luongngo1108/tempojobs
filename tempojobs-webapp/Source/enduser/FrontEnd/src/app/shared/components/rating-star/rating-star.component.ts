@@ -18,13 +18,13 @@ export class RatingStarComponent {
   }
 
   async ngOnInit() {
+    var overlayElement = this.elementRef.nativeElement.querySelector('.overlay');
     var respProfile = await this.userService.getUserDetailByUserId(this.profileId).toPromise();
     if (respProfile?.result) {
       if (respProfile?.result?.evaluation && respProfile?.result?.evaluation?.length > 0) {
         var totalStar = 0;
         respProfile?.result?.evaluation?.map(eva => totalStar += eva);
         var percentage = Math.round(((totalStar/respProfile?.result?.evaluation?.length) / 5) * 100);
-        const overlayElement = this.elementRef.nativeElement.querySelector('.overlay');
         this.renderer.setStyle(overlayElement, 'width', `${100 - percentage}%`);
       }
     }

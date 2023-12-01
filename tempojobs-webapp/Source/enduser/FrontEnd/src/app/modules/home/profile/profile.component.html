@@ -13,8 +13,10 @@
 
                 <input type="file" (change)="updateImage($event)" accept='image/*' style="display: none" #selectImage />
 
-                <h4 class="mb-0" style="margin-bottom: 10px !important;">{{userDetail?.firstName + " " +
-                    userDetail?.lastName}}</h4>
+                <h4 style="margin-bottom: 10px !important; text-align: center;">
+                    {{userDetail?.firstName + " " + userDetail?.lastName}}
+                </h4>
+                <app-rating-star [profileId]="user?.user?.id"></app-rating-star>
 
 
                 <!-- <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light">Follow</button>
