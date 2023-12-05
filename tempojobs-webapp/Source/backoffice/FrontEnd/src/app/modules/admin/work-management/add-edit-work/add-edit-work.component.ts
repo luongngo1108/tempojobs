@@ -104,11 +104,11 @@ export class AddEditWorkComponent {
         this.listWorkStatus.sort((a, b) => a.order - b.order)
       }
     });
-    // this.userService.getUserByRole("User").subscribe(resp => {
-    //   if (resp.result) {
-    //     this.listUser = resp.result;
-    //   }
-    // });
+    this.userService.getUserByRole("User").subscribe(resp => {
+      if (resp.result) {
+        this.listUser = resp.result;
+      }
+    });
   }
 
   ngOnInit() {
@@ -123,16 +123,16 @@ export class AddEditWorkComponent {
     //       this.createBy = token.getPayload();
     //     }
     //   });
-    this.userService.getUserByUserId(this.workModel?.createdById).subscribe(res => {
-      if (res.result) {
-        this.createBy = {
-          displayName: res.result.displayName,
-          id: res.result['_id'],
-          role: res.result.role,
-          email: res.result.email
-        }
-      }
-    })
+    // this.userService.getUserByUserId(this.workModel?.createdById).subscribe(res => {
+    //   if (res.result) {
+    //     this.createBy = {
+    //       displayName: res.result.displayName,
+    //       id: res.result['_id'],
+    //       role: res.result.role,
+    //       email: res.result.email
+    //     }
+    //   }
+    // })
     this.frmCreateWork.get('workProvince').valueChanges.subscribe((valueChanges) => {
       this.provinceName = this.listProvince?.find(province => province.codename === valueChanges)?.name;
       this.listProvince.map((province, index) => {
@@ -274,17 +274,6 @@ export class AddEditWorkComponent {
     if (this.frmCreateWork.valid) {
       const model: WorkModel = Object.assign({}, this.frmCreateWork.value);
       model.googleLocation = new GoogleMapLocation();
-      // const currentDate = new Date();
-      // const diffTime = Math.abs(Number(model.startDate) - Number(currentDate));
-      // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      // var amount = diffDays * 5000 + model.quantity * 1000;
-      // if (model?.workStatusId === this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Từ chối duyệt')?.dataStateId) {
-      //   this.messageService.clear();
-      //   this.messageService.add({
-      //     key: 'toast1', severity: 'info', summary: 'Thông báo',
-      //     detail: `Số tiền công việc trước sẽ được hoàn trả, bạn cần thanh toán để đăng công việc này.`, life: 50000
-      //   });
-      // }
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         backdropClass: 'custom-backdrop',
         hasBackdrop: true,
@@ -293,6 +282,17 @@ export class AddEditWorkComponent {
           nextButtonContent: "Sure"
         },
       });
+
+      this.userService.getUserByUserId(model?.createdById).subscribe(res => {
+        if (res.result) {
+          this.createBy = {
+            displayName: res.result.displayName,
+            id: res.result['_id'],
+            role: res.result.role,
+            email: res.result.email
+          }
+        }
+      })
 
       dialogRef.afterClosed().subscribe(async result => {
         if (result) {

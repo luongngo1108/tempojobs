@@ -48,6 +48,8 @@ export class ToolbarComponent implements OnInit{
   }
   onClickDeletes() {
     const dialogRef = this.dialog.open(ConfirmModalComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
       data: {
         message: `Do you wish to delete ${this.selectedCout} item(s)?`
       }

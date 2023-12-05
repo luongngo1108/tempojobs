@@ -184,8 +184,8 @@ class userController {
     async getUserByRole(req, res, next) {
         var result = new ReturnResult();
         try {
-            const role = req.body;
-            if(roll) {
+            const {role} = req.body;
+            if(role) {
                 var users = await User.find({role: role});  
                 result.result = users;
             }

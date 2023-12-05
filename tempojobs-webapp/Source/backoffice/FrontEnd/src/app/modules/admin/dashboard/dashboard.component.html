@@ -5,3 +5,15 @@
 <div class="base-container">
     <app-ngx-table #ngxTable [isNormalShowTable]="true" [columnsTable]="columns" (onRefresh)="refreshData($event)"></app-ngx-table>
 </div>
+
+<ng-template #userCell let-row="row">
+    <b style="cursor: pointer;" matTooltip="Open user detail" (click)="openUserDetail(row)">{{row?.payerName}}</b>
+</ng-template>
+
+<ng-template #paymentTypeCell let-row="row">
+    <span>{{row?.paymentType === 'PayForWork' ? 'Pay for work' : 'Extend more date'}}</span>
+</ng-template>
+
+<ng-template #workCell let-row="row">
+    <b style="cursor: pointer;" matTooltip="Open work detail" (click)="openWorkDetail(row)">{{row?.workId}}</b>
+</ng-template>

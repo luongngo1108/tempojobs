@@ -446,6 +446,24 @@ class WorkController {
         }
         res.status(200).json(result);
     }
+
+    async onDeletes(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const ids = req.body;
+            if(ids || ids?.length > 0) {
+                var updateResult = await Work.updateMany({workId: {$in: ids}}, {deleted: true});
+                if(updateResult.modifiedCount > 0) {
+                    result.result = true;
+                } else result.result = false
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
 };
 
 export default new WorkController;
