@@ -179,3 +179,17 @@ export function CalculateMoneyPayment(startDate: any): number {
     return Math.round(amount);
   }
 }
+
+export function GetTimeLineForWork(startDate: Date | string) {
+  var dateStartWork = new Date(startDate);
+  var toDay = new Date();
+  if (toDay.getTime() > dateStartWork.getTime()) {
+    return 'Hết hạn';
+  } else {
+    var timeLine = Math.ceil((dateStartWork.getTime() - toDay.getTime()) / (60 * 60 * 1000));
+    var timeLineDate = Math.floor(timeLine / 24);
+    var timeLineHours = timeLine - timeLineDate * 24;
+    if (timeLineDate < 0) return 'Hết hạn';
+    return timeLineDate.toString() + ' ngày ' + timeLineHours.toString() + ' giờ';
+  }
+}
