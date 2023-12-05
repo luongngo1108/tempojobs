@@ -18,8 +18,10 @@
                         style="margin-bottom: 10px; margin-right: 10px;" class="badge"
                         [style.background-color]="status?.colorCode">
                         {{status.dataStateName}}</span>
-                    <span (click)="changeWorkStatus(status)" *ngIf="status?.dataStateId !== frmCreateWork.value?.workStatusId;"
-                        style="margin-bottom: 10px; margin-right: 10px; background-color: #666666; cursor: pointer;" class="badge">
+                    <span (click)="changeWorkStatus(status)"
+                        *ngIf="status?.dataStateId !== frmCreateWork.value?.workStatusId;"
+                        style="margin-bottom: 10px; margin-right: 10px; background-color: #666666; cursor: pointer;"
+                        class="badge">
                         {{status?.dataStateName}}</span>
                 </ng-container>
             </div>
@@ -128,11 +130,15 @@
                 </mat-form-field>
             </div>
             <div class="col-6">
-                <mat-form-field appearance="fill" class="form-field"
-                    (click)="openUserDetail(frmCreateWork.value?.createdBy?.id)">
+                <mat-form-field appearance="fill" class="form-field">
                     <mat-label>Created By</mat-label>
-                    <input style="pointer-events: none;" matInput type="text" appFormatCurrency
-                        [value]="frmCreateWork.value?.createdBy?.email" autocomplete="off" trim="blur" readonly />
+                    <!-- <input style="pointer-events: none;" matInput type="text" appFormatCurrency
+                        [value]="frmCreateWork.value?.createdBy?.email" autocomplete="off" trim="blur" readonly /> -->
+                    <mat-select formControlName="createdById" name="food">
+                        <ng-container *ngFor="let user of listUser">
+                            <mat-option [value]="user._id">{{user.email}}</mat-option>
+                        </ng-container>
+                    </mat-select>
                 </mat-form-field>
             </div>
             <div class="col-12">

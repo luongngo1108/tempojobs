@@ -141,7 +141,7 @@ export class WorkManagementComponent {
 
   onClickDelete(event: any) {
     var rowData = event.row;
-    this.workService.onDeletes([rowData.email]).subscribe(res => {
+    this.workService.onDeletes([rowData.workId]).subscribe(res => {
       if (res.result) {
         this.messageService.clear();
         this.messageService.add({
@@ -161,8 +161,8 @@ export class WorkManagementComponent {
 
   onClickDeletes(event: any) {
     var deteleItem = this.ngxTable.selected;
-    var deleteEmails = deteleItem.map(x => x.email);
-    this.workService.onDeletes(deleteEmails).subscribe(res => {
+    var deleteIds = deteleItem.map(x => x.workId);
+    this.workService.onDeletes(deleteIds).subscribe(res => {
       if (res.result) {
         this.messageService.clear();
         this.messageService.add({

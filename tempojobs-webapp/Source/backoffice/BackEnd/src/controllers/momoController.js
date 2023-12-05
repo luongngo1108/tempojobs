@@ -158,10 +158,16 @@ class momoController {
         return res.status(200).json(result);
     }
 
-    async getPaymentHistoryByUserId(req, res, next) {
+    async getAllPayment(req, res, next) {
         var result = new PagedData();
         try {
             var paymentHistories = await PaymentHistory.find();
+            if(paymentHistories && paymentHistories.length > 0) {
+                for(var payment of paymentHistories) {
+                    var foundUser = await User.findById(payment.payerId);
+                    if(foundUser) payment.payerName = foundUser.displayName;
+                }
+            }
             result.data = paymentHistories;
         }
         catch {
