@@ -24,19 +24,19 @@ async function changeStatusAndSendNotification(allOutDateWork) {
         let content = '';
         let title = '';
         switch (work.workStatusId) {
-            case 1, 6:
-                await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
-                reciever = await User.findById(work.createdById);
-                content = `Công việc số ${work.workId} của bạn đã hết hạn. Vui lòng tạo công việc mới.`;
-                title = `Nhắc nhở!`;
-                await Notification.create({
-                    reciever,
-                    content,
-                    title,
-                    type: 'OutDateWork',
-                    redirectUrl: ''
-                })
-                break;
+            // case 1, 6:
+            //     await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
+            //     reciever = await User.findById(work.createdById);
+            //     content = `Công việc số ${work.workId} của bạn đã hết hạn. Vui lòng tạo công việc mới.`;
+            //     title = `Nhắc nhở!`;
+            //     await Notification.create({
+            //         reciever,
+            //         content,
+            //         title,
+            //         type: 'OutDateWork',
+            //         redirectUrl: ''
+            //     })
+            //     break;
             case 2:
                 await Work.findByIdAndUpdate(work._id, { workStatusId: 15 })
                 reciever = await User.findById(work.createdById);
