@@ -9,6 +9,7 @@ import WorkApply from '../models/workApplyModel.js';
 import User from '../models/userModel.js';
 import UserDetail from '../models/userDetailModel.js';
 import Notification from '../models/notificationModel.js';
+import { WorkApplyViewModel } from '../DTO/workApplyViewModel.js';
 
 class WorkController {
     async getWorkAll(req, res, next) {
@@ -403,6 +404,31 @@ class WorkController {
                 result.result = listWork;
             } else {
                 result.message = "Error get WorkApply by userId: " + userId;
+            }
+        } catch (error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
+    async getAllWorkApplyByWorkId(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const workId = req.params.workId;
+            const listWorkApply = await WorkApply.find({
+                workId: workId
+            }); 
+            if (listWorkApply) {
+                var listWorkApplyRes = [];
+                for(var workApply of listWorkApply) {
+                    var user = await User.findById(workApply.userId);
+                    var userDetail = await UserDetail.findById(user.userDetail);
+                    console.log(user, workApply.userId)
+                    listWorkApplyRes.push(new WorkApplyViewModel(workApply, userDetail));
+                }
+                result.result = listWorkApplyRes;
+            } else {
+                result.message = "Error get WorkApply by workId: " + workId;
             }
         } catch (error) {
             next(error);

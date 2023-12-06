@@ -17,6 +17,7 @@ import { WorkApplyManagementComponent } from './work-management/work-apply-manag
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ChartsComponent } from './dashboard/charts/charts.component';
 import { UserProfileComponent } from './work-management/user-profile/user-profile.component';
+import { WorkApplyDialogComponent } from './work-management/work-apply-dialog/work-apply-dialog.component';
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import { UserProfileComponent } from './work-management/user-profile/user-profil
     WorkApplyManagementComponent,
     DashboardComponent,
     ChartsComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    WorkApplyDialogComponent
   ],
   imports: [
     ThemeModule,

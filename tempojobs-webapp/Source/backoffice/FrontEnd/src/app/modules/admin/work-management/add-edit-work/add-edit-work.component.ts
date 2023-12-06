@@ -17,6 +17,7 @@ import { UserManagementService } from '../../user-management/user-management.ser
 import { GoogleMapLocation } from 'src/app/modules/shared/models/user.model';
 import { ConfirmDialogComponent } from 'src/app/modules/shared/components/confirm-dialog/confirm-dialog.component';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
+import { WorkApplyDialogComponent } from '../work-apply-dialog/work-apply-dialog.component';
 @Component({
   selector: 'app-add-edit-work',
   templateUrl: './add-edit-work.component.html',
@@ -317,7 +318,7 @@ export class AddEditWorkComponent {
           if (!this.workModel?.workId) {
             model.workId = 0;
             model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
-          } 
+          }
           if (this.createBy) {
             model.createdById = this.createBy?.id;
             model.createdBy = this.createBy;
@@ -377,7 +378,7 @@ export class AddEditWorkComponent {
     });
 
     dialogRef.afterClosed().subscribe(res => {
-      if(res) {
+      if (res) {
         this.workService.changeWorkStatus(status.dataStateId, this.workModel.workId).subscribe(res => {
           if (res.result) {
             this.workModel = res.result;
@@ -390,7 +391,33 @@ export class AddEditWorkComponent {
           }
         })
       }
-    }); 
+    });
+  }
+
+  openUserApplied() {
+    const dialogRef = this.dialog.open(WorkApplyDialogComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        model: this.workModel
+      },
+    });
+
+    // dialogRef.afterClosed().subscribe(res => {
+    //   if(res) {
+    //     this.workService.changeWorkStatus(status.dataStateId, this.workModel.workId).subscribe(res => {
+    //       if (res.result) {
+    //         this.workModel = res.result;
+    //         this.frmCreateWork.controls['workStatusId'].setValue(this.workModel.workStatusId);
+    //         this.messageService.clear();
+    //         this.messageService.add({
+    //           key: 'toast1', severity: 'success', summary: 'Success',
+    //           detail: `Change work status successfully`, life: 4000
+    //         });
+    //       }
+    //     })
+    //   }
+    // }); 
   }
 }
 
