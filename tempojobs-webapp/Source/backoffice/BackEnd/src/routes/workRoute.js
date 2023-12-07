@@ -15,8 +15,9 @@ router.route('/getWorkApplyByWorkIdAndUserId').get(workController.getWorkApplyBy
 router.route('/saveWorkApply').post(workController.saveWorkApply);
 router.route('/getAllWorkApplyByUserId/:userId').get(workController.getAllWorkApplyByUserId);
 router.route('/getAllWorkApplyByWorkId/:workId').get(workController.getAllWorkApplyByWorkId);
-router.route('/deleteWorkApply').post(workController.deleteWorkApply)
-router.route('/changeWorkStatus').post(workController.changeWorkStatus)
-router.route('/onDeletes').post(workController.onDeletes)
+router.route('/deleteWorkApply').post(workController.deleteWorkApply);
+router.route('/deleteWorkApplyNotSendNoti').post(workController.deleteWorkApplyNotSendNoti);
+router.route('/changeWorkStatus').post(workController.changeWorkStatus);
+router.route('/onDeletes').post(workController.onDeletes);
 
 export default router;

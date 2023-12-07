@@ -3,7 +3,7 @@
 
 <div class="d-flex flex-wrap" mat-dialog-title
     style="margin: unset; padding: 1px 10px 1px 28px; justify-content: center; align-items: center;">
-    <button nbButton  (click)="addUser()" style="margin: 10px 0px 5px 0px;">
+    <button nbButton (click)="addUser()" style="margin: 10px 0px 5px 0px;">
         <nb-icon icon="save-outline"></nb-icon>Add
     </button>
 
@@ -25,82 +25,63 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="candidates-list shadow-sm rounded">
-                        <td class="title">
-                            <div class="thumb">
-                                <img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                                    alt="">
-                            </div>
-                            <div class="candidate-list-details">
-                                <div class="candidate-list-info">
-                                    <div class="candidate-list-title">
-                                        <h5 class="mb-0"><a href="#">Brooke Kelly</a></h5>
-                                    </div>
-                                    <div class="candidate-list-option">
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-filter pr-1"></i>Information Technology</li>
-                                            <li><i class="fas fa-map-marker-alt pr-1"></i>Rolling Meadows, IL
-                                                60008</li>
-                                        </ul>
+                    <ng-container *ngIf="listWorkApplyViewModel.length>0; else noUserApplied">
+                        <tr *ngFor="let workApply of listWorkApplyViewModel" class="candidates-list shadow-sm rounded">
+                            <td class="title">
+                                <div class="thumb">
+                                    <img (click)="openWorkApplyDetail(workApply.workApply)" class="img-fluid" style="cursor: pointer;"
+                                        [src]="workApply?.userDetail?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                                        alt="">
+                                </div>
+                                <div class="candidate-list-details">
+                                    <div class="candidate-list-info">
+                                        <div class="candidate-list-title">
+                                            <b class="mb-0">{{workApply?.userDetail?.firstName}}
+                                                {{workApply?.userDetail?.lastName}}</b>
+                                        </div>
+                                        <div class="candidate-list-option">
+                                            <!-- <ul class="list-unstyled">
+                                                <li><i class="fas fa-filter pr-1"></i>Information Technology</li>
+                                                <li><i class="fas fa-map-marker-alt pr-1"></i>Rolling Meadows, IL
+                                                    60008</li>
+                                            </ul> -->
+                                            <span class="two-line-text"
+                                                [innerHTML]="workApply?.workApply?.content"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td class="candidate-list-favourite-time text-center">
-                            <a class="candidate-list-favourite order-2 text-danger" href="#"><i
-                                    class="fas fa-heart"></i></a>
-                            <span class="candidate-list-time order-1">Shortlisted</span>
-                        </td>
-                        <td>
-                            <ul class="list-unstyled mb-0 d-flex justify-content-end">
-                                <li><a href="#" class="text-primary" data-toggle="tooltip" title=""
-                                        data-original-title="view"><i class="far fa-eye"></i></a></li>
-                                <li><a href="#" class="text-info" data-toggle="tooltip" title=""
-                                        data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a></li>
-                                <li><a href="#" class="text-danger" data-toggle="tooltip" title=""
-                                        data-original-title="Delete"><i class="far fa-trash-alt"></i></a></li>
-                            </ul>
-                        </td>
-                    </tr>
-                    <tr class="candidates-list shadow-sm rounded">
-                        <td class="title">
-                            <div class="thumb">
-                                <img class="img-fluid" src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                                    alt="">
-                            </div>
-                            <div class="candidate-list-details">
-                                <div class="candidate-list-info">
-                                    <div class="candidate-list-title">
-                                        <h5 class="mb-0"><a href="#">Brooke Kelly</a></h5>
-                                    </div>
-                                    <div class="candidate-list-option">
-                                        <ul class="list-unstyled">
-                                            <li><i class="fas fa-filter pr-1"></i>Information Technology</li>
-                                            <li><i class="fas fa-map-marker-alt pr-1"></i>Rolling Meadows, IL
-                                                60008</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="candidate-list-favourite-time text-center">
-                            <a class="candidate-list-favourite order-2 text-danger" href="#"><i
-                                    class="fas fa-heart"></i></a>
-                            <span class="candidate-list-time order-1">Shortlisted</span>
-                        </td>
-                        <td>
-                            <ul class="list-unstyled mb-0 d-flex justify-content-end">
-                                <li><a href="#" class="text-primary" data-toggle="tooltip" title=""
-                                        data-original-title="view"><i class="far fa-eye"></i></a></li>
-                                <li><a href="#" class="text-info" data-toggle="tooltip" title=""
-                                        data-original-title="Edit"><i class="fas fa-pencil-alt"></i></a></li>
-                                <li><a href="#" class="text-danger" data-toggle="tooltip" title=""
-                                        data-original-title="Delete"><i class="far fa-trash-alt"></i></a></li>
-                            </ul>
-                        </td>
-                    </tr>
+                            </td>
+                            <td class="candidate-list-favourite-time text-center">
+                                <nb-select placeholder="Satus" (selectedChange)="changeStatus($event, workApply.workApply)"
+                                    [(selected)]="workApply?.workApply.status">
+                                    <nb-option *ngFor="let status of listWorkApplyStatus"
+                                        [value]="status?.dataStateId">{{status?.dataStateName}}</nb-option>
+                                </nb-select>
+                            </td>
+                            <td>
+                                <ul class="list-unstyled mb-0 d-flex justify-content-center">
+                                    <li>
+                                        <div (click)="deleteWorkApply(workApply.workApply)" style="cursor: pointer;" class="text-danger" data-toggle="tooltip" title=""
+                                            data-original-title="Delete"><i class="far fa-trash-alt"></i></div>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </div>
     </div>
 </mat-dialog-content>
+
+<ng-template #noUserApplied>
+    <tr class="candidates-list">
+        <td>
+            <i>There are no user applied!</i>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+    </tr>
+</ng-template>

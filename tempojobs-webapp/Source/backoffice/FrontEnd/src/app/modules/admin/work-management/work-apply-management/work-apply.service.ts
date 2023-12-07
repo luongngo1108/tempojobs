@@ -33,6 +33,10 @@ export class WorkApplyService {
     return this.http.post<ReturnResult<WorkApply>>(`${this.baseUrl}/deleteWorkApply`, model);
   }
 
+  deleteWorkApplyNotSendNoti(model: WorkApply): Observable<ReturnResult<WorkApply>> {
+    return this.http.post<ReturnResult<WorkApply>>(`${this.baseUrl}/deleteWorkApplyNotSendNoti`, model);
+  }
+
   getAllWorkApplyByUserId(userId: string): Observable<ReturnResult<WorkApply[]>> {
     return this.http.get<ReturnResult<WorkApply[]>>(`${this.baseUrl}/getAllWorkApplyByUserId/${userId}`);
   }

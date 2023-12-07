@@ -2,7 +2,7 @@ import { email, maxLength, minLength, password, prop, propObject, required } fro
 
 export class User {
   @prop()
-  id: string;
+  _id: string;
 
   @prop()
   displayName: string;
@@ -92,6 +92,8 @@ export class ProfileDetail {
   birth: Date;
   @prop()
   avatarUrl: string;
+  @prop()
+  evaluation: number[] | null;
 }
 
 export class GoogleMapLocation {

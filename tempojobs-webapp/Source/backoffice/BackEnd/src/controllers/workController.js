@@ -314,7 +314,7 @@ class WorkController {
             if (workApply) {
                 var existedWorkApply = await WorkApply.findById(workApply._id);
                 // Only send notification when change from "Da dang ky" to "Da nhan"/ "Tu choi"
-                if (existedWorkApply && (existedWorkApply.status === 7 || existedWorkApply.status === 8 || existedWorkApply.status === 9)) {
+                if (existedWorkApply && (existedWorkApply.status === 8 || existedWorkApply.status === 9)) {
                     // "Da nhan"
                     if (workApply.status === 9) {
                         content = `Bạn đã được nhận công việc số ${workApply.workId}`;
@@ -351,7 +351,7 @@ class WorkController {
         }
         res.status(200).json(result);
     }
-
+    
     async deleteWorkApply(req, res, next) {
         var result = new ReturnResult();
         try {
@@ -378,6 +378,29 @@ class WorkController {
                         type: 'UnSaveWorkApply',
                         redirectUrl: 'created-manage'
                     })
+                } else {
+                    result.message = "Work applied doesn't exist";
+                }
+            }
+        }
+        catch (error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
+    async deleteWorkApplyNotSendNoti(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const workApply = req.body;
+            if (workApply) {
+                const deleteApplied = await WorkApply.deleteOne({ _id: workApply._id });
+                const deleteWorkApplyInWork = await Work.updateOne(
+                    { workId: workApply.workId },
+                    { $pull: { workApply: workApply._id } }
+                );
+                if (deleteApplied.deletedCount > 0) {
+                    result.result = true;
                 } else {
                     result.message = "Work applied doesn't exist";
                 }
@@ -423,7 +446,6 @@ class WorkController {
                 for(var workApply of listWorkApply) {
                     var user = await User.findById(workApply.userId);
                     var userDetail = await UserDetail.findById(user.userDetail);
-                    console.log(user, workApply.userId)
                     listWorkApplyRes.push(new WorkApplyViewModel(workApply, userDetail));
                 }
                 result.result = listWorkApplyRes;
