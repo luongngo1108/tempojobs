@@ -182,8 +182,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
             if (respWork.result) {
               this.listWorkShow.push(respWork.result);
-    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
-
+              this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
             }
           }
         });
@@ -231,7 +230,6 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
-    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
   }
 
   changeTabWithNumber(data: number) {
@@ -243,6 +241,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
             if (respWork.result) {
               this.listWorkShow.push(respWork.result);
+              this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
             }
           }
         });
@@ -292,7 +291,6 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
-    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
   }
 
   // async createPayment(workModel: any) {
