@@ -13,7 +13,7 @@ import { NbToastrService } from '@nebular/theme';
 import { ConfirmModalComponent } from 'src/app/shared/components/confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentServiceService } from 'src/app/shared/services/payment-service.service';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { UserManagementService } from '../../profile/user-management.service';
 import { ProfileDetail, User } from '../../profile/user.model';
 import { MessageService } from 'primeng/api';
@@ -36,7 +36,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   listWorkApply: WorkApply[] = [];
-
+  listWork: WorkModel[] = [];
   listWorkShow: WorkModel[] = [];
   listWorkType: DataStateModel[] = [];
   listWorkStatus: DataStateModel[] = [];
@@ -74,7 +74,8 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     private paymentService: PaymentServiceService,
     private _location: Location,
     private userService: UserManagementService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private datePipe: DatePipe,
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$)).subscribe((token: NbAuthJWTToken) => {
       if (token.isValid()) {
@@ -121,13 +122,13 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.listWorkApply.map(async workApply => {
         var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
         if (respWork.result) {
-          this.listWorkShow.push(respWork.result);
+          respWork.result.listWorkApply = [];
+          respWork.result.listWorkApply.push(workApply);
+          this.listWork.push(respWork.result);
         }
         this.counterTab();
-        this.changeTabWithNumber(1);
       });
     }
-    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
   }
 
   counterTab() {
@@ -139,15 +140,19 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
     if (filterTab1.length > 0) {
       this.countTab1 = filterTab1.length;
     }
-    const filterTab2 = this.listWorkApply.filter(workApply => workApply.status === this.waitingApplyId || workApply.status === this.acceptApplyId);
+    const filterTab2 = this.listWork.filter(work => work.workStatusId === this.approvedId && 
+                                                    (work?.listWorkApply[0]?.status === this.waitingApplyId || 
+                                                    work?.listWorkApply[0]?.status === this.refusedApplyId ||
+                                                    work?.listWorkApply[0]?.status === this.acceptApplyId));
     if (filterTab2.length > 0) {
       this.countTab2 = filterTab2.length;
     }
-    const filterTab3 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.processingId);
+    const filterTab3 = this.listWork.filter(work => work.workStatusId === this.processingId);
     if (filterTab3.length > 0) {
       this.countTab3 = filterTab3.length;
     }
-    const filterTab4 = this.listWorkShow.filter(workApply => workApply.workStatusId === this.evaluationId);
+    const filterTab4 = this.listWork.filter(work => (work.workStatusId === this.evaluationId || work.workStatusId === this.doneId) && 
+                                                    (work?.listWorkApply[0]?.status === this.acceptApplyId));
     if (filterTab4.length > 0) {
       this.countTab4 = filterTab4.length;
     }
@@ -155,6 +160,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async refreshData() {
     await this.getListWorkApplyDefaults();
+    this.changeTabWithNumber(1);
     this.counterTab();
   }
 
@@ -176,6 +182,8 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
             if (respWork.result) {
               this.listWorkShow.push(respWork.result);
+    this.listWorkShow.map(work => work.timeLine = GetTimeLineForWork(work?.startDate));
+
             }
           }
         });
@@ -277,7 +285,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.listWorkApply.map(async workApply => {
           if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatingApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-            if (respWork.result && respWork.result.workStatusId === this.evaluationId) {
+            if (respWork.result && (respWork.result.workStatusId === this.evaluationId || respWork.result.workStatusId === this.doneId)) {
               this.listWorkShow.push(respWork.result);
             }
           }
@@ -342,6 +350,10 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }
+  }
+
+  formatDateTime(dateTime: string): string {
+    return this.datePipe.transform(dateTime, 'dd/MM/yyyy HH:mm:ss');
   }
 
   openMinimizedProfile(user: User, work: WorkModel, tab: number) {
