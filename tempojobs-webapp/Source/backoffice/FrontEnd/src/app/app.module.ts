@@ -14,6 +14,7 @@ import { TokenInterceptor } from './TokenInterceptor';
 import { QuillModule } from 'ngx-quill'
 import { DatePipe } from '@angular/common';
 import { DatePipePipe } from './modules/shared/pipes/date-pipe.pipe';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DatePipePipe } from './modules/shared/pipes/date-pipe.pipe';
     NbEvaIconsModule,
     NbCardModule,
     FontAwesomeModule,
+    NgxEchartsModule.forRoot({ echarts: () => import('echarts') }),
   ],
   providers: [
     {

@@ -48,6 +48,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inline-edit.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { NgxEchartsModule } from 'ngx-echarts';
+
 const materialModules = [
   MatFormFieldModule,
   MatCheckboxModule,
@@ -123,6 +125,7 @@ const angularModules = [
     NgxDatatableModule,
     GoogleMapsModule,
     ToastModule,
+    NgxEchartsModule,
     [...materialModules],
     [...nebularModules],
     [...angularModules]
@@ -152,7 +155,8 @@ const angularModules = [
     MatTableComponent,
     ToolbarComponent,
     RichInlineEditComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    NgxEchartsModule,
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
