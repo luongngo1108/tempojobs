@@ -19,6 +19,8 @@ import { ChartsComponent } from './dashboard/charts/charts.component';
 import { UserProfileComponent } from './work-management/user-profile/user-profile.component';
 import { WorkApplyDialogComponent } from './work-management/work-apply-dialog/work-apply-dialog.component';
 import { ApproveTaskerDialogComponent } from './work-management/approve-tasker-dialog/approve-tasker-dialog.component';
+import { AppyWorkComponent } from './work-management/work-apply-dialog/appy-work/appy-work.component';
+import { FindItemPipe } from './work-management/work-apply-dialog/appy-work/find-item.pipe';
 
 
 @NgModule({
@@ -37,7 +39,9 @@ import { ApproveTaskerDialogComponent } from './work-management/approve-tasker-d
     ChartsComponent,
     UserProfileComponent,
     WorkApplyDialogComponent,
-    ApproveTaskerDialogComponent
+    ApproveTaskerDialogComponent,
+    AppyWorkComponent,
+    FindItemPipe
   ],
   imports: [
     ThemeModule,

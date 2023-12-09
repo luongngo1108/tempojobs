@@ -35,6 +35,17 @@ class userController {
         }
     }
 
+    async getAllUserExceptEmailAndAdmin(req, res, next) {
+        const email = req.query.email;
+        const data = await User.find({email : {$ne: email}, role: {$ne: 'Admin'}});
+        if (data) {
+            res.status(200).json({ data });
+        } else {
+            res.status(401).json("Null");
+            return;
+        }
+    }
+
     async getUserDetailByUserId(req, res, next) {
         var result = new ReturnResult();
         try {

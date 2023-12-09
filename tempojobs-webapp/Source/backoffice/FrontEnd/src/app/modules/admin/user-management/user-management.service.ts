@@ -36,6 +36,10 @@ export class UserManagementService {
         return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/get`,);
     }
 
+    getAllUserExceptEmailAndAdmin(email: string) {
+        return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserExceptEmailAndAdmin?email=${email}`,);
+    }
+
     getAllUserDetail(email: string) {
         return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserDetail?email=${email}`,);
     }

@@ -11,6 +11,7 @@ import { WorkApply, WorkApplyViewModel } from '../work-apply-management/work-app
 import { WorkApplyService } from '../work-apply-management/work-apply.service';
 import { WorkModel } from '../work.model';
 import { WorkService } from '../work.service';
+import { AppyWorkComponent } from './appy-work/appy-work.component';
 
 @Component({
   selector: 'app-work-apply-dialog',
@@ -29,7 +30,7 @@ export class WorkApplyDialogComponent implements OnInit {
     private messageService: MessageService,
     private dialog: MatDialog,
     private userService: UserManagementService,
-    private workservice: WorkService
+    private workService: WorkService
   ) {
 
   }
@@ -89,7 +90,7 @@ export class WorkApplyDialogComponent implements OnInit {
 
   async openWorkApplyDetail(workApply: WorkApply) {
     var userResult =  (await lastValueFrom(this.userService.getUserByUserId(workApply.userId))).result;
-    var workResult =  (await lastValueFrom(this.workservice.getWorkByWorkId(workApply.workId))).result;
+    var workResult =  (await lastValueFrom(this.workService.getWorkByWorkId(workApply.workId))).result;
     let dialogRef = this.dialog.open(ApproveTaskerDialogComponent, {
       disableClose: false,
       width: '500px',
@@ -103,7 +104,31 @@ export class WorkApplyDialogComponent implements OnInit {
     });
   }
 
-  addUser() {
+  async addTaskerToWork() {
+    const dialogRef = this.dialog.open(AppyWorkComponent, {
+      height: 'auto',
+      width: '600px',
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        workModel: this.workModel,
+        listWorkApplied: this.listWorkApplyViewModel
+      },
+    });
 
+    dialogRef.afterClosed().subscribe(async res => {
+      if (res) {
+        this.workApplyService.getAllWorkApplByWorkId(this.workModel.workId).subscribe(res => {
+          if(res.result) {
+            this.listWorkApplyViewModel = res.result;
+          }
+        })
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'success', summary: 'Success',
+          detail: `Add work apply successfully!`, life: 30000
+        });
+      }
+    })
   }
 }

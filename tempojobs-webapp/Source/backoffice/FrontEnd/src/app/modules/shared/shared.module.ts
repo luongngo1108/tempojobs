@@ -49,6 +49,7 @@ import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inli
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { RatingStarComponent } from './components/rating-star/rating-star.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 const materialModules = [
   MatFormFieldModule,
   MatCheckboxModule,
@@ -98,6 +99,7 @@ const angularModules = [
   FlexLayoutModule,
   ColorPickerModule,
   NgxSkeletonLoaderModule,
+  NgxMatSelectSearchModule
 ];
 
 @NgModule({

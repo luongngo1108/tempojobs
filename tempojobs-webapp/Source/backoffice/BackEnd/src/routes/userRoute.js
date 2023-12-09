@@ -7,6 +7,7 @@ import userController from "../controllers/userController.js";
 
 router.route('/get').get( userController.get);
 router.route('/getAllUserDetail').get( userController.getAllUserDetail);
+router.route('/getAllUserExceptEmailAndAdmin').get( userController.getAllUserExceptEmailAndAdmin);
 router.route('/getUserDetailByUserId').get(userController.getUserDetailByUserId);
 router.route('/getUserByUserId').get(userController.getUserByUserId);
 router.route('/getUserByUserDetailId').get(userController.getUserByUserDetailId);
