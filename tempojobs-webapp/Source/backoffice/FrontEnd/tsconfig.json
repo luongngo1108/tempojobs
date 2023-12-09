@@ -20,6 +20,6 @@
     ]
   },
   "angularCompilerOptions": {
-    
-  }
+    "skipLibCheck": true
+  },
 }

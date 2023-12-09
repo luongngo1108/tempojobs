@@ -50,6 +50,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { MatSliderModule } from '@angular/material/slider';
 import { RatingStarComponent } from './components/rating-star/rating-star.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgxEchartsModule } from 'ngx-echarts';
+
 const materialModules = [
   MatFormFieldModule,
   MatCheckboxModule,
@@ -127,6 +129,7 @@ const angularModules = [
     NgxDatatableModule,
     GoogleMapsModule,
     ToastModule,
+    NgxEchartsModule,
     [...materialModules],
     [...nebularModules],
     [...angularModules]
@@ -158,6 +161,7 @@ const angularModules = [
     RichInlineEditComponent,
     ConfirmDialogComponent,
     RatingStarComponent
+    NgxEchartsModule,
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},

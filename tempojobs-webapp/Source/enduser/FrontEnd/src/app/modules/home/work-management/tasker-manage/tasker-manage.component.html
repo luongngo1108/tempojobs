@@ -15,14 +15,14 @@
                   <nb-card-body>
                     <div class="row">
                       <p><strong>[{{element?.workId}}] {{element?.workName}}</strong></p>
-                      <p>Khách hàng: <span style="color: #1996d7;">{{element?.createdBy?.displayName}}</span></p>
+                      <p>Khách hàng: <span style="color: #1996d7;">{{element?.createdBy?.firstName}} {{element?.createdBy?.lastName}}</span></p>
                     </div>
                   </nb-card-body>
                 </nb-card>
               </td>
             </ng-container>
             <ng-container matColumnDef="totalProfile">
-              <th mat-header-cell *matHeaderCellDef> Tổng hồ sơ </th>
+              <th mat-header-cell *matHeaderCellDef> Tổng số hồ sơ </th>
               <td mat-cell *matCellDef="let element"> {{element?.workApply?.length}}/{{element?.quantity}} </td>
             </ng-container>
             <ng-container matColumnDef="timeLine">
@@ -30,7 +30,7 @@
               <td mat-cell *matCellDef="let element"> {{element?.timeLine}} </td>
             </ng-container>
             <ng-container matColumnDef="workStatusName">
-              <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+              <th mat-header-cell *matHeaderCellDef> Trạng thái công việc </th>
               <td mat-cell *matCellDef="let element"> {{handleDisplayStatus(element?.workStatusId)}} </td>
             </ng-container>
             <ng-container matColumnDef="moreAction" stickyEnd>
@@ -114,7 +114,7 @@
             </ng-container>
             <ng-container matColumnDef="workTime" stickyEnd>
               <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Thời gian làm việc </th>
-              <td mat-cell *matCellDef="let element"> {{element?.startDate}} </td>
+              <td mat-cell *matCellDef="let element"> {{formatDateTime(element?.startDate)}} </td>
             </ng-container>
             <ng-container matColumnDef="candidateApproval" stickyEnd>
               <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Ứng viên thực hiện công việc </th>
@@ -124,7 +124,7 @@
             </ng-container>
             <ng-container matColumnDef="workProfit" stickyEnd>
               <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Số tiền nhận </th>
-              <td mat-cell *matCellDef="let element"> {{element?.workProfit}} </td>
+              <td mat-cell *matCellDef="let element"> {{element?.workProfit}} đ </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="displayedColumnsTab3"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumnsTab3;"></tr>

@@ -1,1 +1,8 @@
-<p>charts works!</p>
+<div echarts [options]="chartOption" [loading]="isLoadingChart" theme="macarons" class="demo-chart"></div>
+<div class="button-groups">
+    <nb-button-group (valueChange)="refreshChart($event)">
+        <button nbButtonToggle [(pressed)]="typeChartDefault" value="week">Week</button>
+        <button nbButtonToggle value="month">Month</button>
+        <button nbButtonToggle value="year">Year</button>
+    </nb-button-group>
+</div>
