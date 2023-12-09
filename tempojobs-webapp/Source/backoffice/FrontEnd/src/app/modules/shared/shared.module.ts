@@ -160,8 +160,8 @@ const angularModules = [
     ToolbarComponent,
     RichInlineEditComponent,
     ConfirmDialogComponent,
-    RatingStarComponent
-    NgxEchartsModule,
+    RatingStarComponent,
+    NgxEchartsModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
