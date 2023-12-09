@@ -9,6 +9,7 @@ import WorkApply from '../models/workApplyModel.js';
 import User from '../models/userModel.js';
 import UserDetail from '../models/userDetailModel.js';
 import Notification from '../models/notificationModel.js';
+import { WorkApplyViewModel } from '../DTO/workApplyViewModel.js';
 
 class WorkController {
     async getWorkAll(req, res, next) {
@@ -313,7 +314,7 @@ class WorkController {
             if (workApply) {
                 var existedWorkApply = await WorkApply.findById(workApply._id);
                 // Only send notification when change from "Da dang ky" to "Da nhan"/ "Tu choi"
-                if (existedWorkApply && (existedWorkApply.status === 7 || existedWorkApply.status === 8 || existedWorkApply.status === 9)) {
+                if (existedWorkApply && (existedWorkApply.status === 8 || existedWorkApply.status === 9)) {
                     // "Da nhan"
                     if (workApply.status === 9) {
                         content = `Bạn đã được nhận công việc số ${workApply.workId}`;
@@ -350,7 +351,7 @@ class WorkController {
         }
         res.status(200).json(result);
     }
-
+    
     async deleteWorkApply(req, res, next) {
         var result = new ReturnResult();
         try {
@@ -388,6 +389,29 @@ class WorkController {
         res.status(200).json(result);
     }
 
+    async deleteWorkApplyNotSendNoti(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const workApply = req.body;
+            if (workApply) {
+                const deleteApplied = await WorkApply.deleteOne({ _id: workApply._id });
+                const deleteWorkApplyInWork = await Work.updateOne(
+                    { workId: workApply.workId },
+                    { $pull: { workApply: workApply._id } }
+                );
+                if (deleteApplied.deletedCount > 0) {
+                    result.result = true;
+                } else {
+                    result.message = "Work applied doesn't exist";
+                }
+            }
+        }
+        catch (error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
     async getAllWorkApplyByUserId(req, res, next) {
         try {
             var result = new ReturnResult();
@@ -403,6 +427,30 @@ class WorkController {
                 result.result = listWork;
             } else {
                 result.message = "Error get WorkApply by userId: " + userId;
+            }
+        } catch (error) {
+            next(error);
+        }
+        res.status(200).json(result);
+    }
+
+    async getAllWorkApplyByWorkId(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const workId = req.params.workId;
+            const listWorkApply = await WorkApply.find({
+                workId: workId
+            }); 
+            if (listWorkApply) {
+                var listWorkApplyRes = [];
+                for(var workApply of listWorkApply) {
+                    var user = await User.findById(workApply.userId);
+                    var userDetail = await UserDetail.findById(user.userDetail);
+                    listWorkApplyRes.push(new WorkApplyViewModel(workApply, userDetail));
+                }
+                result.result = listWorkApplyRes;
+            } else {
+                result.message = "Error get WorkApply by workId: " + workId;
             }
         } catch (error) {
             next(error);

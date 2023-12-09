@@ -1,0 +1,42 @@
+<div class="d-flex flex-wrap" mat-dialog-title style="margin: unset; padding: 10px 10px 1px 28px">
+    <button mat-icon-button aria-label="Close the dialog" (click)="closeDialog()" class="ml-auto">
+        <mat-icon>close</mat-icon>
+    </button>
+</div>
+<mat-dialog-content>
+    <h2>WorkID: {{workModel.workId}}</h2>
+    <p><span style="font-weight: 600;">WorkName:</span> {{workModel?.workName}}</p>
+    <mat-form-field>
+        <mat-label>Select user</mat-label>
+        <!-- (openedChange)="openSelectEmployee($event)" -->
+        <mat-select #selectPerformer [(ngModel)]="selectedUser">
+            <mat-select-trigger *ngIf="(selectedUser | findItem : listUser : '_id') as userModel" >
+                <div fxLayout="row" fxLayoutAlign="start center" >
+                    <div fxLayout="column">
+                        <label>{{userModel?.displayName}} - {{userModel?.email}}</label>
+                    </div>  
+                </div>
+            </mat-select-trigger>
+            <mat-option>
+                <ngx-mat-select-search noEntriesFoundLabel="No matching item found" placeholderLabel="" 
+                [formControl]="userBankFilterCtrl"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let item of userFilteredBanks | async" [value]="item?._id"
+                >
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <div fxLayout="column" fxLayoutAlign="start center">
+                        <label style="margin: 0 !important;"><b>{{item?.displayName}}</b> {{item?.email ? '- ' + item.email : item.email }}</label>
+                    </div>    
+                </div>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <form (ngSubmit)="register()" *ngIf="form" [formGroup]="form" aria-labelledby="title">
+        <quill-editor [styles]="{height: '200px'}"  placeholder="description" formControlName="content" (onContentChanged)="inputChange($event)">
+        </quill-editor>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions style="margin: 10px 10px 5px auto; justify-content: flex-end;">
+    <button (click)="closeDialog()" mat-button>Cancel</button>
+    <button (click)="onApplyForWork()" style="background-color: #3f51b5;" mat-raised-button color="primary" cdkFocusInitial>Add</button>
+</mat-dialog-actions>

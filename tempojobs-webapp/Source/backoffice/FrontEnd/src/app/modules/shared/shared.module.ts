@@ -48,6 +48,8 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { RichInlineEditComponent } from './components/rich-inline-edit/rich-inline-edit.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatSliderModule } from '@angular/material/slider';
+import { RatingStarComponent } from './components/rating-star/rating-star.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 const materialModules = [
@@ -99,6 +101,7 @@ const angularModules = [
   FlexLayoutModule,
   ColorPickerModule,
   NgxSkeletonLoaderModule,
+  NgxMatSelectSearchModule
 ];
 
 @NgModule({
@@ -110,7 +113,8 @@ const angularModules = [
     MatTableComponent,
     ToolbarComponent,
     RichInlineEditComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    RatingStarComponent
   ],
   imports: [
     CommonModule,
@@ -156,6 +160,7 @@ const angularModules = [
     ToolbarComponent,
     RichInlineEditComponent,
     ConfirmDialogComponent,
+    RatingStarComponent
     NgxEchartsModule,
   ],
   providers: [

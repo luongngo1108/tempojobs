@@ -36,6 +36,10 @@ export class UserManagementService {
         return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/get`,);
     }
 
+    getAllUserExceptEmailAndAdmin(email: string) {
+        return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserExceptEmailAndAdmin?email=${email}`,);
+    }
+
     getAllUserDetail(email: string) {
         return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserDetail?email=${email}`,);
     }
@@ -52,6 +56,10 @@ export class UserManagementService {
         return this.httpclient.get<ReturnResult<User>>(`${this.baseUrl}/getUserByUserId?id=${id}`);
     }
 
+    getUserByUserDetailId(id: string): Observable<ReturnResult<User>> {
+        return this.httpclient.get<ReturnResult<User>>(`${this.baseUrl}/getUserByUserDetailId?id=${id}`);
+    }
+
     saveProfileDetail(profileDetail: ProfileDetail): Observable<ReturnResult<ProfileDetail>> {
         return this.httpclient.post<ReturnResult<ProfileDetail>>(`${this.baseUrl}/saveUserDetail`, profileDetail)
     }
@@ -66,5 +74,9 @@ export class UserManagementService {
 
     getUserByRole(role: string): Observable<ReturnResult<GoogleMapLocation>> {
         return this.httpclient.post<ReturnResult<GoogleMapLocation>>(`${this.baseUrl}/getUserByRole`, {role: role})
+    }
+
+    evaluationUser(userId: string, evaluate: number): Observable<ReturnResult<boolean>> {
+        return this.httpclient.get<ReturnResult<boolean>>(`${this.baseUrl}/evaluationUser?userId=${userId}&evaluate=${evaluate}`);
     }
 }

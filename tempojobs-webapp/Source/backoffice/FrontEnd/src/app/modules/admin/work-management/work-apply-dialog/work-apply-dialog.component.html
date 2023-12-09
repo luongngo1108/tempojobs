@@ -1,0 +1,87 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+    integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+
+<div class="d-flex flex-wrap" mat-dialog-title
+    style="margin: unset; padding: 1px 10px 1px 28px; justify-content: center; align-items: center;">
+    <button nbButton (click)="addTaskerToWork()" style="margin: 10px 0px 5px 0px;">
+        <nb-icon icon="save-outline"></nb-icon>Add tasker
+    </button>
+
+    <button nbButton ghost (click)="closeDialog()" class="ml-auto">
+        <nb-icon icon="close-outline"></nb-icon>
+    </button>
+</div>
+<mat-divider></mat-divider>
+<p-toast position="bottom-right" key="toast1"></p-toast>
+<mat-dialog-content>
+    <div class="col-md-12">
+        <div class="user-dashboard-info-box table-responsive mb-0 bg-white" style="padding: 5px;">
+            <table class="table manage-candidates-top mb-0">
+                <thead>
+                    <tr>
+                        <th>Candidate Name</th>
+                        <th class="text-center">Status</th>
+                        <th class="action text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="listWorkApplyViewModel.length>0; else noUserApplied">
+                        <tr *ngFor="let workApply of listWorkApplyViewModel" class="candidates-list shadow-sm rounded">
+                            <td class="title">
+                                <div class="thumb">
+                                    <img (click)="openWorkApplyDetail(workApply.workApply)" class="img-fluid" style="cursor: pointer;"
+                                        [src]="workApply?.userDetail?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                                        alt="">
+                                </div>
+                                <div class="candidate-list-details">
+                                    <div class="candidate-list-info">
+                                        <div class="candidate-list-title">
+                                            <b class="mb-0">{{workApply?.userDetail?.firstName}}
+                                                {{workApply?.userDetail?.lastName}}</b>
+                                        </div>
+                                        <div class="candidate-list-option">
+                                            <!-- <ul class="list-unstyled">
+                                                <li><i class="fas fa-filter pr-1"></i>Information Technology</li>
+                                                <li><i class="fas fa-map-marker-alt pr-1"></i>Rolling Meadows, IL
+                                                    60008</li>
+                                            </ul> -->
+                                            <span class="two-line-text"
+                                                [innerHTML]="workApply?.workApply?.content"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="candidate-list-favourite-time text-center">
+                                <nb-select placeholder="Satus" (selectedChange)="changeStatus($event, workApply.workApply)"
+                                    [(selected)]="workApply?.workApply.status">
+                                    <nb-option *ngFor="let status of listWorkApplyStatus"
+                                        [value]="status?.dataStateId">{{status?.dataStateName}}</nb-option>
+                                </nb-select>
+                            </td>
+                            <td>
+                                <ul class="list-unstyled mb-0 d-flex justify-content-center">
+                                    <li>
+                                        <div (click)="deleteWorkApply(workApply.workApply)" style="cursor: pointer;" class="text-danger" data-toggle="tooltip" title=""
+                                            data-original-title="Delete"><i class="far fa-trash-alt"></i></div>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<ng-template #noUserApplied>
+    <tr class="candidates-list">
+        <td>
+            <i>There are no user applied!</i>
+        </td>
+        <td>
+        </td>
+        <td>
+        </td>
+    </tr>
+</ng-template>

@@ -35,6 +35,17 @@ class userController {
         }
     }
 
+    async getAllUserExceptEmailAndAdmin(req, res, next) {
+        const email = req.query.email;
+        const data = await User.find({email : {$ne: email}, role: {$ne: 'Admin'}});
+        if (data) {
+            res.status(200).json({ data });
+        } else {
+            res.status(401).json("Null");
+            return;
+        }
+    }
+
     async getUserDetailByUserId(req, res, next) {
         var result = new ReturnResult();
         try {
@@ -66,6 +77,24 @@ class userController {
             let userId = req.query.id;
             if(userId) {             
                 const user = await User.findById(userId);
+                if(user) {
+                    result.result = user;
+                }
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
+    async getUserByUserDetailId(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            let userDetailId = req.query.id;
+            if(userDetailId) {             
+                const user = await User.findOne({userDetail: userDetailId});
                 if(user) {
                     result.result = user;
                 }
