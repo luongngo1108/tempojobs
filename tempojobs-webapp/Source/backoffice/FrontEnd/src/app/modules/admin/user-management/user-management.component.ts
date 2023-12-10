@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { UserManagementService } from './user-management.service';
 import { NgxTableComponent } from '../../shared/components/ngx-table/ngx-table.component';
 import { ProfileDialogComponent } from '../profile-dialog/profile-dialog.component';
@@ -14,6 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 export class UserManagementComponent implements OnInit, OnDestroy{
   columns = [];
   @ViewChild('ngxTableUser', { static: true }) ngxTable: NgxTableComponent;
+  @ViewChild('showRating', { static: true }) showRating: TemplateRef<any>;
   addEditComponent = ProfileDialogComponent;
   private destroy$: Subject<void> = new Subject<void>();
   user: any = {};
@@ -34,6 +35,11 @@ export class UserManagementComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     this.columns = [
+      {
+        name: "rating",
+        prop: "",
+        cellTemplate: this.showRating,
+      },
       {
         name: "firstName",
         prop: "firstName"
