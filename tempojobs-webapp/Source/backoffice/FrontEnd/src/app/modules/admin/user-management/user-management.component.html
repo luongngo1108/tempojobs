@@ -5,3 +5,9 @@
     <app-ngx-table #ngxTableUser [columnsTable]="columns" (onRefresh)="refreshData($event)"
     [addEditComponent]="addEditComponent" (editEvent)="successEventEdit($event)" (onDelete)="onClickDelete($event)"></app-ngx-table>
 </div>
+
+<ng-template #showRating let-row="row">
+    <ng-container *ngIf="row?.role === 'User'">
+        <app-rating-star [profileId]="row"></app-rating-star>
+    </ng-container>
+</ng-template>
