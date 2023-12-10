@@ -58,13 +58,9 @@ export class AppyWorkComponent implements OnInit, OnDestroy, AfterViewInit {
     this.form = this.formBuilder.formGroup(WorkApply, this.workApplyModel);
     this.userService.getAllUserExceptEmailAndAdmin(this.user.user.email).subscribe(e => {
       this.listUser = e.data;
-      this.listUser.filter((user) => {
-          
-        var copyWorkApplied = this.listWorkApplied.map(x => {return {...x}})
-        copyWorkApplied = copyWorkApplied.filter(x => {x.workApply.userId == user._id});
-        console.log(copyWorkApplied);
+      this.listUser = this.listUser.filter((user) => {
         return (
-          copyWorkApplied.length > 0
+          this.listWorkApplied.filter(x => x.workApply.userId == user._id).length === 0
         );
       })
       console.log(this.listUser);
@@ -105,9 +101,9 @@ export class AppyWorkComponent implements OnInit, OnDestroy, AfterViewInit {
       this.listUser.filter((user) => {
         const searchLowerCase = search.toLowerCase();
         return (
-          user?.displayName?.toLowerCase()?.trim()?.indexOf(searchLowerCase) > -1 ||
-          user?.email?.toLowerCase()?.trim()?.indexOf(searchLowerCase) > -1 ||
-          this.listWorkApplied.filter(x => x.userId === user._id).length > 0
+          (user?.displayName?.toLowerCase()?.trim()?.indexOf(searchLowerCase) > -1 ||
+          user?.email?.toLowerCase()?.trim()?.indexOf(searchLowerCase) > -1) &&
+          this.listWorkApplied.filter(x => x.userId == user._id).length === 0
         );
       })
     );
