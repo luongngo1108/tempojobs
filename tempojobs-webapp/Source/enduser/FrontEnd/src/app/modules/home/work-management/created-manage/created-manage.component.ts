@@ -22,6 +22,7 @@ import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog
 import { CalculateMoneyPayment, GetTimeLineForWork } from 'src/app/shared/utility/Helper';
 import { ExtendDayDialogComponent } from './extend-day-dialog/extend-day-dialog.component';
 import { PaymentType } from 'src/app/shared/enums/payment-type';
+import { WorkApplyDialogComponent } from './work-apply-dialog/work-apply-dialog.component';
 @Component({
   selector: 'app-created-manage',
   templateUrl: './created-manage.component.html',
@@ -517,5 +518,15 @@ export class CreatedManageComponent implements OnInit, AfterViewInit, OnDestroy 
         
       }
     })
+  }
+
+  openUserApplied(data: WorkModel) {
+    const dialogRef = this.dialog.open(WorkApplyDialogComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        model: data
+      },
+    });
   }
 }

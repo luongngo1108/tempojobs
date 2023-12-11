@@ -265,6 +265,10 @@
       [ngClass]="{disabledNoOfCasesDiv: row?.listTaskerAccepted?.length >= row.quantity}">
       <mat-list-item role="listitem" (click)="openMinimizedProfile(tasker, row, tab)" style="cursor: pointer;">{{ tasker?.displayName }}</mat-list-item>
     </mat-list>
+    <button mat-raised-button (click)="openUserApplied(row)" *ngIf="row?.listTaskerWaitings?.length > 3" style="display: flex; align-items: center;">
+      <mat-icon style="font-size: small; margin-top: 6px;">view_list</mat-icon>
+      <span style="font-size: 10px;">Xem tất cả</span>
+    </button>
   </ng-container>
 </ng-template>
 

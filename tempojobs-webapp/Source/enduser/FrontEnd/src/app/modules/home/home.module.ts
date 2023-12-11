@@ -18,6 +18,7 @@ import { ApproveTaskerDialogComponent } from './work-management/created-manage/a
 import { ReportComponent } from './report/report.component';
 import { TaskerManageComponent } from './work-management/tasker-manage/tasker-manage.component';
 import { ExtendDayDialogComponent } from './work-management/created-manage/extend-day-dialog/extend-day-dialog.component';
+import { WorkApplyDialogComponent } from './work-management/created-manage/work-apply-dialog/work-apply-dialog.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ExtendDayDialogComponent } from './work-management/created-manage/exten
     ApproveTaskerDialogComponent,
     ReportComponent,
     TaskerManageComponent,
-    ExtendDayDialogComponent
+    ExtendDayDialogComponent,
+    WorkApplyDialogComponent
   ],
   imports: [
     CommonModule,
