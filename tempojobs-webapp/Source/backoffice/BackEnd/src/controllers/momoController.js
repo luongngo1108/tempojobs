@@ -115,24 +115,32 @@ class momoController {
         var result = new ReturnResult();
         try {
             const { paymentToken, amount, userId, paymentType, extendDay } = req.body;
-            var updateValues = { workStatusId: 2, paymentToken: "", startDate: extendDay }
-            switch (paymentType) {
-                case PaymentType.PayForWork:
-                    updateValues.paymentType = PaymentType.PayForWork;
-                    break;
-                case PaymentType.ExtendWork:
-                    updateValues.paymentType = PaymentType.ExtendWork;
-                    break;
+            var updateValues = null;
+            if(paymentType == PaymentType.ExtendWork) {
+                updateValues = { workStatusId: 2, paymentToken: "", startDate: extendDay }
+            } 
+            if(paymentType == PaymentType.PayForWork) {
+                updateValues = { workStatusId: 2, paymentToken: ""}
             }
-            const updatedWork = await Work.findOneAndUpdate({ paymentToken: paymentToken }, updateValues, { returnOriginal: false });
-            if (updatedWork) {
-                const savedPaymentHistory = await PaymentHistory.create({
-                    payerId: userId,
-                    workId: updatedWork.workId,
-                    amount: amount,
-                    paymentType: paymentType
-                });
-                if (savedPaymentHistory) result.result = true;
+            if(updateValues) {
+                switch (paymentType) {
+                    case PaymentType.PayForWork:
+                        updateValues.paymentType = PaymentType.PayForWork;
+                        break;
+                    case PaymentType.ExtendWork:
+                        updateValues.paymentType = PaymentType.ExtendWork;
+                        break;
+                }
+                const updatedWork = await Work.findOneAndUpdate({ paymentToken: paymentToken }, updateValues, { returnOriginal: false });
+                if (updatedWork) {
+                    const savedPaymentHistory = await PaymentHistory.create({
+                        payerId: userId,
+                        workId: updatedWork.workId,
+                        amount: amount,
+                        paymentType: paymentType
+                    });
+                    if (savedPaymentHistory) result.result = true;
+                }
             }
         }
         catch {
