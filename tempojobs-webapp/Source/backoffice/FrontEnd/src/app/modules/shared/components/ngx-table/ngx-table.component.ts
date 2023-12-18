@@ -87,8 +87,10 @@ export class NgxTableComponent implements OnInit {
   }
 
   onSelect({ selected }) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
+    if(this.selected.length > 0 && selected.length>0) {
+      this.selected.splice(0, this.selected.length);
+      this.selected.push(...selected);
+    }
   }
 
   setData(result: PagedData<any>) {
@@ -164,8 +166,12 @@ export class NgxTableComponent implements OnInit {
 
     var tempResult = this.rows;
     this.listFilter.forEach(element => {
+     
       tempResult = tempResult.filter(x => {
-        return x[element.prop].toLowerCase().trim().includes(element.value.toLowerCase().trim())
+        if(x[element.prop]) {
+          return x[element.prop]?.toString()?.toLowerCase()?.trim()?.includes(element.value?.toLowerCase()?.trim())
+        }
+        else return true;
       })
     });
     this.rows = tempResult;

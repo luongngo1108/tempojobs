@@ -5,3 +5,7 @@
     <app-ngx-table #ngxTableUser [columnsTable]="columns" (onRefresh)="refreshData($event)"
     [addEditComponent]="addEditComponent" (editEvent)="successEventEdit($event)" (onDelete)="onClickDelete($event)"></app-ngx-table>
 </div>
+
+<ng-template #workCell let-row="row">
+    <b style="cursor: pointer;" matTooltip="Open work detail" (click)="openWorkDetail(row)">{{row?.workId}}</b>
+</ng-template>

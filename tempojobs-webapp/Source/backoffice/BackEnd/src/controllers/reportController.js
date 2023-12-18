@@ -9,6 +9,7 @@ class reportController {
             if(report._id === null) {
                 var createdReport = await Report.create({
                     userId: report.userId,
+                    workId: report.workId,
                     fullName: report.fullName,
                     email: report.email,
                     phone: report.phone,

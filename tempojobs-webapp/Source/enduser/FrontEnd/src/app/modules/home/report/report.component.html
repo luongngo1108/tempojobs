@@ -1,69 +1,63 @@
 <p-toast position="bottom-right" key="toast1"></p-toast>
-<section class="py-5">
-    <div class="container px-5">
-        <!-- Contact form-->
-        <div class="bg-light rounded-4 py-5 px-4 px-md-5">
-            <div class="text-center mb-5">
-                <!-- <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i
+<mat-dialog-content>
+    <div class="text-center mb-5 mt-3">
+        <!-- <div class="feature bg-primary bg-gradient-primary-to-secondary text-white rounded-3 mb-3"><i
               class="bi bi-envelope"></i></div> -->
-                <h1 class="fw-bolder"><span class="text-gradient d-inline">Để lại thông tin để chúng tôi liên hệ với
+        <h1 class="fw-bolder"><span class="text-gradient d-inline">Để lại thông tin phản ánh để chúng tôi liên hệ với
                         bạn</span></h1>
-                <!-- <p class="lead fw-normal text-muted mb-0">Let's work together!</p> -->
-            </div>
-            <div class="row gx-5 justify-content-center">
-                <div class="col-lg-8 col-xl-6">
-                    <form *ngIf="formReport" [formGroup]="formReport" id="contactForm">
-                        <!-- Name input-->
-                        <div class="form-floating mb-3">
-                            <input class="form-control" formControlName="fullName" id="name" type="text"
-                            placeholder="Nhập họ và tên..." required />
-                            <label for="name">Họ và tên</label>
-                            <mat-error *ngIf="
+        <!-- <p class="lead fw-normal text-muted mb-0">Let's work together!</p> -->
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-10">
+            <form *ngIf="formReport" [formGroup]="formReport" id="contactForm">
+                <!-- Name input-->
+                <div class="form-floating mb-3">
+                    <input class="form-control" formControlName="fullName" id="name" type="text"
+                        placeholder="Nhập họ và tên..." required />
+                    <label for="name">Họ và tên</label>
+                    <mat-error *ngIf="
                                 formReport.controls?.fullName?.errors &&
                                 (formReport.controls?.fullName?.dirty ||
                                     formReport.controls?.fullName?.touched)">
-                                {{ formReport.controls.fullName["errorMessage"] }}</mat-error>
-                        </div>
-                        <!-- Email address input-->
-                        <div class="form-floating mb-3">
-                            <input formControlName="email" class="form-control" id="email" type="email"
-                            placeholder="name@example.com" />
-                            <label for="email">Email</label>
-                            <mat-error *ngIf="
+                        {{ formReport.controls.fullName["errorMessage"] }}</mat-error>
+                </div>
+                <!-- Email address input-->
+                <div class="form-floating mb-3">
+                    <input formControlName="email" class="form-control" id="email" type="email"
+                        placeholder="name@example.com" />
+                    <label for="email">Email</label>
+                    <mat-error *ngIf="
                                 formReport.controls?.email?.errors &&
                                 (formReport.controls?.email?.dirty ||
                                     formReport.controls?.email?.touched)">
-                                {{ formReport.controls.email["errorMessage"] }}</mat-error>
-                        </div>
-                        <!-- Phone number input-->
-                        <div class="form-floating mb-3">
-                            <input formControlName="phone" class="form-control" id="phone" type="tel"
-                            placeholder="(123) 456-7890" />
-                            <label for="phone">Số điện thoại liên hệ</label>
-                            <mat-error *ngIf="
+                        {{ formReport.controls.email["errorMessage"] }}</mat-error>
+                </div>
+                <!-- Phone number input-->
+                <div class="form-floating mb-3">
+                    <input formControlName="phone" class="form-control" id="phone" type="tel"
+                        placeholder="(123) 456-7890" />
+                    <label for="phone">Số điện thoại liên hệ</label>
+                    <mat-error *ngIf="
                                 formReport.controls?.phone?.errors &&
                                 (formReport.controls?.phone?.dirty ||
                                     formReport.controls?.phone?.touched)">
-                                {{ formReport.controls.phone["errorMessage"] }}</mat-error>
-                        </div>
-                        <!-- Message input-->
-                        <div class="form-floating mb-3">
-                            
-                            <textarea formControlName="message" class="form-control" id="message" type="text"
-                                placeholder="Enter your message here..." style="height: 10rem" required></textarea>
-                                <label for="message">Lời nhắn</label>
-                            <mat-error *ngIf="
+                        {{ formReport.controls.phone["errorMessage"] }}</mat-error>
+                </div>
+                <!-- Message input-->
+                <div class="form-floating mb-3">
+
+                    <textarea formControlName="message" class="form-control" id="message" type="text"
+                        placeholder="Enter your message here..." style="height: 10rem" required></textarea>
+                    <label for="message">Lời nhắn</label>
+                    <mat-error *ngIf="
                                 formReport.controls?.message?.errors &&
                                 (formReport.controls?.message?.dirty ||
                                     formReport.controls?.message?.touched)">
-                                {{ formReport.controls.message["errorMessage"] }}</mat-error>
-                        </div>
-                        <div class="d-grid"><button [disabled]="!formReport.valid" [nbSpinner]="isLoading"
-                                (click)="sendRport()" class="btn btn-primary btn-lg" id="submitButton"
-                                type="submit">Gửi</button></div>
-                    </form>
+                        {{ formReport.controls.message["errorMessage"] }}</mat-error>
                 </div>
-            </div>
+                <div class="d-grid"><button [disabled]="!formReport.valid" [nbSpinner]="isLoading" (click)="sendRport()"
+                        class="btn btn-primary btn-lg" id="submitButton" type="submit">Gửi</button></div>
+            </form>
         </div>
     </div>
-</section>
+</mat-dialog-content>

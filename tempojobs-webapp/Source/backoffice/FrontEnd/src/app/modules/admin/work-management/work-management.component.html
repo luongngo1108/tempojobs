@@ -18,5 +18,5 @@
 </ng-template>
 
 <ng-template #userCell let-row="row">
-    <b style="cursor: pointer;" matTooltip="Open user detail" (click)="openUserDetail(row)">{{row?.createdBy?.displayName}}</b>
+    <b style="cursor: pointer;" matTooltip="Open user detail" (click)="openUserDetail(row)">{{row?.createdBy?.firstName}} {{row?.createdBy?.lastName}}</b>
 </ng-template>

@@ -1,6 +1,6 @@
 <div class="d-flex flex-wrap" mat-dialog-title
     style="margin: unset; padding: 1px 10px 1px 28px; justify-content: center; align-items: center;">
-    <button nbButton status="success" (click)="saveData()" style="margin: 10px 0px 5px 0px;">
+    <button nbButton status="success" (click)="saveData()" style="margin: 10px 0px 5px 0px;" [disabled]="!frmCreateWork.valid">
         <nb-icon icon="save-outline"></nb-icon>Save
     </button>
     <button nbButton (click)="openUserApplied()" style="margin: 10px 0px 5px 45px;">
@@ -14,7 +14,7 @@
 <p-toast position="bottom-right" key="toast1"></p-toast>
 <mat-dialog-content>
     <form [formGroup]="frmCreateWork">
-        <div class="row">
+        <div *ngIf="action == 'Edit'" class="row">
             <div class="col-12">
                 <ng-container *ngFor="let status of listWorkStatus">
                     <span *ngIf="status?.dataStateId === frmCreateWork.value?.workStatusId;"
