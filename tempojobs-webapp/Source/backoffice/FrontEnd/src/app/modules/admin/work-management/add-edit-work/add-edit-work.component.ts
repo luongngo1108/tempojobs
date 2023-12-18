@@ -148,25 +148,31 @@ export class AddEditWorkComponent {
         this.frmCreateWork.get('workHours').setValue(valueChanges);
       }
     });
-    this.frmCreateWork.get('workProfit').valueChanges.subscribe((valueChanges) => {
-      if (valueChanges && valueChanges !== this.workProfitValue) {
-        this.workProfitValue = valueChanges.toString();
-        const cleanValue = valueChanges.replace(/[^0-9]/g, '');
-        const numberValue = Number(cleanValue);
-        const formattedValue = new Intl.NumberFormat('vi-VN', {
-          style: 'currency',
-          currency: 'VND'
-        }).format(numberValue);
-        this.frmCreateWork.get('workProfit').setValue(formattedValue.replace('₫', ''));
-      }
-    });
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => {
-        const name = typeof value === 'string' ? value : '';
-        return name ? this._filter(name as string) : this.listProvince.slice();
-      }),
-    );
+
+    try {
+      this.frmCreateWork.get('workProfit').valueChanges.subscribe((valueChanges) => {
+        if (valueChanges && valueChanges !== this.workProfitValue) {
+          this.workProfitValue = valueChanges.toString();
+          const cleanValue = valueChanges.replace(/[^0-9]/g, '');
+          const numberValue = Number(cleanValue);
+          const formattedValue = new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+          }).format(numberValue);
+          this.frmCreateWork.get('workProfit').setValue(formattedValue.replace('₫', ''));
+        }
+      });
+      this.filteredOptions = this.myControl.valueChanges.pipe(
+        startWith(''),
+        map(value => {
+          const name = typeof value === 'string' ? value : '';
+          return name ? this._filter(name as string) : this.listProvince.slice();
+        }),
+      );
+    } catch (error) {
+
+    }
+
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -275,64 +281,68 @@ export class AddEditWorkComponent {
     if (this.frmCreateWork.valid) {
       const model: WorkModel = Object.assign({}, this.frmCreateWork.value);
       model.googleLocation = new GoogleMapLocation();
-      const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-        backdropClass: 'custom-backdrop',
-        hasBackdrop: true,
-        data: {
-          content: `All data will be change?`,
-          nextButtonContent: "Sure"
-        },
-      });
-
-      this.userService.getUserByUserId(model?.createdById).subscribe(res => {
-        if (res.result) {
-          this.createBy = {
-            displayName: res.result.displayName,
-            id: res.result['_id'],
-            role: res.result.role,
-            email: res.result.email
+    
+      if (model.createdById) {
+        const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          backdropClass: 'custom-backdrop',
+          hasBackdrop: true,
+          data: {
+            content: this.action === 'Add' ? `Create new work?` : `All data will be change?`,
+            nextButtonContent: "Sure"
+          },
+        });
+        this.userService.getUserDetailByUserId(model?.createdById).subscribe(res => {
+          if (res.result) {
+            this.createBy = res.result;
+            console.log(this.createBy)
           }
-        }
-      })
-
-      dialogRef.afterClosed().subscribe(async result => {
-        if (result) {
-          // Save work
-          this.workModel = model;
-          const latLng = {
-            lat: parseFloat(this.latitude?.toString()),
-            lng: parseFloat(this.longitude?.toString())
+        })
+        dialogRef.afterClosed().subscribe(async result => {
+          if (result) {
+            // Save work
+            this.workModel = model;
+            const latLng = {
+              lat: parseFloat(this.latitude?.toString()),
+              lng: parseFloat(this.longitude?.toString())
+            }
+            try {
+              await this.geocoder.geocode({ location: latLng }).then(async response => {
+                if (response.results[0]) {
+                  this.workModel.googleLocation.address = response.results[0].formatted_address;
+                  this.workModel.googleLocation.latitude = this.latitude;
+                  this.workModel.googleLocation.longitude = this.longitude;
+                }
+              })
+            } catch (error) {
+              console.log("Request limited!!!");
+            }
+  
+            if (!this.workModel?.workId) {
+              model.workId = 0;
+              model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
+            }
+            if (this.createBy) {
+              model.createdBy = this.createBy;
+            }
+            if (!model.workApply) {
+              model.workApply = [];
+            }
+            console.log(model)
+            var respSaveWork = await lastValueFrom(this.workService.saveWork(model));
+            if (respSaveWork.result) {
+              this.workModel = respSaveWork.result;
+              this.dialogRef.close(true);
+            }
           }
-          try {
-            await this.geocoder.geocode({ location: latLng }).then(async response => {
-              if (response.results[0]) {
-                this.workModel.googleLocation.address = response.results[0].formatted_address;
-                this.workModel.googleLocation.latitude = this.latitude;
-                this.workModel.googleLocation.longitude = this.longitude;
-              }
-            })
-          } catch (error) {
-            console.log("Request limited!!!");
-          }
-
-          if (!this.workModel?.workId) {
-            model.workId = 0;
-            model.workStatusId = this.listWorkStatus?.find(workStatus => workStatus.dataStateName === 'Đang duyệt')?.dataStateId;
-          }
-          if (this.createBy) {
-            model.createdById = this.createBy?.id;
-            model.createdBy = this.createBy;
-          }
-          if (!model.workApply) {
-            model.workApply = [];
-          }
-          var respSaveWork = await lastValueFrom(this.workService.saveWork(model));
-          if (respSaveWork.result) {
-            this.workModel = respSaveWork.result;
-            this.dialogRef.close(true);
-          }
-        }
-      });
+        });
+      } else {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'warn', summary: 'Warning',
+          detail: `Please select a user!`, life: 4000
+        });
+        return;
+      }  
     }
   }
 

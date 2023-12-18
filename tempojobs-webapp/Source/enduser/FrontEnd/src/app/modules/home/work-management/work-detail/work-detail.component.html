@@ -19,12 +19,17 @@
                     <h1>{{workModel?.workName}}</h1>
                     <div [innerHTML]="workModel?.workDescription || 'Không có miêu tả công việc!'">
                     </div>
-                    <ul class="list-inline share-buttons">
+                    <ul class="list-inline bottom-stuffs share-buttons">
                         <li class="list-inline-item">Loại công việc:</li>
                         <li class="list-inline-item">
                             <i><a href="/work-list">
                                     {{workModel?.workType?.dataStateName}}
                                 </a></i>
+                        </li>
+                        <li *ngIf="user?.user?.id !== workModel?.createdById" (click)="openReport()"
+                        style="display: flex; align-items: center; margin-top: 10px; cursor: pointer;" class="list-inline-item">
+                            <nb-icon style=" color: #6e2828;margin-right: 10px;" icon="alert-triangle-outline"></nb-icon>
+                            <span>Phản ánh công việc này</span>
                         </li>
                     </ul>
                     <!-- <hr class="mb40"> -->
@@ -124,7 +129,7 @@
                 <button *ngIf="user?.user?.id !== workModel?.createdById" [disabled]="!user?.user || (workApplied && workApplied?.status !== 14)" (click)="openApplyForWorkDialog()" status="success" style="width: 100%; margin-top: 10px;" nbButton>
                     Đăng ký nhận việc</button>
                 <div style="color: #6e2828; margin-top: 10px;"><i *ngIf="!user?.user">Vui lòng đăng nhập để nhận việc!</i></div>
-                <div style="color: #6e2828; margin-top: 10px;"><i *ngIf="workApplied && workApplied?.status !== 14">Bạn đã đăng ký nhận việc, kiểm tra trong hồ sơ xin việc!</i></div>
+                <div style="color: #6e2828; margin-top: 10px;"><i *ngIf="(workApplied && workApplied?.status !== 14) && (user?.user?.id !== workModel?.createdById)">Bạn đã đăng ký nhận việc, kiểm tra trong hồ sơ xin việc!</i></div>
                 <ng-container  *ngIf="user?.user?.id === workModel?.createdById">
                     <div class="row" style="display: flex; justify-content: center; align-items: center;">
                         <nb-icon class="col-2" icon="alert-triangle-outline"></nb-icon>

@@ -13,6 +13,7 @@ import { NbToastrService } from '@nebular/theme';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { MessageService } from 'primeng/api';
 import { WorkApply } from './appy-work/work-appy.model';
+import { ReportComponent } from '../../report/report.component';
 
 @Component({
   selector: 'app-work-detail',
@@ -24,7 +25,7 @@ export class WorkDetailComponent implements OnInit {
   userDetailModel: ProfileDetail;
   destroy$: Subject<void> = new Subject<void>();
   user: any = {};
-  workApplied: WorkApply; 
+  workApplied: WorkApply;
 
   constructor(
     private workService: WorkManagementService,
@@ -80,7 +81,7 @@ export class WorkDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(async res => {
       if (res) {
-      this.workApplied = (await lastValueFrom(this.workService.getWorkApplyByWorkIdAndUserId(this.workModel.workId, this.user.user.id))).result;
+        this.workApplied = (await lastValueFrom(this.workService.getWorkApplyByWorkIdAndUserId(this.workModel.workId, this.user.user.id))).result;
         this.messageService.clear();
         this.messageService.add({
           key: 'toast1', severity: 'success', summary: 'Thành công',
@@ -103,5 +104,25 @@ export class WorkDetailComponent implements OnInit {
 
   openAppliedForWork() {
     this.router.navigateByUrl("created-manage");
+  }
+
+  openReport() {
+    const dialogRef = this.dialog.open(ReportComponent, {
+      backdropClass: 'custom-backdrop',
+      hasBackdrop: true,
+      data: {
+        workModel: this.workModel
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.messageService.clear();
+        this.messageService.add({
+          key: 'toast1', severity: 'success', summary: 'Thành công',
+          detail: 'Cảm ơn! Chúng tôi sẽ liên hệ với bạn qua sớm nhất có thể!', life: 20000
+        });
+      }
+    })
   }
 }

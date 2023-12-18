@@ -104,7 +104,7 @@ export class WorkManagementComponent {
       },
       {
         name: 'Owner',
-        prop: 'createdBy.displayName',
+        prop: 'createdBy.firstName',
         cellTemplate: this.userCell
       }
     ];
@@ -210,7 +210,7 @@ export class WorkManagementComponent {
       backdropClass: 'custom-backdrop',
       hasBackdrop: true,
       data: {
-        userId: row.createdBy.id
+        userId: row.createdById
       },
     });
   }

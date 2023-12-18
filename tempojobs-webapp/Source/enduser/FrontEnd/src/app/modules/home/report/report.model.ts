@@ -4,6 +4,7 @@ export class Report {
     @prop()
     _id: "";
     userId: string | null;
+    workId: number | null;
     @prop()
     @required()
     fullName: string | null;

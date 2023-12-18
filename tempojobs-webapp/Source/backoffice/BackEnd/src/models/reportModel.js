@@ -6,6 +6,9 @@ const Report = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
+    workId: {
+        type: Number
+    },
     fullName: {
         type: String,
         required: true

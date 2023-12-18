@@ -10,6 +10,7 @@ import { Subject, takeUntil, lastValueFrom } from 'rxjs';
 import { ReportService } from './report.service';
 import { NbToastrService } from '@nebular/theme';
 import { MessageService } from 'primeng/api';
+import { WorkModel } from 'src/app/shared/models/work.model';
 @Component({
   selector: 'app-report',
   templateUrl: './report.component.html',
@@ -22,8 +23,9 @@ export class ReportComponent implements OnInit, OnDestroy {
   private destroy$: Subject<void> = new Subject<void>();
   user: any =null;
   userDetail: ProfileDetail;
+  workModel: WorkModel
   constructor(
-    // @Inject(MAT_DIALOG_DATA) public data: {userId: string},
+    @Inject(MAT_DIALOG_DATA) public data: any,
     private userService: UserManagementService,
     public dialogRef: MatDialogRef<ReportComponent>,
     private formBuilder: RxFormBuilder,
@@ -40,6 +42,7 @@ export class ReportComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    if(this.data.workModel) this.workModel = this.data.workModel;
     if(this.user) {
       var res = await lastValueFrom(this.userService.getUserDetailByUserId(this.user.user.id));
       if (res.result) this.userDetail = res.result;;
@@ -50,8 +53,9 @@ export class ReportComponent implements OnInit, OnDestroy {
       this.reportModel.userId = this.user.user.id;
       this.reportModel.email = this.user.user.email;
       this.reportModel.phone = this.userDetail?.phone;
-      this.reportModel.fullName = `${this.userDetail?.firstName} ${this.userDetail?.lastName}`
+      this.reportModel.fullName = `${this.userDetail?.firstName} ${this.userDetail?.lastName}`;
     }
+    this.reportModel.workId = this.workModel.workId;
     this.formReport = this.formBuilder.formGroup(Report, this.reportModel);
   }
 
@@ -59,12 +63,8 @@ export class ReportComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.reportService.saveReport(this.reportModel).subscribe(res => {
       if (res.result) {
-        this.messageService.clear();
-        this.messageService.add({
-          key: 'toast1', severity: 'success', summary: 'Thành công',
-          detail: 'Cảm ơn! Chúng tôi sẽ liên hệ với bạn qua sớm nhất có thể!', life: 20000
-        });
         this.isLoading = false;
+        this.dialogRef.close(true);
       }
     })
   }

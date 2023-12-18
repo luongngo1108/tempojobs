@@ -1,7 +1,7 @@
 <p-toast position="bottom-right" key="toast1"></p-toast>
 <div>
     <mat-form-field style="min-width: 440px;">
-        <mat-label>Select user</mat-label>
+        <mat-label>Chọn người dùng</mat-label>
         <!-- (openedChange)="openSelectEmployee($event)" -->
         <mat-select #selectPerformer [(ngModel)]="selectedUser">
             <mat-select-trigger *ngIf="(selectedUser | findItem : listUser : '_id') as userModel" >
@@ -25,7 +25,7 @@
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <button [disabled]="!selectedUser" nbButton status="danger" (click)="blockUser()" style="margin-left: 20px;">Block</button>
+    <button [disabled]="!selectedUser" nbButton status="danger" (click)="blockUser()" style="margin-left: 20px;">Chặn</button>
     <h5  class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
         Danh sách các người dùng đã bị chặn</h5>
     <div *ngFor="let user of listBlockedUser" fxLayout="row" style="margin-bottom: 15px;">
