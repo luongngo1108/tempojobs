@@ -16,5 +16,8 @@ router.route('/onDeletes').post(userController.onDeletes);
 router.route('/getUserById').get(userController.getUserById);
 router.route('/getUserByRole').post(userController.getUserByRole);
 router.route('/evaluationUser').get(userController.evaluationUser);
+router.route('/blockUser').post(userController.blockUser);
+router.route('/unBlockUser').post(userController.unBlockUser);
+router.route('/getBlockedUserByUserId').get(userController.getBlockedUserByUserId);
 
 export default router;

@@ -11,6 +11,7 @@ import { Page } from 'src/app/shared/models/page';
 import { UserProfileComponent } from '../user-profile/user-profile.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GetTimeLineForWork } from 'src/app/shared/utility/Helper';
+import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'app-home-page',
@@ -34,6 +35,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   processingId: number;
   evaluationId: number;
   doneId: number;
+  currentUser: any;
   
   constructor(
     private workService: WorkManagementService,
@@ -41,7 +43,14 @@ export class HomePageComponent implements OnInit, OnDestroy {
     private dataStateService: DataStateManagementService,
     private messageService: MessageService,
     public dialog: MatDialog,
+    public authService: NbAuthService
   ) {
+    this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
+    .subscribe(async (token: NbAuthJWTToken) => {
+      if (token.isValid()) {
+        this.currentUser = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
+      }
+    });
     this.paging.filter = [];
   }
 
@@ -54,6 +63,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   }
 
   async getPagingWork() {
+    this.paging.userId = this.currentUser.user.id;
     var resp = await this.workService.getWorkPaging(this.paging).pipe(takeUntil(this.destroy$)).toPromise()
     if (resp.result) {
       this.listWork = resp.result.data;

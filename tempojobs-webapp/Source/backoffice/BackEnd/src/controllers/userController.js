@@ -130,6 +130,11 @@ class userController {
         try {
             const userDetail = req.body;
             let updatedUserDetail = await UserDetail.findByIdAndUpdate(userDetail._id, userDetail, { returnOriginal: false });
+            // Save user img
+            if(userDetail.avatarUrl) {
+                var updatedUser = await User.findOneAndUpdate({email: updatedUserDetail.email}, {avatarUrl: userDetail.avatarUrl}, { returnOriginal: false });
+            }
+
             if (updatedUserDetail) {
                 result.result = updatedUserDetail;
                 var displayNameUser = `${updatedUserDetail.firstName} ${updatedUserDetail.lastName}`
@@ -246,6 +251,61 @@ class userController {
                 }
             } else {
                 result.message = "Bạn cần đưa dữ liệu đánh giá";
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
+    async blockUser(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const {userId, blockId} = req.body;
+            if(userId && blockId) {
+                const savedResult = await User.findByIdAndUpdate(userId, { $push: { blockedUser: blockId } }, {returnOriginal: true});
+                if(savedResult) result.result = true;
+                else result.result = false;
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
+    async unBlockUser(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const {userId, blockId} = req.body;
+            if(userId && blockId) {
+                const savedResult = await User.findByIdAndUpdate(userId, { $pull: { blockedUser: blockId } }, {returnOriginal: true});
+                if(savedResult) result.result = true;
+                else result.result = false;
+            }
+        }
+        catch (ex) {
+            console.log(ex);
+            result.message = constants.TECHNICAL_ERROR;
+        }
+        res.status(200).json(result);
+    }
+
+    async getBlockedUserByUserId(req, res, next) {
+        var result = new ReturnResult();
+        try {
+            const userId = req.query.userId;
+            const user = await User.findById(userId);
+            if(user) {
+                if(user.blockedUser && user.blockedUser.length > 0) {
+                    const blockUsers = await User.find({
+                        '_id': {$in: user.blockedUser}
+                    })
+                    if(blockUsers && blockUsers.length > 0) result.result = blockUsers;
+                }
             }
         }
         catch (ex) {

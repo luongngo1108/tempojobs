@@ -11,4 +11,6 @@ export class Page {
     pageNumber: number = 0;
 
     filter?: FilterMapping[];
+
+    userId: string; 
 }

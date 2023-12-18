@@ -13,6 +13,7 @@ export class User {
   @prop()
   role: string;
   exp: number;
+  avatarUrl: String;
 }
 
 export class UserModel {
@@ -116,4 +117,10 @@ export class GoogleMapLocation {
   longitude: number | null;
   @prop()
   address: string | null;
+}
+
+export enum ProfileTabName {
+  AboutMe = 'about-me',
+  EditProfile = 'edit-profile',
+  Blacklist = 'black-list'
 }

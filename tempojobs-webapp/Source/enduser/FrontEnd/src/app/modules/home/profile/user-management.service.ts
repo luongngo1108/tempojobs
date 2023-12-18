@@ -63,4 +63,20 @@ export class UserManagementService {
     evaluationUser(userId: string, evaluate: number): Observable<ReturnResult<boolean>> {
         return this.httpclient.get<ReturnResult<boolean>>(`${this.baseUrl}/evaluationUser?userId=${userId}&evaluate=${evaluate}`);
     }
+
+    getAllUserExceptEmailAndAdmin(email: string) {
+        return this.httpclient.get<PagedData<User[]>>(`${this.baseUrl}/getAllUserExceptEmailAndAdmin?email=${email}`,);
+    }
+
+    blockUser(userId: string, blockId: string): Observable<ReturnResult<boolean>> {
+        return this.httpclient.post<ReturnResult<boolean>>(`${this.baseUrl}/blockUser`, {userId: userId, blockId: blockId});
+    }
+
+    unBlockUser(userId: string, blockId: string): Observable<ReturnResult<boolean>> {
+        return this.httpclient.post<ReturnResult<boolean>>(`${this.baseUrl}/unBlockUser`, {userId: userId, blockId: blockId});
+    }
+
+    getBlockedUserByUserId(userId: string): Observable<ReturnResult<User[]>> {
+        return this.httpclient.get<ReturnResult<User[]>>(`${this.baseUrl}/getBlockedUserByUserId?userId=${userId}`);
+    }
 }

@@ -24,6 +24,13 @@ const User = new Schema ({
         type: String,
         default: "User",
     },
+    blockedUser: [{
+        type: Schema.Types.ObjectId,
+        default: null
+    }],
+    avatarUrl: {
+        type: String
+    }
 }, {
     timestamps: true,
 });

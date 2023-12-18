@@ -1,0 +1,51 @@
+<p-toast position="bottom-right" key="toast1"></p-toast>
+<div>
+    <mat-form-field style="min-width: 440px;">
+        <mat-label>Select user</mat-label>
+        <!-- (openedChange)="openSelectEmployee($event)" -->
+        <mat-select #selectPerformer [(ngModel)]="selectedUser">
+            <mat-select-trigger *ngIf="(selectedUser | findItem : listUser : '_id') as userModel" >
+                <div fxLayout="row" fxLayoutAlign="start center" >
+                    <div fxLayout="column">
+                        <label>{{userModel?.displayName}} - {{userModel?.email}}</label>
+                    </div>  
+                </div>
+            </mat-select-trigger>
+            <mat-option>
+                <ngx-mat-select-search noEntriesFoundLabel="No matching item found" placeholderLabel="" 
+                [formControl]="userBankFilterCtrl"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let item of userFilteredBanks | async" [value]="item?._id"
+                >
+                <div fxLayout="row" fxLayoutAlign="start center">
+                    <div fxLayout="column" fxLayoutAlign="start center">
+                        <label style="margin: 0 !important;"><b>{{item?.displayName}}</b> {{item?.email ? '- ' + item.email : item.email }}</label>
+                    </div>    
+                </div>
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button [disabled]="!selectedUser" nbButton status="danger" (click)="blockUser()" style="margin-left: 20px;">Block</button>
+    <h5  class="mb-3 text-uppercase bg-light p-2"><i class="mdi mdi-account-circle mr-1"></i>
+        Danh sách các người dùng đã bị chặn</h5>
+    <div *ngFor="let user of listBlockedUser" fxLayout="row" style="margin-bottom: 15px;">
+        <div fxFlex="7" class="thumb">
+            <img class="img-fluid" style="cursor: pointer;"
+                [src]="user?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                alt="">
+        </div>
+        <div fxFlex="40"  class="candidate-list-details">
+            <div class="candidate-list-info">
+                <div class="candidate-list-title">
+                    <b class="one-line-text" class="mb-0">{{user?.displayName}}</b>
+                </div>
+                <div class="candidate-list-option">
+                    <span class="one-line-text"
+                        [innerHTML]="user?.email"></span>
+                </div>
+            </div>
+        </div>
+        <button (click)="unBlockUser(user._id)" matTooltip="Remove" fxFlex="15" nbButton ghost status="danger" class="mr-auto"><nb-icon icon="trash-outline"></nb-icon></button>
+    </div>
+</div>
+

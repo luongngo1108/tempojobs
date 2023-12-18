@@ -8,8 +8,10 @@
         <p-toast position="bottom-right" key="toast1"></p-toast>
         <div class="col-lg-4 col-xl-4">
             <div class="card-box text-center">
-                <img style="cursor: pointer;" [src]="userDetail?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"  (click)="selectImage.click()"
-                    class="rounded-circle avatar-xl img-thumbnail" alt="profile-image" matTooltip="Nhấn vào đây để sửa ảnh đại diện">
+                <img style="cursor: pointer;"
+                    [src]="userDetail?.avatarUrl || 'https://bootdey.com/img/Content/avatar/avatar7.png'"
+                    (click)="selectImage.click()" class="rounded-circle avatar-xl img-thumbnail" alt="profile-image"
+                    matTooltip="Nhấn vào đây để sửa ảnh đại diện">
 
                 <input type="file" (change)="updateImage($event)" accept='image/*' style="display: none" #selectImage />
 
@@ -139,16 +141,22 @@
                     <button nbButton hero status="success" (click)="changeTab('about-me')">Thông tin chung</button>
                     <button style="margin-left: 20px;" (click)="changeTab('edit-profile')" nbButton>Sửa thông tin cá
                         nhân</button>
+                    <button style="margin-left: 20px;" (click)="changeTab('black-list')" nbButton>Blacklist</button>
                 </ul>
                 <div class="tab-content">
-                    <div *ngIf="isEditProfile; then editProfile else aboutMe"></div>
-                    <ng-template #aboutMe>
-                        <app-profile-activity></app-profile-activity>
-                    </ng-template>
-                    <ng-template #editProfile>
-                        <app-edit-profile [profileDetail]="userDetail" [user]="user"
-                            (updatedProfileDetail)="updateProfileDetail($event)"></app-edit-profile>
-                    </ng-template>
+                    <div [ngSwitch]="currentTabName">
+                        <div *ngSwitchCase="tabListName.AboutMe">
+                            <app-profile-activity></app-profile-activity>
+                        </div>
+                        <div *ngSwitchCase="tabListName.EditProfile">
+                            <app-edit-profile [profileDetail]="userDetail" [user]="user"
+                                (updatedProfileDetail)="updateProfileDetail($event)"></app-edit-profile>
+                        </div>
+                        <div *ngSwitchCase="tabListName.Blacklist">
+                            <app-black-list-management [profileDetail]="userDetail" [user]="user"
+                                (updatedProfileDetail)="updateProfileDetail($event)"></app-black-list-management>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

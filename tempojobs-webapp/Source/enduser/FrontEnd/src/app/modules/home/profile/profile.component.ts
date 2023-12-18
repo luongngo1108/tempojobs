@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ChangeDetectorRef, ViewChild, ElementRef, NgZone, inject } from '@angular/core';
 import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { Subject, takeUntil, lastValueFrom, Observable } from 'rxjs';
-import { ProfileDetail } from './user.model';
+import { ProfileDetail, ProfileTabName } from './user.model';
 import { UserManagementService } from './user-management.service';
 import { GoogleMap } from '@angular/google-maps';
 import { NbToast, NbToastrService } from '@nebular/theme';
@@ -46,7 +46,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   longitude!: any;
   markers: google.maps.Marker[] = [];
   // Google map end
-  isEditProfile: boolean = false;
+  currentTabName: string = 'about-me';
+  tabListName = ProfileTabName;
 
   constructor(
     private authService: NbAuthService,
@@ -58,7 +59,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
   }
   ngOnInit(): void {
-    this.isEditProfile = false;
+    this.currentTabName = 'about-me';
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe(async (token: NbAuthJWTToken) => {
         if (token.isValid()) {
@@ -169,13 +170,8 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   changeTab(tabName: string) {
-    switch (tabName) {
-      case 'about-me':
-        this.isEditProfile = false;
-        break;
-      case 'edit-profile':
-        this.isEditProfile = true;
-        break;
+    if(tabName) {
+      this.currentTabName = tabName;
     }
   }
 
@@ -215,7 +211,7 @@ export class ProfileComponent implements OnInit, OnDestroy, AfterViewInit {
     const file = event.target.files[0];
     if(file) {
       var n = Date.now();
-      const filePath = `UserImages/${file.name}`;
+      const filePath = `UserImages/${file.name}${n}`;
       var storageRef = ref(this.storage,filePath )
       const uploadTask = await uploadBytesResumable(storageRef, file);
       const downloadURL = await getDownloadURL(uploadTask.ref);

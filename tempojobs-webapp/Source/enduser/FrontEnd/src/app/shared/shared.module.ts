@@ -48,6 +48,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { MatDividerModule } from '@angular/material/divider';
 import { RatingStarComponent } from './components/rating-star/rating-star.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 
 const materialModules = [
   MatFormFieldModule,
@@ -95,6 +96,7 @@ const angularModules = [
   RxReactiveFormsModule,
   HttpClientModule,
   FlexLayoutModule,
+  NgxMatSelectSearchModule
 ];
 
 @NgModule({

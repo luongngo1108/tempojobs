@@ -19,6 +19,9 @@ import { ReportComponent } from './report/report.component';
 import { TaskerManageComponent } from './work-management/tasker-manage/tasker-manage.component';
 import { ExtendDayDialogComponent } from './work-management/created-manage/extend-day-dialog/extend-day-dialog.component';
 import { WorkApplyDialogComponent } from './work-management/created-manage/work-apply-dialog/work-apply-dialog.component';
+import { BlackListManagementComponent } from './profile/black-list-management/black-list-management.component';
+import { AddBlacklistComponent } from './profile/black-list-management/add-blacklist/add-blacklist.component';
+import { FindItemPipe } from './profile/black-list-management/find-item.pipe';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,10 @@ import { WorkApplyDialogComponent } from './work-management/created-manage/work-
     ReportComponent,
     TaskerManageComponent,
     ExtendDayDialogComponent,
-    WorkApplyDialogComponent
+    WorkApplyDialogComponent,
+    BlackListManagementComponent,
+    AddBlacklistComponent,
+    FindItemPipe
   ],
   imports: [
     CommonModule,
