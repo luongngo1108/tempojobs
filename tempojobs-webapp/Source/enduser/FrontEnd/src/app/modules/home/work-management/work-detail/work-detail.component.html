@@ -102,7 +102,9 @@
                     <dt>Hạn ứng tuyển: </dt>
                     <dd>{{workModel?.startDate | datePipe:workModel?.startDate ?? 'Không có'}}</dd>
                     <dt>Địa chỉ: </dt>
-                    <dd>{{workModel?.workAddress ?? 'Không có'}}</dd>
+                    <dd>{{workModel?.workAddress ?? 'Không có'}}  {{workModel?.workProvince | provinceConvert:workModel?.workDistrict: listProvince}}</dd>
+                    <dt>Địa chỉ Google Map: </dt>
+                    <dd>{{workModel?.googleLocation?.address ?? 'Không có'}}</dd>
                     <dt>Tiền trả: </dt>
                     <dd>{{workModel?.workProfit ?? 'Không có'}}</dd>
                 </dl>
