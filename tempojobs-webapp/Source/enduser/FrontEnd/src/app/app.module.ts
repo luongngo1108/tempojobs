@@ -39,7 +39,7 @@ import {StorageModule} from '@angular/fire/storage'
     NbToastrModule.forRoot(),
     QuillModule.forRoot(),
     NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyDPOyzngYDXtIRdJTDFwSV02xNIDLEXgHI',
+      messageGoogleMapKey: 'AIzaSyC6n653gO_6ToPPi3NnPmGkSYMk4iv1MBA',
     }),
     NbLayoutModule,
     NbEvaIconsModule,
