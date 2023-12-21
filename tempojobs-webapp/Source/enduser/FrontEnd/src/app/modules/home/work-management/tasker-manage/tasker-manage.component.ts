@@ -60,7 +60,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
   refusedApplyId: number;
   acceptApplyId: number;
   savingApplyId: number;
-  evaluatingApplyId: number;
+  evaluatedApplyId: number;
 
   private destroy$: Subject<void> = new Subject<void>();
 
@@ -111,7 +111,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.waitingApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Đang đăng ký').dataStateId;
       this.acceptApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Được nhận').dataStateId;
       this.refusedApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Bị từ chối').dataStateId;
-      this.evaluatingApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Đã đánh giá').dataStateId;
+      this.evaluatedApplyId = this.listWorkApplyStatus.find(workApplyStatus => workApplyStatus.dataStateName === 'Đã đánh giá').dataStateId;
     }
   }
 
@@ -152,7 +152,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.countTab3 = filterTab3.length;
     }
     const filterTab4 = this.listWork.filter(work => (work.workStatusId === this.evaluationId || work.workStatusId === this.doneId) && 
-                                                    (work?.listWorkApply[0]?.status === this.acceptApplyId));
+                                                    (work?.listWorkApply[0]?.status === this.acceptApplyId || work?.listWorkApply[0]?.status === this.evaluatedApplyId));
     if (filterTab4.length > 0) {
       this.countTab4 = filterTab4.length;
     }
@@ -221,7 +221,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       case 4:
         this.listWorkApply.map(async workApply => {
-          if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatingApplyId) {
+          if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatedApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
             if (respWork.result && (respWork.result.workStatusId === this.evaluationId || respWork.result.workStatusId === this.doneId)) {
               this.listWorkShow.push(respWork.result);
@@ -282,7 +282,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         break;
       case 4:
         this.listWorkApply.map(async workApply => {
-          if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatingApplyId) {
+          if (workApply.status === this.acceptApplyId || workApply.status === this.evaluatedApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
             if (respWork.result && (respWork.result.workStatusId === this.evaluationId || respWork.result.workStatusId === this.doneId)) {
               this.listWorkShow.push(respWork.result);
