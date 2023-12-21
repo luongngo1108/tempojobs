@@ -22,6 +22,7 @@ import { WorkApplyDialogComponent } from './work-management/created-manage/work-
 import { BlackListManagementComponent } from './profile/black-list-management/black-list-management.component';
 import { AddBlacklistComponent } from './profile/black-list-management/add-blacklist/add-blacklist.component';
 import { FindItemPipe } from './profile/black-list-management/find-item.pipe';
+import { ProvinceConvertPipe } from './work-management/work-detail/province-convert.pipe';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { FindItemPipe } from './profile/black-list-management/find-item.pipe';
     WorkApplyDialogComponent,
     BlackListManagementComponent,
     AddBlacklistComponent,
-    FindItemPipe
+    FindItemPipe,
+    ProvinceConvertPipe
   ],
   imports: [
     CommonModule,

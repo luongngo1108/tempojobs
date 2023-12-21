@@ -14,6 +14,7 @@ import { NbAuthJWTToken, NbAuthService } from '@nebular/auth';
 import { MessageService } from 'primeng/api';
 import { WorkApply } from './appy-work/work-appy.model';
 import { ReportComponent } from '../../report/report.component';
+import { DataStateManagementService } from 'src/app/shared/services/data-state-management.service';
 
 @Component({
   selector: 'app-work-detail',
@@ -26,6 +27,7 @@ export class WorkDetailComponent implements OnInit {
   destroy$: Subject<void> = new Subject<void>();
   user: any = {};
   workApplied: WorkApply;
+  listProvince: any[] = [];
 
   constructor(
     private workService: WorkManagementService,
@@ -34,7 +36,8 @@ export class WorkDetailComponent implements OnInit {
     public dialog: MatDialog,
     private messageService: MessageService,
     private authService: NbAuthService,
-    private router: Router
+    private router: Router,
+    private dataStateService: DataStateManagementService
   ) {
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe(async (token: NbAuthJWTToken) => {
@@ -42,6 +45,12 @@ export class WorkDetailComponent implements OnInit {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
         }
       });
+
+    this.dataStateService.getListProvince().pipe(takeUntil(this.destroy$)).subscribe(resp => {
+      if (resp) {
+        this.listProvince = resp;
+      }
+    });
   }
 
   async ngOnInit(): Promise<void> {
