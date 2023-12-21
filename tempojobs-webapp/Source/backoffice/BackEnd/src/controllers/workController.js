@@ -47,9 +47,9 @@ class WorkController {
             var currentUserId = page?.userId;
             var listBlockers = [];
             if (currentUserId) {
-                var currentUser = await User.findOne({ _id: currentUserId });
-                if (currentUser) {
-                    listBlockers = currentUser?.blockedUser;
+                var listUserBlock = await User.find({ blockedUser: { $in: [currentUserId] } });
+                if (listUserBlock && listUserBlock.length > 0) {
+                    listUserBlock.map(item => listBlockers.push(item._id));
                 }
             }
             if (filterSearch) {

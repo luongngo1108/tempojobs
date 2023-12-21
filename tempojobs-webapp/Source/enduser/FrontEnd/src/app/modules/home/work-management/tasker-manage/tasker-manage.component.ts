@@ -230,6 +230,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
+    this.counterTab();
   }
 
   changeTabWithNumber(data: number) {
@@ -250,7 +251,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         this.listWorkApply.map(async workApply => {
           if (workApply.status === this.waitingApplyId || workApply.status === this.refusedApplyId || workApply.status === this.acceptApplyId) {
             var respWork = await this.workService.getWorkByWorkId(workApply.workId).pipe(takeUntil(this.destroy$)).toPromise();
-            if (respWork.result) {
+            if (respWork.result && respWork.result.workStatusId === this.approvedId) {
               this.listWorkShow.push(respWork.result);
             }
           }
@@ -291,6 +292,7 @@ export class TaskerManageComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         break;
     }
+    this.counterTab();
   }
 
   // async createPayment(workModel: any) {
