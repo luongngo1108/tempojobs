@@ -61,7 +61,7 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   longitude!: any;
   markers: google.maps.Marker[] = [];
   // Google map end
-  workHoursValue: number = 0.5;
+  workHoursValue: number = 1;
   workProfitValue: string = "";
 
   minDate: Date = new Date();
@@ -108,6 +108,9 @@ export class AddEditWorkComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    if (this.workModel) {
+      this.workHoursValue = this.workModel?.workHours;
+    }
     this.frmCreateWork = this.frmBuilder.formGroup(WorkModel, this.workModel);
     this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe((token: NbAuthJWTToken) => {

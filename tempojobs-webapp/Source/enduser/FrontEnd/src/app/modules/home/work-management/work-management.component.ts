@@ -99,7 +99,7 @@ export class WorkManagementComponent implements OnInit, OnDestroy {
   }
 
   async getPagingWork() {
-    this.paging.userId = this.currentUser.user.id;
+    this.paging.userId = this.currentUser?.user?.id;
     var resp = await this.workService.getWorkPaging(this.paging).pipe(takeUntil(this.destroy$)).toPromise()
     if (resp.result) {
       this.listWork = resp.result.data;

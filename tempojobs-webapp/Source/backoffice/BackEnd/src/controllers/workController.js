@@ -44,53 +44,72 @@ class WorkController {
                 if (item.prop === 'workProvince') filterProvince.push({ workProvince: item.value });
             });
             var filterSearch = filterMappingList.find(item => item.prop === 'SEARCHING')?.value;
+            var currentUserId = page?.userId;
+            var listBlockers = [];
+            if (currentUserId) {
+                var currentUser = await User.findOne({ _id: currentUserId });
+                if (currentUser) {
+                    listBlockers = currentUser?.blockedUser;
+                }
+            }
             if (filterSearch) {
                 page.totalElements = await Work.find({
                     deleted: false,
+                    createdById: { $nin: listBlockers },
                     $or: [
                         { workName: { $regex: filterSearch, $options: "i" } },
                         { workDescription: { $regex: filterSearch, $options: "i" } }
-                    ]
+                    ],
                 }).count();
                 listWork = await Work.find({
                     deleted: false,
+                    createdById: { $nin: listBlockers },
                     $or: [
                         { workName: { $regex: filterSearch, $options: "i" } },
                         { workDescription: { $regex: filterSearch, $options: "i" } }
-                    ]
+                    ],
                 }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
             } else {
                 if (filterWorkType.length === 0 && filterProvince.length === 0) {
                     page.totalElements = await Work.find().count();
-                    listWork = await Work.find().sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
+                    listWork = await Work.find({
+                        deleted: false,
+                        createdById: { $nin: listBlockers },
+                    }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterWorkType.length > 0 && filterProvince.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
+                        createdById: { $nin: listBlockers },
                         $or: filterWorkType,
-                        $or: filterProvince
+                        $or: filterProvince,
                     }).count();
                     listWork = await Work.find({
                         deleted: false,
+                        createdById: { $nin: listBlockers },
                         $or: filterWorkType,
-                        $or: filterProvince
+                        $or: filterProvince,
                     }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterWorkType.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
-                        $or: filterWorkType
+                        createdById: { $nin: listBlockers },
+                        $or: filterWorkType,
                     }).count();
                     listWork = await Work.find({
                         deleted: false,
-                        $or: filterWorkType
+                        createdById: { $nin: listBlockers },
+                        $or: filterWorkType,
                     }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterProvince.length > 0) {
                     page.totalElements = await Work.find({
                         deleted: false,
-                        $or: filterProvince
+                        createdById: { $nin: listBlockers },
+                        $or: filterProvince,
                     }).count();
                     listWork = await Work.find({
                         deleted: false,
-                        $or: filterProvince
+                        createdById: { $nin: listBlockers },
+                        $or: filterProvince,
                     }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 }
             }

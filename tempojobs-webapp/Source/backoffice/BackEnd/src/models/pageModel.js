@@ -1,10 +1,11 @@
 export class Page {
-    constructor(size, totalElements, totalPages, pageNumber, filter) {
+    constructor(size, totalElements, totalPages, pageNumber, filter, userId) {
       this.size = size;
       this.totalElements = totalElements;
       this.totalPages = totalPages;
       this.pageNumber = pageNumber;
       this.filter = filter;
+      this.userId = userId;
     }
 }
 
