@@ -36,12 +36,20 @@ class WorkController {
             page = req.body;
             var filterMappingList = page?.filter;
             var filterWorkType = [];
+            var listFilterWorkType = [];
             filterMappingList.map(item => {
-                if (item.prop === 'workType') filterWorkType.push({ workTypeId: item.value });
+                if (item.prop === 'workType') {
+                    filterWorkType.push({ workTypeId: item.value });
+                    listFilterWorkType.push(item.value);   
+                }
             });
             var filterProvince = [];
+            var listFilterWorkProvince = [];
             filterMappingList.filter(item => {
-                if (item.prop === 'workProvince') filterProvince.push({ workProvince: item.value });
+                if (item.prop === 'workProvince') {
+                    filterProvince.push({ workProvince: item.value });
+                    listFilterWorkProvince.push(item.value);
+                }
             });
             var filterSearch = filterMappingList.find(item => item.prop === 'SEARCHING')?.value;
             var currentUserId = page?.userId;
@@ -80,14 +88,18 @@ class WorkController {
                     page.totalElements = await Work.find({
                         deleted: false,
                         createdById: { $nin: listBlockers },
-                        $or: filterWorkType,
-                        $or: filterProvince,
+                        $and: [
+                            { workTypeId: { $in: listFilterWorkType } },
+                            { workProvince: { $in: listFilterWorkProvince } },
+                        ],
                     }).count();
                     listWork = await Work.find({
                         deleted: false,
                         createdById: { $nin: listBlockers },
-                        $or: filterWorkType,
-                        $or: filterProvince,
+                        $and: [
+                            { workTypeId: { $in: listFilterWorkType } },
+                            { workProvince: { $in: listFilterWorkProvince } },
+                        ],
                     }).sort({ workStatusId: 1 }).skip(page.pageNumber * page.size).limit(page.size);
                 } else if (filterWorkType.length > 0) {
                     page.totalElements = await Work.find({
