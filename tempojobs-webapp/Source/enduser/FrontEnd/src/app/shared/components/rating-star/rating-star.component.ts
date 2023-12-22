@@ -25,6 +25,8 @@ export class RatingStarComponent {
         var totalStar = 0;
         respProfile?.result?.evaluation?.map(eva => totalStar += eva);
         var percentage = Math.round(((totalStar/respProfile?.result?.evaluation?.length) / 5) * 100);
+        var lastPercentage = 100 - percentage;
+        console.log("ehe" + lastPercentage)
         this.renderer.setStyle(overlayElement, 'width', `${100 - percentage}%`);
       }
     }
