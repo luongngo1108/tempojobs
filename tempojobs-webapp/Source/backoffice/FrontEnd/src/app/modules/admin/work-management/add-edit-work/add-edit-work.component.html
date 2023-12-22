@@ -3,7 +3,7 @@
     <button nbButton status="success" (click)="saveData()" style="margin: 10px 0px 5px 0px;" [disabled]="!frmCreateWork.valid">
         <nb-icon icon="save-outline"></nb-icon>Save
     </button>
-    <button nbButton (click)="openUserApplied()" style="margin: 10px 0px 5px 45px;">
+    <button nbButton *ngIf="action == 'Edit'" (click)="openUserApplied()" style="margin: 10px 0px 5px 45px;">
         <nb-icon icon="people-outline"></nb-icon>Users applied
     </button>
     <button nbButton ghost (click)="closeDialog()" class="ml-auto">
@@ -94,7 +94,7 @@
                 <!-- <div class="example-label-container">
                     <label class="example-value-label">{{workHoursValue}} tiếng</label>
                 </div> -->
-                <mat-slider class="example-margin" [max]="24" [min]="0.5" [step]="0.5" [discrete]="true"
+                <mat-slider class="example-margin" max="24" min="1" step="1" [discrete]="true"
                     [showTickMarks]="false" [displayWith]="formatLabel">
                     <input matSliderThumb matInput formControlName="workHours" autocomplete="off" required trim="blur">
                 </mat-slider>

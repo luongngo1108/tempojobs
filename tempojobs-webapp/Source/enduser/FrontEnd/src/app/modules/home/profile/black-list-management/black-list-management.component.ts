@@ -58,7 +58,7 @@ export class BlackListManagementComponent implements OnInit, OnDestroy, AfterVie
     var getBlockedRes = await lastValueFrom(this.userService.getBlockedUserByUserId(this.user.user.id));
     if (getBlockedRes.result) {
       this.listBlockedUser = getBlockedRes.result;
-    }
+    } else this.listBlockedUser = [];
 
     this.userService.getAllUserExceptEmailAndAdmin(this.user.user.email).subscribe(e => {
       this.listUser = e.data;

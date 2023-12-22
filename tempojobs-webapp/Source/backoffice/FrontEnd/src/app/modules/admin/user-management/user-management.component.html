@@ -8,6 +8,6 @@
 
 <ng-template #showRating let-row="row">
     <ng-container *ngIf="row?.role === 'User'">
-        <app-rating-star [profileId]="row"></app-rating-star>
+        <app-rating-star style="display: flex; justify-content: center;" [profileId]="row"></app-rating-star>
     </ng-container>
 </ng-template>

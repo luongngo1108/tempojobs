@@ -347,14 +347,16 @@ class WorkController {
                     if (existedNotification) {
                         await Notification.findByIdAndUpdate(existedNotification._id, { content, title, isRead: false });
                     } else {
-                        const notification = await Notification.create({
-                            referenceUser,
-                            reciever,
-                            content,
-                            title,
-                            type: 'WorkApplyCreator',
-                            redirectUrl: 'tasker-manage'
-                        })
+                        if(workApply.status === 9 || workApply.status === 8) {
+                            const notification = await Notification.create({
+                                referenceUser,
+                                reciever,
+                                content,
+                                title,
+                                type: 'WorkApplyCreator',
+                                redirectUrl: 'tasker-manage'
+                            })
+                        }
                     }
                 }
                 const saveApplied = await WorkApply.updateOne({ _id: workApply._id }, workApply);

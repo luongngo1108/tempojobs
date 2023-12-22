@@ -103,13 +103,13 @@
             </ng-container>
             <ng-container matColumnDef="confirm" stickyEnd>
               <th mat-header-cell *matHeaderCellDef aria-label="row actions"> Xác nhận </th>
-              <td mat-cell *matCellDef="let element">
-                <button mat-button style="background-color: #3de18c; color: white;" (click)="changeWorkStatus(element, processingId, 2)"
+              <td mat-cell *matCellDef="let element" >
+                <button class="col-xl-8" mat-button style="background-color: #3de18c; color: white;" (click)="changeWorkStatus(element, processingId, 2)"
                         [disabled]="!(element?.listTaskerAccepted?.length > 0)"
                         [class.disable-button]="!(element?.listTaskerAccepted?.length > 0)">
                   Hoàn thành duyệt
                 </button>
-                <button mat-button style="background-color: #daae0e; margin-top: 5px; color: white;" (click)="extendTimeLine(element)"
+                <button class="col-xl-8" mat-button style="background-color: #daae0e; margin-top: 5px; color: white;" (click)="extendTimeLine(element)"
                         *ngIf="element.workStatusId == expiredId">
                   Gia hạn thêm
                 </button>

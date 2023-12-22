@@ -36,7 +36,7 @@ import { NgxEchartsModule } from 'ngx-echarts';
     NbToastrModule.forRoot(),
     QuillModule.forRoot(),
     NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyDPOyzngYDXtIRdJTDFwSV02xNIDLEXgHI',
+      messageGoogleMapKey: 'AIzaSyC6n653gO_6ToPPi3NnPmGkSYMk4iv1MBA',
     }),
     NbLayoutModule,
     NbEvaIconsModule,
