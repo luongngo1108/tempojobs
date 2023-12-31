@@ -381,8 +381,7 @@ export class AddEditWorkComponent {
       backdropClass: 'custom-backdrop',
       hasBackdrop: true,
       data: {
-        content: `Are you sure want to change data states? Notification will 
-        be sent to users when you change to 'Từ chối duyệt' or 'Đã duyệt'.`,
+        content: `Notification will be sent to the when you change to 'Từ chối duyệt' or 'Đã duyệt' or 'Cần thanh toán'.`,
         nextButtonContent: "Sure"
       },
     });

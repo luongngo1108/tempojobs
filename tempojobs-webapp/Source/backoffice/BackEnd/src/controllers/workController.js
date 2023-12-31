@@ -497,11 +497,11 @@ class WorkController {
             const { statusId, workId } = req.body;
             if (statusId && workId) {
                 result.result = await Work.findOneAndUpdate({ workId }, { workStatusId: statusId }, { returnOriginal: false });
-                if (result.result && (statusId === 2 || statusId === 3)) {
+                if (result.result && (statusId === 2 || statusId === 3 || statusId === 6)) {
                     var content = '';
                     var title = '';
                     switch (statusId) {
-                        case 2:
+                        case 2, 6:
                             content = `Công việc số ${workId} của bạn đã dược duyệt.`;
                             title = `Chúc mừng!`;
                             break;
